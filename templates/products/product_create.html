@@ -1,0 +1,188 @@
+{% extends 'index.html' %}
+
+
+
+{% block title %}
+    Create
+{% endblock title %}
+
+{% block banner %}
+{% endblock banner %}
+
+{% block content %}
+
+    <style>
+        .product-create-form-wrapper{
+            width: 90%;
+            margin: 5rem auto;
+            max-width: 500px;
+            padding: 1.5rem;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: start;
+            box-shadow: 0px 0px 20px -1px rgb(219, 219, 219);
+        }
+
+        .product-create-form-wrapper > h2 {
+            letter-spacing: 0.07rem;
+        }
+
+        .create-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem
+        }
+
+        .image-upload-warning {
+            color: rgb(87, 87, 87);
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.07rem;
+            padding: 0 1rem;
+        }
+
+       
+        .product-name-input,
+        .product-price-input,
+        .product-description-textarea,
+        .product-detail-textarea{
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .product-image-input {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .product-price-input > p > input,
+        .product-name-input > p > input,
+        .product-description-textarea > p > textarea,
+        .product-detail-textarea > p > textarea{
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 5px;
+            letter-spacing: 0.07rem;
+            line-height: 1.5;
+            font-size: 1rem;
+            border: 1px solid rgb(189, 189, 189);
+        }
+
+        .product-description-textarea > p > textarea,
+        .product-detail-textarea > p > textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .product-available-input {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem
+        }
+
+        .product-available-input > input {
+            width: 15px;
+            aspect-ratio: 1/1;
+        }
+
+        .product-image-input > label,
+        .product-price-input > label,
+        .product-available-input > label,
+        .product-name-input > label,
+        .product-description-textarea > label,
+        .product-detail-textarea > label {
+           letter-spacing: 0.07rem;
+           color: rgb(39, 39, 39);
+        }
+
+        .product-price-input > p > input:focus,
+        .product-name-input > p > input:focus,
+        .product-description-textarea > p > textarea:focus,
+        .product-detail-textarea > p > textarea:focus {
+            outline: 2px solid rgb(123, 0, 255);
+            border: none;
+        }
+
+        .create-form-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .create-form-btns > button {
+            padding: 0.8rem 1rem;
+            background: orangered;
+            color: white;
+            text-align: center;
+            letter-spacing: 0.07rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .create-form-btns > a {
+            padding: 0.8rem 1rem;
+            background: rgb(100, 100, 100);
+            color: white;
+            text-align: center;
+            letter-spacing: 0.07rem;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 693px) {
+            .product-create-form-wrapper{
+                width: 95%;
+            }
+        }
+
+    </style>
+
+    <div class="product-create-form-wrapper">
+        <h2>Add your product</h2>
+        <form class="create-form" action="{% url 'products:product-create' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="product-name-input">
+                {{ product_form.name.label_tag}}
+                <p>{{ product_form.name}}</p>
+            </div>
+            <div class="product-image-input">
+                {{ product_form.product_image.label_tag}}
+                <p>{{ product_form.product_image}}</p>
+            </div>
+            <div class="product-description-textarea">
+                {{ product_form.description.label_tag}}
+                <p>{{ product_form.description}}</p>
+            </div>
+            <div class="product-detail-textarea">
+                {{ product_form.detail.label_tag}}
+                <p>{{ product_form.detail}}</p>
+            </div>
+            <div class="product-price-input">
+                {{ product_form.price.label_tag}}
+                <p>{{ product_form.price}}</p>
+            </div>
+            <div class="product-available-input">
+                {{ product_form.available.label_tag}}
+                {{ product_form.available}}
+            </div>
+            <div class="product-image-input">
+                {{ image_form.image.label_tag }}
+                <p>{{ image_form.image }}</p>
+                <ul class="image-upload-warning">
+                    <li>required.</li>
+                    <li>three images are allowed.</li>
+                </ul>
+            </div>
+            <div class="create-form-btns">
+                <button type="submit">Create</button>
+                <a href="{% url 'products:product-list' %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}

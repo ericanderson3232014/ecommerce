@@ -1,0 +1,94 @@
+{% extends 'index.html' %}
+
+
+
+{% block title %}
+    Logout
+{% endblock title %}
+
+{% block banner %}
+{% endblock banner %}
+
+{% block content %}
+    
+    <style>
+
+        .logout-form-wrapper {
+            width: 95%;
+            max-width: 500px;
+            margin: 5rem auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1.3rem;
+            border-radius: 5px;
+            box-shadow: 0px 0px 20px -1px rgb(209, 209, 209);
+        }
+
+        .logout-form-wrapper > p {
+            letter-spacing: 0.07rem;
+            /* text-wrap: balance; */
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgb(20, 20, 20);
+            /* line-height: 1.3; */
+        }
+
+        .logout-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .logout-no,
+        .logout-yes {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-weight: initial;
+        }
+
+        .logout-no {
+            color: rgb(255, 0, 0);
+        }
+
+        .logout-yes {
+            color: rgb(97, 97, 97);
+        }
+
+        .logout-form > h3 > button {
+            letter-spacing: 0.07rem;
+            text-decoration: underline;
+            color: rgb(97, 97, 97);
+            font-size: 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-form > h3 > a {
+            letter-spacing: 0.07rem;
+            color: rgb(255, 0, 0);
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+    </style>
+    {% if not request.user.is_authenticated %}
+        <div class="logout-warning-wrapper">
+            <h2>You are not logged in!</h3>
+            <h3>Did you meant to login? <a href="{% url 'users:user-login' %}">Login</a></h3>
+        </div>
+        {% else %}
+        <div class="logout-form-wrapper">
+            <p>Are you sure you want to logout?</p>
+            <form action="{% url 'users:user-logout' %}" class="logout-form" method="POST">
+                {% csrf_token %}
+                <h3 class="logout-no">No, <a href="{% url 'products:product-list' %}">Continue shopping</a></h3>
+                <h3 class="logout-yes">Yes, <button type="submit">Log me out</button></h3></h3>
+            </form>
+        </div>
+    {% endif %}
+{% endblock content %}

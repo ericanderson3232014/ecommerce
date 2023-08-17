@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+
+
+{% block title %}
+    Products
+{% endblock title %}
+
+
+
+{% block content %}
+
+    <div class="product-list-wrapper">
+        <div class="products">
+            {% for obj in query_set %}
+                <a href="{{ obj.get_absolute_url }}?name={{obj.name}}" class="product">
+                    <img class="product-image" src="{{ obj.product_image.url }}" alt="">
+                    <div class="availability-like-reviews">
+                        <div class="product-available-container">
+                            {% if obj.available %}
+                                <p class="product-available"><strong>In Stock</strong></p>
+                            {% else %}
+                                <p class="product-available"><strong>Out of Stock</strong></p>
+                            {% endif %}
+                        </div>
+                        <div class="product-review-container">
+                            <span class="material-symbols-outlined review-icon">rate_review</span>
+                            {% if obj.productreview_set.all %}
+                                <span class="rating">{{ obj.productreview_set.count }}</span>
+                            {% else %}
+                                <span class="rating">0</span>
+                            {% endif %}
+                        </div>
+                        <div class="product-favorite-container">
+                            <span class="material-symbols-outlined favorite-icon">favorite</span>
+                            <span class="rating">{{obj.likes}}/5</span>
+                        </div>
+                    </div>
+                    <div class="product-info-container">
+                        <h3 class="product-name">{{ obj.name }} <span class="product-price">p{{obj.price }}</span></h3>
+                        <p class="product-description">
+                            {{ obj.description|truncatewords:30}}
+                        </p>
+                        <p class="see-detail">See Detail</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}

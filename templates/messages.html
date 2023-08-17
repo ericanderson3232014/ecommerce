@@ -1,0 +1,83 @@
+<style>
+    .message-container {
+        padding: 0.5rem 0;
+    }
+
+    .success {
+        background: rgb(216, 255, 234);
+        color: rgb(0, 117, 59);
+    }
+
+    .warning {
+        background: rgb(255, 239, 216);
+        color: rgb(187, 112, 0);
+    }
+
+    .error {
+        background: rgb(255, 217, 210);
+        color: rgb(201, 23, 0);
+    }
+
+    .info {
+        background: rgb(234, 242, 255);
+        color: rgb(4, 54, 131);
+    }
+
+    .message {
+        width: 90%;
+        margin: 0 auto;
+        letter-spacing: 0.07rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 17px;
+    }
+
+    .close-message-btn {
+        cursor: pointer;
+    }
+
+</style>
+
+
+{% if messages %}
+    {% for message in messages%}
+        {% if message.tags == 'success' %}
+            <div class="success message-container">
+                <p class="message">{{ message }}
+                    <span class="material-symbols-outlined close-message-btn">close</span>
+                </p>
+            </div>
+        {% elif message.tags == 'error' %}
+            <div class="error message-container">
+                <p class="message">{{ message }}
+                    <span class="material-symbols-outlined close-message-btn">close</span>
+                </p>
+            </div>
+        {% elif message.tags == 'warning' %}
+            <div class="warning message-container">
+                <p class="message">{{ message }}
+                    <span class="material-symbols-outlined close-message-btn">close</span>
+                </p>
+            </div>
+        {% elif message.tags == 'info' %}
+            <div class="info message-container">
+                <p class="message">{{ message }}
+                    <span class="material-symbols-outlined close-message-btn">close</span>
+                </p>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+    const closeMessageBtn = [...document.querySelectorAll('.close-message-btn')]
+
+    closeMessageBtn.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            const parent = e.currentTarget.parentElement.parentElement
+            parent.style.display = 'none'
+        })
+    })
+
+</script>

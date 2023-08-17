@@ -1,0 +1,165 @@
+{% extends 'index.html' %}
+
+
+
+
+{% block title %}
+    Register
+{% endblock title%}
+
+{% block banner %}
+{% endblock banner %}
+
+{% block content %}
+
+    <style>
+
+        .user-register-form-wrapper {
+            width: 95%;
+            max-width: 500px;
+            margin: 5rem auto;
+            padding: 1.3rem;
+            border-radius: 5px;
+            box-shadow: 0px 0px 20px -1px rgb(216, 216, 216);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .user-registered-and-authenticated {
+            width: 95%;
+            max-width: 500px;
+            margin: 3rem auto;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .user-registered-and-authenticated > h2 {
+            letter-spacing: 0.07rem;
+        }
+
+        .user-registered-and-authenticated > h3{
+            letter-spacing: 0.07rem;
+            color: rgb(66, 66, 66);
+        }
+
+        .user-registered-and-authenticated > h3 > a{
+            letter-spacing: 0.07rem;
+            color: rgb(255, 0, 0);
+            text-decoration: underline;
+        }
+
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .register-form > h2 {
+            letter-spacing: 0.07rem;
+        }
+
+        .register-form > div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .register-form > div > input {
+            padding: 0.7rem 1rem;
+            border-radius: 5px;
+            letter-spacing: 0.07rem;
+            color: rgb(48, 48, 48);
+            font-size: 1rem;
+            border: 1px solid rgb(170, 170, 170);
+        }
+
+        .register-form > div > input:focus {
+            outline: 2px solid rgb(123, 0, 255);
+            border: none;
+        }
+
+        .register-form > div > label {
+            letter-spacing: 0.07rem;
+            color: rgb(0, 0, 0);
+        }
+        .register-form > div > p {
+            font-size: 0.95rem;
+            letter-spacing: 0.07rem;
+            color: rgb(54, 54, 54);
+        }
+
+        .register-form > div > ul {
+           margin-left: 1rem;
+           color: rgb(54, 54, 54);
+           font-size: 0.95rem;
+        }
+
+        .register-form > div > .errorlist {
+           margin-left: 1rem;
+           color: rgb(255, 51, 0);
+           font-size: 0.95rem;
+        }
+
+        .register-form > button {
+            padding: 0.8rem 1rem;
+            text-align: center;
+            letter-spacing: 0.07rem;
+            background: orangered;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .already-registered {
+            letter-spacing: 0.07rem;
+            color: rgb(41, 41, 41)
+        }
+
+        .already-registered > a {
+            letter-spacing: 0.07rem;
+            color: rgb(255, 0, 0);
+            text-decoration: underline;
+        }
+    </style>
+
+    {% if request.user.is_authenticated %}
+        <div class="user-registered-and-authenticated">
+            <h2>You are already logged in  and registered!</h2>
+            <h3>Did meant to logout? <a href="{% url 'users:user-logout' %}">Logout</a></h3>
+            <h3>No, <a href="{% url 'products:product-list' %}">continue shopping</a></h3>
+        </div>
+    {% else %}
+        <div class="user-register-form-wrapper">
+            <form action="" method="POST" class="register-form">
+                <h2>Please register</h2>
+                {% csrf_token %}
+                <div>
+                    <p class="errorlist">{{ form.username.errors }}</p>
+                    {{ form.username.label_tag}}
+                    {{ form.username}}
+                    <p>{{ form.username.help_text}}</p>
+                </div>
+                <div>{{ email_form }}</div>
+                <div>
+                    {{ form.password1.label_tag}}
+                    {{ form.password1}}
+                    {{ form.password1.help_text}}
+                    {{ form.password2.errors}}
+                </div>
+            
+                <div>
+                    {{ form.password2.label_tag}}
+                    {{ form.password2}}
+                    <p>{{ form.password2.help_text}}</p>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <p class="already-registered">Already registered? <a href="{% url 'users:user-login' %}">Login</a></p>
+        </div>
+    {% endif %}
+    
+{% endblock content %}

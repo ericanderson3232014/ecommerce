@@ -1,0 +1,110 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{ query.name }} 
+{% endblock title %}
+
+
+
+{% block content %}
+
+    <style>
+
+        .product-reviews-wrapper {
+            border: 1px solid black;
+        }
+
+    </style>
+
+
+    <div class="product-detail-container-wrapper">
+        <div class="product-detail-container">
+            <div class="product-detail-img-container">
+                <img src="{{ query.get_product_image_url }}" alt="">
+                <div class="product-detail-extra-images">
+                    {% for img in images %}
+                        <a href="#header" class="product-detail-extra-image">
+                            <span class="material-symbols-outlined product-detail-image-close-btn">close</span>
+                            <img class="extra-image" src="{{ img.image.url }}" alt="product image">
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="prduct-detail-info-container">
+                <div class="product-detail-available-review-favorite">
+                    {% if query.available %}
+                        <h4 class="product-detail-available">In Stock</h4>
+                    {% else %}
+                        <h4 class="product-detail-available">Out of Stock</h4>
+                    {% endif %}
+                    <div class="product-detail-review-icon-container">
+                        <span class="material-symbols-outlined product-detail-review-icon">rate_review</span>
+                        {% if query.productreview_set.all %}
+                            <a href="#reviews" class="product-detail-rating">
+                                {% if query.productreview_set.count > 1%}
+                                    {{ query.productreview_set.count }} 
+                                    <span>reviews</span>
+                                {% else %}
+                                    {{ query.productreview_set.count }} 
+                                    <span>review</span>
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            <span class="product-detail-rating">0</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-detail-favorite-icon-container">
+                        <span class="material-symbols-outlined product-detail-favorite-icon">favorite</span>
+                        <span class="product-detail-rating">{{ query.likes }}/5 <span>rating</span></span>
+                    </div>
+                </div>
+                {% if can_review %}
+                    <a class="write-review" href="{% url 'products:product-review' query.id %}">Write a review</a>
+                {% endif %}
+                <div class="product-detail-price-and-name">
+                    <h2 class="product-detail-name">{{ query.name }}</h2>
+                    <h3 class="product-detail-price">P{{ query.price }}</h3>
+                </div>
+                <div class="product-description-drop-container">
+                    <div class="product-description-drop product-detail-toggle-btn">
+                        <h4 class="product-detail-description-header">Description</h4>
+                        <span class="material-symbols-outlined product-description-arrow-up">keyboard_arrow_up</span>
+                        <span class="material-symbols-outlined product-description-arrow-down">keyboard_arrow_down</span>
+                    </div>
+                    <p class="product-description">{{ query.description }}</p>
+                </div>
+                <div class="product-detail-drop-container">
+                    <div class="product-detail-drop product-detail-toggle-btn">
+                        <h4 class="product-detail-detail-header">Detail</h4>
+                        <span class="material-symbols-outlined product-detail-arrow-up">keyboard_arrow_up</span>
+                        <span class="material-symbols-outlined product-detail-arrow-down">keyboard_arrow_down</span>
+                    </div>
+                    <p class="product-detail">{{ query.detail }}</p>
+                </div>
+                <div class="product-detail-btns">
+                    <a class="add-to-basket" href="">Add to Basket</a>
+                    <a class="back-to-product" href="{% url 'products:product-list' %}">Back to Products</a>
+                </div>
+            </div>
+        </div>
+        <div id="reviews" class="product-reviews-wrapper">
+           <div class="product-reviews">
+            {% for review in reviews %}
+                <div class="product-review">
+                    <h4>{{ review.author.username }}</h4>
+                    {% if not review.content %}
+                        <p>Review not available</p>
+                    {% else %}
+                        <p>{{ review.content }}</p>
+                    {% endif %}
+                </div>
+                <br>
+            {% endfor %}
+            <br>
+           </div>
+        </div>
+    </div>
+
+{% endblock content %}
