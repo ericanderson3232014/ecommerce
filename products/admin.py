@@ -4,6 +4,7 @@ from .models import (
     Product, 
     ProductImage,
     ProductReview,
+    ProductSubCategory
 )
 
 
@@ -14,9 +15,15 @@ class ProductCategoryAdmin(admin.ModelAdmin):
 admin.site.register( ProductCategory, ProductCategoryAdmin)
 
 
+class ProductSubCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+admin.site.register(ProductSubCategory, ProductSubCategoryAdmin)
+
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price', 'created', 'updated', 'available']
-    search_fields = ['name', 'id']
+    list_display = ['name', 'price', 'category', 'sub_category', 'created', 'updated', 'available']
+    search_fields = ['name', 'category__name', 'sub_category__name']
 
 admin.site.register(Product, ProductAdmin)
 

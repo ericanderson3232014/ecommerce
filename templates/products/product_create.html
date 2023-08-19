@@ -13,26 +13,26 @@
 
     <style>
         .product-create-form-wrapper{
+            min-height: 100vh;
+            padding: 3rem 0;
+        }
+
+        .create-form {
             width: 90%;
-            margin: 5rem auto;
+            margin: 0rem auto;
             max-width: 500px;
             padding: 1.5rem;
             border-radius: 5px;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
             justify-content: start;
+            gap: 0.5rem;
+            background: white;
             box-shadow: 0px 0px 20px -1px rgb(219, 219, 219);
         }
 
-        .product-create-form-wrapper > h2 {
+        .create-form > h2 {
             letter-spacing: 0.07rem;
-        }
-
-        .create-form {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem
         }
 
         .image-upload-warning {
@@ -43,7 +43,7 @@
             padding: 0 1rem;
         }
 
-       
+        .product-category-input,
         .product-name-input,
         .product-price-input,
         .product-description-textarea,
@@ -59,6 +59,7 @@
             gap: 0.5rem;
         }
 
+        .product-category-input > p > select,
         .product-price-input > p > input,
         .product-name-input > p > input,
         .product-description-textarea > p > textarea,
@@ -70,6 +71,10 @@
             line-height: 1.5;
             font-size: 1rem;
             border: 1px solid rgb(189, 189, 189);
+        }
+
+        .product-category-input > p > select {
+            background: white;
         }
 
         .product-description-textarea > p > textarea,
@@ -89,6 +94,7 @@
             aspect-ratio: 1/1;
         }
 
+        .product-category-input > label
         .product-image-input > label,
         .product-price-input > label,
         .product-available-input > label,
@@ -143,10 +149,10 @@
     </style>
 
     <div class="product-create-form-wrapper">
-        <h2>Add your product</h2>
         <form class="create-form" action="{% url 'products:product-create' %}" method="POST" enctype="multipart/form-data">
+            <h2>Add your product</h2>
             {% csrf_token %}
-            <div class="product-name-input">
+            <div class="product-category-input">
                 {{ product_form.category.label_tag}}
                 <p>{{ product_form.category}}</p>
             </div>

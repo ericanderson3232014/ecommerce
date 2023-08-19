@@ -25,12 +25,14 @@ def home_view(request):
 
 def product_list_view(request):
     query_set = Product.objects.all()
+    laptops = query_set.filter(category__name__iexact='laptop')
+    entry_level = laptops.filter(sub_category__name__iexact='entry level laptop')
     for query in query_set:
         obj = str(query.likes)
         if obj[2] == '0':
             query.likes = int(obj[0])
             query.save()
-    context = {'query_set': query_set}
+    context = {'query_set': query_set[0:5], 'laptops':laptops[0:5], 'entry_level':entry_level}
     return render(request, 'products/product_list.html', context)
 
 
@@ -104,11 +106,11 @@ def product_review_view(request, id):
 
 def product_search_view(request):
     q = request.GET.get('q')
-    query_set = Product.objects.filter(Q(category__name__iexact = q) | Q(name__icontains = q))
+    query_set = Product.objects.filter(Q(category__name__icontains = q) | Q(sub_category__name__icontains = q) |Q(name__icontains = q))
     for query in query_set:
         obj = str(query.likes)
         if obj[2] == '0':
             query.likes = int(obj[0])
             query.save()
-    context = {'query_set': query_set, 'search':True}
+    context = {'query_set': query_set, 'q':q,'search':True}
     return render(request, 'products/product_list.html', context)

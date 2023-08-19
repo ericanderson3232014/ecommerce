@@ -5,6 +5,7 @@ import uuid
 
 
 
+
 class ProductCategory(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='category_images')
@@ -17,6 +18,21 @@ class ProductCategory(models.Model):
         verbose_name_plural = 'Product Categories'
 
 
+
+class ProductSubCategory(models.Model):
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = 'Product Sub-Categories'
+        ordering = ['name']
+
+
+
 class Product(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -24,6 +40,7 @@ class Product(models.Model):
         editable=False
     )
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    sub_category = models.ForeignKey(ProductSubCategory, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100, blank=True, null=True)
     product_image = models.ImageField(upload_to='product_image', null=True, blank=True)
@@ -35,7 +52,6 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     num_of_times_solid = models.IntegerField(default=0)
     likes = models.DecimalField(max_digits=5, decimal_places=1 ,default=0.0)
-
 
     def __str__(self):
         return self.name
@@ -51,6 +67,7 @@ class Product(models.Model):
         verbose_name_plural = 'Products'
 
 
+
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_images')
@@ -60,6 +77,7 @@ class ProductImage(models.Model):
 
     class Meta:
         verbose_name_plural = 'Product Images'
+
 
 
 class ProductReview(models.Model):

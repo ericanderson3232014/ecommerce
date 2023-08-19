@@ -19,7 +19,7 @@
         </nav>
     {% endwith %}
     <form class="search-form" action="{% url 'products:product-search' %}" method="GET">
-        <input class="search-input" type="text", name='q' placeholder="What are you looking for?">
+        <input class="search-input" type="text", name='q' required placeholder="What are you looking for?">
         <input class="submit-input" type="submit" name="submit" value="Search">
     </form>
 </div>
