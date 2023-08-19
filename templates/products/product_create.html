@@ -147,6 +147,10 @@
         <form class="create-form" action="{% url 'products:product-create' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="product-name-input">
+                {{ product_form.category.label_tag}}
+                <p>{{ product_form.category}}</p>
+            </div>
+            <div class="product-name-input">
                 {{ product_form.name.label_tag}}
                 <p>{{ product_form.name}}</p>
             </div>

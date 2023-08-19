@@ -13,7 +13,7 @@
     <div class="categories-wrapper">
         <div class="category-images">
             {% for cat in category %}
-            <a href="" class="category-image">
+            <a href="{% url 'products:product-search' %}?q={{ cat.name }}" class="category-image">
                 <h2 class="category-name">{{ cat.name }}</h2>
                 <img class="img" src="{{ cat.image.url }}" alt="">
             </a>

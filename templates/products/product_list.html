@@ -11,6 +11,12 @@
 {% block content %}
 
     <div class="product-list-wrapper">
+        {% if search %}
+            <h1>Search result</h1>
+            {% if not query_set %}
+                <h3>Search result return zero items!</h3>
+            {% endif %}
+        {% endif %}
         <div class="products">
             {% for obj in query_set %}
                 <a href="{{ obj.get_absolute_url }}?name={{obj.name}}" class="product">

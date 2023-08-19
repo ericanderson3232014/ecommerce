@@ -23,6 +23,7 @@ class Product(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100, blank=True, null=True)
     product_image = models.ImageField(upload_to='product_image', null=True, blank=True)
@@ -64,6 +65,7 @@ class ProductImage(models.Model):
 class ProductReview(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=100)
     content = models.TextField()
     rating = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)

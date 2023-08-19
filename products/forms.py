@@ -9,6 +9,7 @@ class CreateProductForm(forms.ModelForm):
     class Meta:
         model = Product 
         fields = [
+            'category',
             'name',
             'product_image',
             'description', 
@@ -33,4 +34,5 @@ class CreateProductImageForm(forms.ModelForm):
 
 class ProductReviewForm(forms.Form):
     rating = forms.CharField(max_length=5)
+    title = forms.CharField(max_length=100)
     content = forms.CharField(widget=forms.Textarea, required=False)

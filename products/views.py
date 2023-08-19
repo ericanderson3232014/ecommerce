@@ -83,10 +83,12 @@ def product_review_view(request, id):
             author = request.user
             content = form.cleaned_data.get('content')
             rating = int(form.cleaned_data.get('rating'))
+            title = form.cleaned_data.get('title')
             reveiw = ProductReview.objects.create(
                 product=product, 
                 author=author, 
                 rating=rating, 
+                title = title,
                 content=content
             )
             product = Product.objects.get(id=id)
@@ -102,11 +104,11 @@ def product_review_view(request, id):
 
 def product_search_view(request):
     q = request.GET.get('q')
-    search = q.split()
-    results = []
-    for word in search:
-        product_search = Product.objects.filter(Q(name__contains=word))
-        category_search = ProductCategory.objects.filter(Q(name__contains=word))
-        results += product_search
-        results += category_search
-    return render(request, 'products/product_list.html')
+    query_set = Product.objects.filter(Q(category__name__iexact = q) | Q(name__icontains = q))
+    for query in query_set:
+        obj = str(query.likes)
+        if obj[2] == '0':
+            query.likes = int(obj[0])
+            query.save()
+    context = {'query_set': query_set, 'search':True}
+    return render(request, 'products/product_list.html', context)
