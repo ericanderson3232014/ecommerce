@@ -9,126 +9,204 @@
 
 
 {% block content %}
-
+<div class="{% if not query_set %} product-list-background-white {% endif %}">
     <div class="product-list-wrapper">
+        <!-- SEARCH RESULT STARTS HERE -->
         {% if search %}
             <h1 class="product-list-header">Search result <span>for {{ q }}</span></h1>
             {% if not query_set %}
                 <h3>Search result returned zero items!</h3>
+            {% else %}
+                <div class="products">
+                    {% for obj in query_set %}
+                        <a href="{{ obj.get_absolute_url }}?name={{obj.name}}" class="product">
+                            <img class="product-image" src="{{ obj.product_image.url }}" alt="">
+                            <div class="availability-like-reviews">
+                                <div class="product-available-container">
+                                    {% if obj.available %}
+                                        <p class="product-available"><strong>In Stock</strong></p>
+                                    {% else %}
+                                        <p class="product-available"><strong>Out of Stock</strong></p>
+                                    {% endif %}
+                                </div>
+                                <div class="product-review-container">
+                                    <span class="material-symbols-outlined review-icon">rate_review</span>
+                                    {% if obj.productreview_set.all %}
+                                        <span class="rating">{{ obj.productreview_set.count }}</span>
+                                    {% else %}
+                                        <span class="rating">0</span>
+                                    {% endif %}
+                                </div>
+                                <div class="product-favorite-container">
+                                    <span class="material-symbols-outlined favorite-icon">favorite</span>
+                                    <span class="rating">{{obj.likes}}/5</span>
+                                </div>
+                            </div>
+                            <div class="product-info-container">
+                                <h3 class="product-name">{{ obj.name }} </h3>
+                                <p class="product-description">{{ obj.description|truncatewords:20}}</p>
+                                {% if obj.get_discount_price%}
+                                    <h3 class="product-price">
+                                        P{{ obj.get_discount_price }}
+                                    </h3>
+                                    <p class="product-discount-price-container">
+                                        <span class="product-discount-price" >
+                                            P{{ obj.price }}
+                                        </span>
+                                        <span class="product-discount-percent">-10%</span>
+                                    </p>
+                                {% else %}
+                                    <h3 class="product-price">P{{ obj.price }}</h3>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% else %}
-            <h1 class="product-list-header">Latest</h1>
+        <!-- PRODUCT LIST STARTS HERE -->
+            <!-- Product list 1 -->
+            <h1 class="product-list-header">Latest product</h1>
+            <div class="products">
+                {% for obj in query_set %}
+                    <a href="{{ obj.get_absolute_url }}?name={{obj.name}}" class="product">
+                        <img class="product-image" src="{{ obj.product_image.url }}" alt="">
+                        <div class="availability-like-reviews">
+                            <div class="product-available-container">
+                                {% if obj.available %}
+                                    <p class="product-available"><strong>In Stock</strong></p>
+                                {% else %}
+                                    <p class="product-available"><strong>Out of Stock</strong></p>
+                                {% endif %}
+                            </div>
+                            <div class="product-review-container">
+                                <span class="material-symbols-outlined review-icon">rate_review</span>
+                                {% if obj.productreview_set.all %}
+                                    <span class="rating">{{ obj.productreview_set.count }}</span>
+                                {% else %}
+                                    <span class="rating">0</span>
+                                {% endif %}
+                            </div>
+                            <div class="product-favorite-container">
+                                <span class="material-symbols-outlined favorite-icon">favorite</span>
+                                <span class="rating">{{obj.likes}}/5</span>
+                            </div>
+                        </div>
+                        <div class="product-info-container">
+                                <h3 class="product-name">{{ obj.name }} </h3>
+                                <p class="product-description">{{ obj.description|truncatewords:20}}</p>
+                                {% if obj.get_discount_price%}
+                                    <h3 class="product-price">
+                                        P{{ obj.get_discount_price }}
+                                    </h3>
+                                    <p class="product-discount-price-container">
+                                        <span class="product-discount-price" >
+                                            P{{ obj.price }}
+                                        </span>
+                                        <span class="product-discount-percent">-10%</span>
+                                    </p>
+                                {% else %}
+                                    <h3 class="product-price">P{{ obj.price }}</h3>
+                                {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <!-- Product list 2 -->
+            <h1 class="product-list-header">Best sellers</h1>
+            <div class="products">
+                {% for laptop in laptops %}
+                    <a href="{{ laptop.get_absolute_url }}?name={{laptop.name}}" class="product">
+                        <img class="product-image" src="{{ laptop.product_image.url }}" alt="">
+                        <div class="availability-like-reviews">
+                            <div class="product-available-container">
+                                {% if laptop.available %}
+                                    <p class="product-available"><strong>In Stock</strong></p>
+                                {% else %}
+                                    <p class="product-available"><strong>Out of Stock</strong></p>
+                                {% endif %}
+                            </div>
+                            <div class="product-review-container">
+                                <span class="material-symbols-outlined review-icon">rate_review</span>
+                                {% if laptop.productreview_set.all %}
+                                    <span class="rating">{{ laptop.productreview_set.count }}</span>
+                                {% else %}
+                                    <span class="rating">0</span>
+                                {% endif %}
+                            </div>
+                            <div class="product-favorite-container">
+                                <span class="material-symbols-outlined favorite-icon">favorite</span>
+                                <span class="rating">{{ laptop.likes }}/5</span>
+                            </div>
+                        </div>
+                        <div class="product-info-container">
+                            <h3 class="product-name">{{ laptop.name }} </h3>
+                            <p class="product-description">{{ laptop.description|truncatewords:20}}</p>
+                            {% if laptop.get_discount_price%}
+                                    <h3 class="product-price">
+                                        P{{ laptop.get_discount_price }}
+                                    </h3>
+                                    <p class="product-discount-price-container">
+                                        <span class="product-discount-price" >
+                                            P{{ laptop.price }}
+                                        </span>
+                                        <span class="product-discount-percent">-10%</span>
+                                    </p>
+                                {% else %}
+                                    <h3 class="product-price">P{{ laptop.price }}</h3>
+                                {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <!-- Product list 3 -->
+            <h1 class="product-list-header">Just for you</h1>
+            <div class="products">
+                {% for laptop in entry_level %}
+                    <a href="{{ laptop.get_absolute_url }}?name={{laptop.name}}" class="product">
+                        <img class="product-image" src="{{ laptop.product_image.url }}" alt="">
+                        <div class="availability-like-reviews">
+                            <div class="product-available-container">
+                                {% if laptop.available %}
+                                    <p class="product-available"><strong>In Stock</strong></p>
+                                {% else %}
+                                    <p class="product-available"><strong>Out of Stock</strong></p>
+                                {% endif %}
+                            </div>
+                            <div class="product-review-container">
+                                <span class="material-symbols-outlined review-icon">rate_review</span>
+                                {% if laptop.productreview_set.all %}
+                                    <span class="rating">{{ laptop.productreview_set.count }}</span>
+                                {% else %}
+                                    <span class="rating">0</span>
+                                {% endif %}
+                            </div>
+                            <div class="product-favorite-container">
+                                <span class="material-symbols-outlined favorite-icon">favorite</span>
+                                <span class="rating">{{ laptop.likes }}/5</span>
+                            </div>
+                        </div>
+                        <div class="product-info-container">
+                            <h3 class="product-name">{{ laptop.name }} </h3>
+                            <p class="product-description">{{ laptop.description|truncatewords:20 }}</p>
+                            {% if laptop.get_discount_price%}
+                                <h3 class="product-price">
+                                    P{{ laptop.get_discount_price }}
+                                </h3>
+                                <p class="product-discount-price-container">
+                                    <span class="product-discount-price" >
+                                        P{{ laptop.price }}
+                                    </span>
+                                    <span class="product-discount-percent">-10%</span>
+                                </p>
+                            {% else %}
+                                <h3 class="product-price">P{{ laptop.price }}</h3>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
         {% endif %}
-        <!-- Product 1 -->
-        <div class="products">
-            {% for obj in query_set %}
-                <a href="{{ obj.get_absolute_url }}?name={{obj.name}}" class="product">
-                    <img class="product-image" src="{{ obj.product_image.url }}" alt="">
-                    <div class="availability-like-reviews">
-                        <div class="product-available-container">
-                            {% if obj.available %}
-                                <p class="product-available"><strong>In Stock</strong></p>
-                            {% else %}
-                                <p class="product-available"><strong>Out of Stock</strong></p>
-                            {% endif %}
-                        </div>
-                        <div class="product-review-container">
-                            <span class="material-symbols-outlined review-icon">rate_review</span>
-                            {% if obj.productreview_set.all %}
-                                <span class="rating">{{ obj.productreview_set.count }}</span>
-                            {% else %}
-                                <span class="rating">0</span>
-                            {% endif %}
-                        </div>
-                        <div class="product-favorite-container">
-                            <span class="material-symbols-outlined favorite-icon">favorite</span>
-                            <span class="rating">{{obj.likes}}/5</span>
-                        </div>
-                    </div>
-                    <div class="product-info-container">
-                        <h3 class="product-name">{{ obj.name }} <span class="product-price">p{{obj.price }}</span></h3>
-                        <p class="product-description">
-                            {{ obj.description|truncatewords:30}}
-                        </p>
-                        <p class="see-detail">See Detail</p>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-         <!-- Product 2 -->
-        <h1 class="product-list-header">Best sellers</h1>
-        <div class="products">
-            {% for laptop in laptops %}
-                <a href="{{ laptop.get_absolute_url }}?name={{laptop.name}}" class="product">
-                    <img class="product-image" src="{{ laptop.product_image.url }}" alt="">
-                    <div class="availability-like-reviews">
-                        <div class="product-available-container">
-                            {% if laptop.available %}
-                                <p class="product-available"><strong>In Stock</strong></p>
-                            {% else %}
-                                <p class="product-available"><strong>Out of Stock</strong></p>
-                            {% endif %}
-                        </div>
-                        <div class="product-review-container">
-                            <span class="material-symbols-outlined review-icon">rate_review</span>
-                            {% if laptop.productreview_set.all %}
-                                <span class="rating">{{ laptop.productreview_set.count }}</span>
-                            {% else %}
-                                <span class="rating">0</span>
-                            {% endif %}
-                        </div>
-                        <div class="product-favorite-container">
-                            <span class="material-symbols-outlined favorite-icon">favorite</span>
-                            <span class="rating">{{ laptop.likes }}/5</span>
-                        </div>
-                    </div>
-                    <div class="product-info-container">
-                        <h3 class="product-name">{{ laptop.name }} <span class="product-price">p{{ laptop.price }}</span></h3>
-                        <p class="product-description">
-                            {{ laptop.description|truncatewords:30 }}
-                        </p>
-                        <p class="see-detail">See Detail</p>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-         <!-- Product 3 -->
-         <h1 class="product-list-header">Just for you</h1>
-         <div class="products">
-             {% for laptop in entry_level %}
-                 <a href="{{ laptop.get_absolute_url }}?name={{laptop.name}}" class="product">
-                     <img class="product-image" src="{{ laptop.product_image.url }}" alt="">
-                     <div class="availability-like-reviews">
-                         <div class="product-available-container">
-                             {% if laptop.available %}
-                                 <p class="product-available"><strong>In Stock</strong></p>
-                             {% else %}
-                                 <p class="product-available"><strong>Out of Stock</strong></p>
-                             {% endif %}
-                         </div>
-                         <div class="product-review-container">
-                             <span class="material-symbols-outlined review-icon">rate_review</span>
-                             {% if laptop.productreview_set.all %}
-                                 <span class="rating">{{ laptop.productreview_set.count }}</span>
-                             {% else %}
-                                 <span class="rating">0</span>
-                             {% endif %}
-                         </div>
-                         <div class="product-favorite-container">
-                             <span class="material-symbols-outlined favorite-icon">favorite</span>
-                             <span class="rating">{{ laptop.likes }}/5</span>
-                         </div>
-                     </div>
-                     <div class="product-info-container">
-                         <h3 class="product-name">{{ laptop.name }} <span class="product-price">p{{ laptop.price }}</span></h3>
-                         <p class="product-description">
-                             {{ laptop.description|truncatewords:30 }}
-                         </p>
-                         <p class="see-detail">See Detail</p>
-                     </div>
-                 </a>
-             {% endfor %}
-         </div>
     </div>
-
+</div>
 {% endblock content %}

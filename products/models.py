@@ -21,7 +21,7 @@ class ProductCategory(models.Model):
 
 class ProductSubCategory(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -46,7 +46,7 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='product_image', null=True, blank=True)
     description = models.TextField(max_length=300)
     detail = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     available = models.BooleanField(default=True)
@@ -61,6 +61,13 @@ class Product(models.Model):
     
     def get_absolute_url(self):
         return reverse('products:product-detail', args=[str(self.id)])
+    
+    def get_discount_price(self):
+        item = Product.objects.get(name=self.name)
+        if item.sub_category:
+            if item.sub_category.name == 'Gaming Laptop':
+                discount = float(item.price) - float(item.price) * .10
+                return str(discount)[0:-2]
     
     class Meta:
         ordering = ['-created']

@@ -416,28 +416,46 @@ home.html
 product_list.html
 =================  */
 
+.product-list-background-white {
+    background: white;
+}
+
 .product-list-wrapper {
     width: 90%;
     margin: 0 auto;
     padding: 2rem 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .product-list-header {
     letter-spacing: 0.07rem;
     color: rgb(43, 43, 43);
-    border-bottom: 1px solid rgb(201, 201, 201);
+    border-bottom: 1px solid rgb(218, 218, 218);
     font-size: 1.7rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
+    margin-top: 1rem;
     padding-bottom: 0.5rem;
     font-weight: 500;
+    text-wrap: balance;
+}
+
+@media screen and (max-width: 1000px) {
+    .product-list-header {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 543px) {
+    .product-list-header {
+        font-size: 1.3rem;
+    }
 }
 
 .products {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 1.5rem;
 }
 
@@ -447,31 +465,24 @@ product_list.html
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.5rem;
     transition: transform 150ms linear;
     border-radius: 10px;
-    /* border: 1px solid transparent; */
-    /* border: 1px solid rgb(240, 240, 240); */
 }
 
 @media (hover) {
     .product:hover {
         transform: scale(1.05);
-        /* border: 1px solid rgb(211, 211, 211); */
-        /* box-shadow: none; */
     }
 }
 
 .product > img {
     width: 100%;
-    /* height: 100%; */
-    height: auto;
+    /* height: auto; */
     display: block;
-    /* object-fit: cover; */
-    /* aspect-ratio: 4/3; */
+    aspect-ratio: 4/3;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    display: block;
 }
 
 .availability-like-reviews {
@@ -481,7 +492,7 @@ product_list.html
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0rem 1.5rem 0.5rem 1.5rem;
+    padding: 0rem 1rem 0.5rem 1rem;
 }
 
 .product-available-container,
@@ -497,15 +508,12 @@ product_list.html
 
 .product-available {
     color: rgb(123, 0, 255);
-    font-size: 1rem;
+    font-size: 0.9rem;
     letter-spacing: 0.07rem;
 }
 
 .review-icon,
 .favorite-icon{
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */
     color: rgb(133, 133, 133);
     gap: 0.2rem;
     font-size: 1.3rem;
@@ -517,11 +525,11 @@ product_list.html
 }
 
 .product-info-container {
-    padding: 1.5rem;
+    padding: 1rem;
     padding-top: 0rem;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.5rem;
 }
 
 .product-name {
@@ -532,38 +540,49 @@ product_list.html
     color: rgb(49, 49, 49);
     letter-spacing: 0.07rem;
     font-size: 1.05rem;
-    word-wrap: break-word;
+    /* word-wrap: break-word; */
+    text-wrap: balance;
     line-height: 1.3;
-}
-
-.product-price {
-    color: rgb(255, 72, 0);
-    font-size: 1.05rem !important;
 }
 
 .product-description {
     color: rgb(65, 65, 65);
     letter-spacing: 0.09rem;
     line-height: 1.5;
+    word-wrap: break-word;
+
+    /* max-height: 500px;
+    min-width: calc(250px - 1rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid black; */
 }
 
-.see-detail {
-    color: rgb(255, 68, 0);
-    letter-spacing: 0.07rem;
-    text-decoration: underline;
-    font-size: 0.9rem;
-    font-weight: 500;
+.product-price {
+    color: rgb(255, 78, 33);
+    letter-spacing: 0.05rem;
     align-self: start;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 1.1rem !important;
 }
 
-@media (hover) {
-    .see-detail:hover {
-        text-decoration: none;
-        background: rgb(255, 77, 13);
-        color: white;
-        padding: 0.4rem 0.7rem;
-        border-radius: 5px;
-    }
+.product-discount-price-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+}
+
+.product-discount-price {
+    position: relative;
+    color: gray;
+}
+
+.product-discount-percent {
+    color: rgb(53, 53, 53)
 }
 
 @media screen and (max-width: 693px) {
