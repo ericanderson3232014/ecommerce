@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+
+
+
+{% block title %}
+    {{ request.user }}'s basket
+{% endblock title %}
+
+
+
+{% block content %}
+
+<div class="my-basket-wrapper">
+    <h2>
+        {{ num_of_product }}
+        {% if num_of_product > 1 %} 
+            items in the basket
+        {% else %}
+            item in the basket
+        {% endif %}
+    </h2>
+</div>
+
+{% endblock content %}

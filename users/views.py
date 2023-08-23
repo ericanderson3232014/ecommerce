@@ -58,4 +58,4 @@ def user_logout_view(request):
         if request.method == 'POST':
             logout(request)
             return redirect('users:user-login')
-    return render(request, 'users/user_logout.html', context={})
+        return render(request, 'users/user_logout.html', context=None)

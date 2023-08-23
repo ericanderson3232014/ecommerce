@@ -15,12 +15,19 @@
                 <a class="nav-link {% if url_name == 'product-create' %}active-nav-link{% endif %}" href="{% url 'products:product-create' %}">Create</a>
                 <a class="nav-link {% if url_name == 'user-logout' %}active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
                 <!-- <h3 style="color: white; letter-spacing: 0.07rem;">welcome back {{ request.user.username }}!</h3> -->
+                <a class="nav-basket {% if url_name == 'product-basket' %}active-nav-link{% endif %}" href="{% url 'products:product-basket' request.user.username %}">
+                    <span class="material-symbols-outlined shopping-cart">shopping_cart</span> 
+                    <span class="num-of-items">{{ num_of_product }}</span>
+                </a>
             {% endif %}
+            <a href="{% url 'sellers:sellers-seller' %}" class="nav-link">Sell on market</a>
         </nav>
     {% endwith %}
     <form class="search-form" action="{% url 'products:product-search' %}" method="GET">
-        <input class="search-input" type="text", name='q' required placeholder="What are you looking for?">
-        <input class="submit-input" type="submit" name="submit" value="Search">
+        <input class="search-input" type="text", name='q' required placeholder="Search">
+        <button class="submit-input" type="submit">
+            <span class="material-symbols-outlined">search</span>
+        </button>
     </form>
 </div>
 
@@ -42,9 +49,33 @@
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-login' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-login' %}">Login</a>
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-register' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-register' %}">Register</a>
             {% else %}
+                <a class="mobile-nav mobile-nav-link {% if url_name == 'product-create' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-create' %}">Create</a>
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-logout' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
             {% endif %}
+            <a href="{% url 'sellers:sellers-seller' %}" class="mobile-nav mobile-nav-link">Sell on market</a>
+            <!-- <form class="mobile-search-form" action="{% url 'products:product-search' %}" method="GET">
+                <input class="mobile-search-input" type="text", name='q' required placeholder="Search">
+                <button class="mobile-submit-btn" type="submit">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </form> -->
         </nav>
     {% endwith %}
     <div class="mobile-nav-background-layout"></div>
 </div>
+
+<script>
+    const searchInput = document.querySelector('.search-input')
+    const submitInput = document.querySelector('.submit-input')
+    const searchForm = document.querySelector('.search-form')
+
+    searchInput.addEventListener('click', (e) => {
+        searchForm.style.outline = '2px solid rgb(143, 38, 255)'
+    })
+
+    window.addEventListener('click', (e) => {
+        if(e.target != searchInput) {
+            searchForm.style.outline = 'none'
+        }
+    })
+</script>

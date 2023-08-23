@@ -4,7 +4,8 @@ from .models import (
     Product, 
     ProductImage,
     ProductReview,
-    ProductSubCategory
+    ProductSubCategory,
+    Order
 )
 
 
@@ -39,3 +40,9 @@ class ProductReviewAdmin(admin.ModelAdmin):
     list_display = ['product', 'rating', 'created', 'updated']
 
 admin.site.register(ProductReview, ProductReviewAdmin)
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'product', 'ordered_date']
+
+admin.site.register(Order, OrderAdmin)

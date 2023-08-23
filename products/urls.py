@@ -5,7 +5,9 @@ from .views import (
     product_detail_view,
     product_create_view,
     product_review_view,
-    product_search_view
+    product_search_view,
+    add_to_basket_view,
+    basket_view,
 )
 
 
@@ -19,5 +21,7 @@ urlpatterns = [
     path('product/create/', product_create_view, name='product-create'),
     path('product/<uuid:id>/detail/', product_detail_view, name='product-detail'),
     path('product/<uuid:id>/review/',product_review_view, name='product-review' ),
-    path('product/search/', product_search_view, name='product-search')
+    path('product/search/', product_search_view, name='product-search'),
+    path('product/<uuid:id>/add-to-basket/', add_to_basket_view, name='add-to-basket'),
+    path('<str:str>s/basket/', basket_view, name='product-basket'),
 ]

@@ -11,11 +11,13 @@
 {% block content %}
 
     <div class="categories-wrapper">
-        <div class="category-images">
+        <div class="categories">
             {% for cat in category %}
-            <a href="{% url 'products:product-search' %}?q={{ cat.name }}" class="category-image">
-                <h2 class="category-name">{{ cat.name }}</h2>
-                <img class="img" src="{{ cat.image.url }}" alt="">
+            <a href="{% url 'products:product-search' %}?q={{ cat.name }}" class="category">
+                <h3 class="category-name">{{ cat.name }}</h3>
+                <div class="category-img">
+                    <img class="img" src="{{ cat.image.url }}" alt="">
+                </div>
             </a>
             {% endfor %}
         </div>

@@ -6,7 +6,8 @@ from .models import (
     Product, 
     ProductImage,  
     ProductCategory,
-    ProductReview
+    ProductReview,
+    Order,
 )
 from .forms import (
     CreateProductForm, 
@@ -14,7 +15,8 @@ from .forms import (
     ProductReviewForm
 )
 
-
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 
 def home_view(request):
@@ -28,6 +30,16 @@ def product_list_view(request):
     laptops = query_set.filter(category__name__iexact='laptop')
     entry_level = laptops.filter(sub_category__name__iexact='entry level laptop')
     for query in query_set:
+        obj = str(query.likes)
+        if obj[2] == '0':
+            query.likes = int(obj[0])
+            query.save()
+    for query in laptops:
+        obj = str(query.likes)
+        if obj[2] == '0':
+            query.likes = int(obj[0])
+            query.save()
+    for query in entry_level:
         obj = str(query.likes)
         if obj[2] == '0':
             query.likes = int(obj[0])
@@ -112,5 +124,19 @@ def product_search_view(request):
         if obj[2] == '0':
             query.likes = int(obj[0])
             query.save()
-    context = {'query_set': query_set, 'q':q,'search':True}
-    return render(request, 'products/product_list.html', context)
+    context = {'query_set': query_set, 'q':q}
+    return render(request, 'products/search_result.html', context)
+
+
+def add_to_basket_view(request, id):
+    product = Product.objects.get(id=id)
+    if request.user.is_authenticated:
+        Order.objects.create(customer=request.user, product=product)
+        messages.success(request, f'{product.name} has been added to the basket.')
+        return redirect(product.get_absolute_url())
+    messages.error(request, 'You are not logged in.')
+    return redirect(product.get_absolute_url())
+
+@login_required
+def basket_view(request, str):
+    return render(request, 'products/basket.html')

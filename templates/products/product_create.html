@@ -18,20 +18,31 @@
         }
 
         .create-form {
-            width: 90%;
-            margin: 0rem auto;
-            max-width: 500px;
-            padding: 1.5rem;
+            width: 95%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.3rem;
             border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: start;
-            gap: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit, 
+                minmax(330px, 1fr)
+            );
+            gap: 1.5rem;
             background: white;
             box-shadow: 0px 0px 20px -1px rgb(219, 219, 219);
         }
 
-        .create-form > h2 {
+        .product-create-input-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: stretch;
+            gap: 1rem;
+            border-radius: 5px;
+        }
+        
+        .product-create-input-container > h2 {
             letter-spacing: 0.07rem;
         }
 
@@ -43,6 +54,7 @@
             padding: 0 1rem;
         }
 
+        .product-sub-category-input,
         .product-category-input,
         .product-name-input,
         .product-price-input,
@@ -59,6 +71,7 @@
             gap: 0.5rem;
         }
 
+        .product-sub-category-input > p > select,
         .product-category-input > p > select,
         .product-price-input > p > input,
         .product-name-input > p > input,
@@ -73,6 +86,8 @@
             border: 1px solid rgb(189, 189, 189);
         }
 
+
+        .product-sub-category-input > p > select,
         .product-category-input > p > select {
             background: white;
         }
@@ -105,6 +120,9 @@
            color: rgb(39, 39, 39);
         }
 
+
+        .product-sub-category-input > p > select:focus,
+        .product-category-input > p > select:focus,
         .product-price-input > p > input:focus,
         .product-name-input > p > input:focus,
         .product-description-textarea > p > textarea:focus,
@@ -140,57 +158,59 @@
             border-radius: 5px;
         }
 
-        @media screen and (max-width: 693px) {
-            .product-create-form-wrapper{
-                width: 95%;
-            }
-        }
-
     </style>
 
     <div class="product-create-form-wrapper">
         <form class="create-form" action="{% url 'products:product-create' %}" method="POST" enctype="multipart/form-data">
-            <h2>Add your product</h2>
             {% csrf_token %}
-            <div class="product-category-input">
-                {{ product_form.category.label_tag}}
-                <p>{{ product_form.category}}</p>
+            <div class="product-create-input-container">
+                <h2>Add your product</h2>
+                <div class="product-category-input">
+                    {{ product_form.category.label_tag}}
+                    <p>{{ product_form.category}}</p>
+                </div>
+                <div class="product-sub-category-input">
+                    {{ product_form.sub_category.label_tag}}
+                    <p>{{ product_form.sub_category}}</p>
+                </div>
+                <div class="product-name-input">
+                    {{ product_form.name.label_tag}}
+                    <p>{{ product_form.name}}</p>
+                </div>
+                <div class="product-image-input">
+                    {{ product_form.product_image.label_tag}}
+                    <p>{{ product_form.product_image}}</p>
+                </div>
+                <div class="product-price-input">
+                    {{ product_form.price.label_tag}}
+                    <p>{{ product_form.price}}</p>
+                </div>
+                <div class="product-available-input">
+                    {{ product_form.available.label_tag}}
+                    {{ product_form.available}}
+                </div>
             </div>
-            <div class="product-name-input">
-                {{ product_form.name.label_tag}}
-                <p>{{ product_form.name}}</p>
-            </div>
-            <div class="product-image-input">
-                {{ product_form.product_image.label_tag}}
-                <p>{{ product_form.product_image}}</p>
-            </div>
-            <div class="product-description-textarea">
-                {{ product_form.description.label_tag}}
-                <p>{{ product_form.description}}</p>
-            </div>
-            <div class="product-detail-textarea">
-                {{ product_form.detail.label_tag}}
-                <p>{{ product_form.detail}}</p>
-            </div>
-            <div class="product-price-input">
-                {{ product_form.price.label_tag}}
-                <p>{{ product_form.price}}</p>
-            </div>
-            <div class="product-available-input">
-                {{ product_form.available.label_tag}}
-                {{ product_form.available}}
-            </div>
-            <div class="product-image-input">
-                {{ image_form.image.label_tag }}
-                <p>{{ image_form.image }}</p>
-                <ul class="image-upload-warning">
-                    <li>required.</li>
-                    <li>three images are allowed.</li>
-                </ul>
-            </div>
-            <div class="create-form-btns">
-                <button type="submit">Create</button>
-                <a href="{% url 'products:product-list' %}">Cancel</a>
+            <div class="product-create-input-container">
+                <div class="product-image-input">
+                    {{ image_form.image.label_tag }}
+                    <p>{{ image_form.image }}</p>
+                    <ul class="image-upload-warning">
+                        <li>required.</li>
+                        <li>three images are allowed.</li>
+                    </ul>
+                </div>
+                <div class="product-description-textarea">
+                    {{ product_form.description.label_tag}}
+                    <p>{{ product_form.description}}</p>
+                </div>
+                <div class="product-detail-textarea">
+                    {{ product_form.detail.label_tag}}
+                    <p>{{ product_form.detail}}</p>
+                </div>
+                <div class="create-form-btns">
+                    <button type="submit">Create</button>
+                    <a href="{% url 'products:product-list' %}">Cancel</a>
+                </div>
             </div>
         </form>
     </div>

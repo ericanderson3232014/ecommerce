@@ -133,7 +133,7 @@
                     <p class="product-detail">{{ query.detail }}</p>
                 </div>
                 <div class="product-detail-btns">
-                    <a class="add-to-basket" href="">Add to Basket</a>
+                    <a class="add-to-basket" href="{% url 'products:add-to-basket' query.id %}">Add to Basket</a>
                     <a class="back-to-product" href="{% url 'products:product-list' %}">Back to Products</a>
                 </div>
             </div>

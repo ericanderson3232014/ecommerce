@@ -10,6 +10,7 @@ class CreateProductForm(forms.ModelForm):
         model = Product 
         fields = [
             'category',
+            'sub_category',
             'name',
             'product_image',
             'description', 

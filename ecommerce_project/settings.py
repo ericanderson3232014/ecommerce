@@ -16,7 +16,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.85.37', 'ericanderson3262014.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.244.37', 'ericanderson3262014.pythonanywhere.com']
 # ALLOWED_HOSTS = []
 
 # Application definition
@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     # local apps
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig',
+    'sellers.apps.SellersConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'products.context_processors.get_basket_total',
             ],
         },
     },
