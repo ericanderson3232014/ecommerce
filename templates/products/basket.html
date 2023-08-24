@@ -40,6 +40,7 @@
         display: flex;
         align-items: center;
         background: white;
+
     }
 
     .basket-product > * {
@@ -47,15 +48,14 @@
     } 
 
     .basket-product-info-container {
-        flex: 2;
+        /* flex: 2; */
         display: flex;
         align-items: center;
         gap: 1rem;
-        /* border: 1px solid black; */
     }
 
     .basket-product-image {
-        flex: 0 0 40%;
+        flex: 0 0 30%;
     }
 
     .basket-product-image > img {
@@ -101,7 +101,6 @@
     }
 
     .basket-total-product {
-        /* border: 1px solid black; */
         display: flex;
         align-items: stretch;
         justify-content: center;
@@ -165,6 +164,17 @@
         justify-content: center;
         letter-spacing: 0.05rem;
     }
+
+    .basket-sub-total {
+        width: 90%;
+        max-width: 1000px;
+        margin: 0 auto;
+        letter-spacing: 0.05rem;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
 </style>
 
 <div class="product-basket-wrapper">
@@ -197,7 +207,7 @@
                         </div>
                     </div>
                 </div>
-                <form class="basket-total-product" action="{% url 'products:update-basket' %}" method="GET">
+                <form class="basket-total-product" action="{% url 'products:update-basket' product.product.name %}" method="GET">
                     <button type="button"class="basket-minus-item">
                         <span class="material-symbols-outlined">
                             remove
@@ -205,7 +215,7 @@
                     </button>
                     <div class="quantity">
                         Qty:
-                        <input class="total-amount" type="text" readonly name='amount' value="{{ product.total }}" min="{{ product.total }}">
+                        <input class="total-amount" type="text" readonly name='amount' value="{{ product.quantity }}" min="{{ product.quantity }}">
                     </div>
                     <button  type="button" class="basket-add-item">
                         <span class="material-symbols-outlined">
@@ -215,14 +225,13 @@
                     <button class='update-or-delete' type="submit">Delete</button>
                 </form>
                 <div class="total-price">
-                    {% if product.product.get_discount_price %}
-                        <h3>P{{ product.product.get_discount_price }}</h3>
-                    {% else %}
-                        <h3>P{{ product.product.price }}</h3>
-                    {% endif %}
+                    <h3>P{{ product.get_order_total }}</h3>
                 </div>
             </div>
         {% endfor %}
+    </div>
+    <div class="basket-sub-total">
+        <h3>Sub total: P{{ sub_total }}</h3>
     </div>
 </div>
 
@@ -236,7 +245,6 @@
 
     basketAddItem.forEach((btn) => {
         btn.addEventListener('click', (e) => {
-            e.preventDefault()
             const input = e.currentTarget.previousElementSibling.firstElementChild
             const submitButton = e.currentTarget.nextElementSibling
             submitButton.textContent = 'Update'
@@ -246,17 +254,15 @@
     
     basketMinusItem.forEach((btn) => {
         btn.addEventListener('click', (e) => {
-            e.preventDefault()
             const input = e.currentTarget.nextElementSibling.firstElementChild
             const submitButton = e.currentTarget.nextElementSibling.nextElementSibling.nextElementSibling
-            if(totalAmount.value <= 0){
-                input.value = 0
-                console.log('hello')
-                submitButton.textContent = 'Delete'
-            }else if(input.value >= 1){
+            if(input.value >= 1){
                 input.value --
-                console.log(input.value)
                 submitButton.textContent = 'Update'
+                if(input.value <=0) {
+                    submitButton.textContent = 'Delete'
+                    input.value = 0
+                }
             }
 
         })

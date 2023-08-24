@@ -132,9 +132,16 @@ def product_search_view(request):
 def add_to_basket_view(request, id):
     product = Product.objects.get(id=id)
     if request.user.is_authenticated:
-        Order.objects.create(customer=request.user, product=product)
-        messages.success(request, f'{product.name} has been added to the basket.')
-        return redirect(product.get_absolute_url())
+        order = Order.objects.filter(customer=request.user ,product=product).first()
+        if order:
+            order.quantity += 1
+            order.save()
+            messages.success(request, f'{product.name} quantity has been updated.')
+            return redirect('products:product-basket', request.user.username)
+        else:
+            Order.objects.create(customer=request.user, product=product, quantity=1)
+            messages.success(request, f'{product.name} has been added to the basket.')
+            return redirect('products:product-basket', request.user.username)
     messages.error(request, 'You are not logged in.')
     return redirect(product.get_absolute_url())
 
@@ -150,7 +157,16 @@ def basket_view(request, str):
     return render(request, 'products/basket.html', context)
 
 
-def handle_product_view(request):
+@login_required
+def update_basket_view(request, product_name):
     user = request.user
-    amount = request.GET.get('amount')
+    qty = request.GET.get('amount')
+    order = Order.objects.get(customer=user, product__name=product_name)
+    if order.quantity == int(qty):
+        order.delete()
+        messages.success(request, f'{product_name} has been deleted from your basket.')
+        return redirect('products:product-basket', user.username)
+    order.quantity = int(qty)
+    order.save()
+    messages.success(request, f'{product_name} has been updated.')
     return redirect('products:product-basket', user.username)
