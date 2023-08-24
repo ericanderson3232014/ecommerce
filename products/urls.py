@@ -8,6 +8,7 @@ from .views import (
     product_search_view,
     add_to_basket_view,
     basket_view,
+    handle_product_view
 )
 
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('product/search/', product_search_view, name='product-search'),
     path('product/<uuid:id>/add-to-basket/', add_to_basket_view, name='add-to-basket'),
     path('<str:str>s/basket/', basket_view, name='product-basket'),
+    path('update/basket/', handle_product_view, name='update-basket')
 ]

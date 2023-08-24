@@ -3,22 +3,265 @@
 
 
 {% block title %}
-    {{ request.user }}'s basket
+    {{ request.user.username }}'s basket
 {% endblock title %}
 
 
 
 {% block content %}
 
-<div class="my-basket-wrapper">
-    <h2>
-        {{ num_of_product }}
-        {% if num_of_product > 1 %} 
-            items in the basket
-        {% else %}
-            item in the basket
-        {% endif %}
-    </h2>
+<style>
+
+    .product-basket-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 2rem 0;
+    }
+
+    .product-basket-header {
+        width: 90%;
+        max-width: 1000px;
+        margin: 0 auto;
+        border-bottom: 2px solid rgb(216, 216, 216);
+        padding-bottom: 0.5rem;
+    }
+
+    .basket-list {
+        width: 90%;
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .basket-product {
+        display: flex;
+        align-items: center;
+        background: white;
+    }
+
+    .basket-product > * {
+        flex: 1;
+    } 
+
+    .basket-product-info-container {
+        flex: 2;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        /* border: 1px solid black; */
+    }
+
+    .basket-product-image {
+        flex: 0 0 40%;
+    }
+
+    .basket-product-image > img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        display: block;
+    }
+
+    .basket-product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    .basket-product-name {
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 0.05rem;
+        color: rgb(36, 36, 36);
+    }
+
+    .basket-product-price {
+        letter-spacing: 0.05rem;
+        font-weight: 500;
+        color: orangered
+    }
+
+    .basket-product-discount-price {
+        letter-spacing: 0.05rem;
+        font-size: 0.9rem;
+        color: gray;
+    }
+
+    .basket-product-discount-price > span {
+        color: rgb(31, 31, 31);
+    }
+
+    .basket-product-available {
+        letter-spacing: 0.05rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgb(68, 0, 177)
+    }
+
+    .basket-total-product {
+        /* border: 1px solid black; */
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 0.5rem
+    }
+
+    .basket-minus-item,
+    .basket-add-item {
+        cursor: pointer;
+    }
+
+    .basket-minus-item,
+    .basket-add-item,
+    .quantity {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+    }
+
+    .quantity {
+        border: 1px solid rgb(197, 197, 197);
+        padding: 0 0.4rem;
+        padding-right: 0.2rem;
+        font-size: 0.9rem;
+        letter-spacing: 0.05rem;
+        color: rgb(59, 59, 59)
+    }
+
+    .basket-minus-item,
+    .quantity > input,
+    .basket-add-item {
+        width: 33px;
+        aspect-ratio: 1/1;
+        text-align: center;
+        border: none;
+    }
+
+    .quantity > input {
+        width: 20px;
+        aspect-ratio: 1/1;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    .update-or-delete {
+        padding: 0.3rem 0.6rem;
+        letter-spacing: 0.05rem;
+        border-radius: 5px;
+        background: orangered;
+        color: white;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .total-price {
+        /* border: 1px solid black; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: 0.05rem;
+    }
+</style>
+
+<div class="product-basket-wrapper">
+    <h2 class="product-basket-header">{{ request.user.username }}'s basket</h2>
+    <div class="basket-list">
+        {% for product in query_set %}
+            <div class="basket-product">
+                <div class="basket-product-info-container">
+                    <div class="basket-product-image">
+                        <img src="{{ product.product.get_product_image_url }}" alt="">
+                    </div>
+                    <div class="basket-product-info">
+                        <p class="basket-product-name">
+                            {{ product.product.name }} 
+                        </p>
+                        <div class="basket-product-price-and-discount">
+                            {% if product.product.get_discount_price %}
+                                <p class="basket-product-price">P{{ product.product.get_discount_price }}</p>
+                                <p class="basket-product-discount-price">P{{ product.product.price }} <span>-10%</span></p>
+                            {% else %}
+                                <p class="basket-product-price">P{{ product.product.price }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="basket-product-available">
+                            {% if product.product.available %}
+                                <p>In stock</p>
+                            {% else %}
+                                <p>Out of stock</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <form class="basket-total-product" action="{% url 'products:update-basket' %}" method="GET">
+                    <button type="button"class="basket-minus-item">
+                        <span class="material-symbols-outlined">
+                            remove
+                        </span>
+                    </button>
+                    <div class="quantity">
+                        Qty:
+                        <input class="total-amount" type="text" readonly name='amount' value="{{ product.total }}" min="{{ product.total }}">
+                    </div>
+                    <button  type="button" class="basket-add-item">
+                        <span class="material-symbols-outlined">
+                            add
+                        </span>
+                    </button>
+                    <button class='update-or-delete' type="submit">Delete</button>
+                </form>
+                <div class="total-price">
+                    {% if product.product.get_discount_price %}
+                        <h3>P{{ product.product.get_discount_price }}</h3>
+                    {% else %}
+                        <h3>P{{ product.product.price }}</h3>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
+
+
+<script>
+
+    const basketMinusItem = document.querySelectorAll('.basket-minus-item')
+    const basketAddItem = document.querySelectorAll('.basket-add-item')
+    const totalAmount = document.querySelectorAll('.total-amount')
+    
+
+    basketAddItem.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault()
+            const input = e.currentTarget.previousElementSibling.firstElementChild
+            const submitButton = e.currentTarget.nextElementSibling
+            submitButton.textContent = 'Update'
+            input.value ++
+        })
+    })
+    
+    basketMinusItem.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault()
+            const input = e.currentTarget.nextElementSibling.firstElementChild
+            const submitButton = e.currentTarget.nextElementSibling.nextElementSibling.nextElementSibling
+            if(totalAmount.value <= 0){
+                input.value = 0
+                console.log('hello')
+                submitButton.textContent = 'Delete'
+            }else if(input.value >= 1){
+                input.value --
+                console.log(input.value)
+                submitButton.textContent = 'Update'
+            }
+
+        })
+    })
+    
+</script>
 
 {% endblock content %}

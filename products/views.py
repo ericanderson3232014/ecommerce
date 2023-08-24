@@ -17,6 +17,7 @@ from .forms import (
 
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.contrib.auth.models import User
 
 
 def home_view(request):
@@ -137,6 +138,19 @@ def add_to_basket_view(request, id):
     messages.error(request, 'You are not logged in.')
     return redirect(product.get_absolute_url())
 
+
 @login_required
 def basket_view(request, str):
-    return render(request, 'products/basket.html')
+    user = User.objects.filter(username__iexact=str).first()
+    query_set = user.order_set.all()
+    context = {'query_set': query_set}
+    if not query_set.exists():
+        messages.info(request, 'Your basket is empty.')
+        return redirect('products:product-list')
+    return render(request, 'products/basket.html', context)
+
+
+def handle_product_view(request):
+    user = request.user
+    amount = request.GET.get('amount')
+    return redirect('products:product-basket', user.username)
