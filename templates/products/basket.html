@@ -171,8 +171,18 @@
         margin: 0 auto;
         letter-spacing: 0.05rem;
         display: flex;
-        justify-content: end;
-        align-items: center;
+        flex-direction: column;
+        justify-content: start;
+        align-items: end;
+        gap: 0.5rem;
+    }
+
+    .basket-sub-total > a {
+        letter-spacing: 0.05rem;
+        padding: 0.8rem 1rem;
+        background: orangered;
+        color: white;
+        border-radius: 5px;
     }
 
 </style>
@@ -231,7 +241,9 @@
         {% endfor %}
     </div>
     <div class="basket-sub-total">
+        <!-- coming from context_processors.py -->
         <h3>Sub total: P{{ sub_total }}</h3>
+        <a href="{% url 'products:checkout' request.user.username %}">Continue to checkout</a>
     </div>
 </div>
 

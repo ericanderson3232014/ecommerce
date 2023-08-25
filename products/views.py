@@ -8,6 +8,7 @@ from .models import (
     ProductCategory,
     ProductReview,
     Order,
+    Checkout,
 )
 from .forms import (
     CreateProductForm, 
@@ -158,15 +159,22 @@ def basket_view(request, str):
 
 
 @login_required
-def update_basket_view(request, product_name):
+def update_basket_view(request, str):
     user = request.user
     qty = request.GET.get('amount')
-    order = Order.objects.get(customer=user, product__name=product_name)
+    order = Order.objects.get(customer=user, product__name=str)
     if order.quantity == int(qty):
         order.delete()
-        messages.success(request, f'{product_name} has been deleted from your basket.')
+        messages.success(request, f'{str} has been deleted from your basket.')
         return redirect('products:product-basket', user.username)
     order.quantity = int(qty)
     order.save()
-    messages.success(request, f'{product_name} has been updated.')
+    messages.success(request, f'{str} has been updated.')
     return redirect('products:product-basket', user.username)
+
+
+@login_required
+def checkout_view(request, str):
+    checkout = Checkout.objects.get(customer__username=str)
+    print(checkout.set_amount_due())
+    return redirect('products:product-list')

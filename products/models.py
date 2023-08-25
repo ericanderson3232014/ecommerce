@@ -46,7 +46,7 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='product_image', null=True, blank=True)
     description = models.TextField(max_length=300)
     detail = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=0)
+    price = models.DecimalField(max_digits=10, decimal_places=0, default=0.0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     available = models.BooleanField(default=True)
@@ -114,7 +114,8 @@ class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.PROTECT)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     ordered_date = models.DateTimeField(auto_now_add=True)
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=1)
+    open = models.BooleanField(default=True)
 
     def get_order_total(self):
         product = Order.objects.get(customer=self.customer, product=self.product)
@@ -123,3 +124,20 @@ class Order(models.Model):
     
     def __str__(self):
         return f'{self.customer.username} - {self.product.name}'
+    
+
+class Checkout(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    order = models.ManyToManyField(Order)
+    checkout_datte = models.DateTimeField(auto_now_add=True)
+    total_amount_due = models.DecimalField(max_digits=10, decimal_places=0, default=0)
+
+    def set_amount_due(self):
+        customer = User.objects.get(username=self.customer.username)
+        checkout = Checkout.objects.get(customer=customer)
+        amount_due = [product.get_order_total() for product in checkout.order.all()]
+        self.total_amount_due = sum( amount_due)
+        return sum(amount_due)
+    
+    def __str__(self):
+        return f'{self.customer.username} - {self.order}'
