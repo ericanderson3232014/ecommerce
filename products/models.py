@@ -129,15 +129,16 @@ class Order(models.Model):
 class Checkout(models.Model):
     customer = models.ForeignKey(User, on_delete=models.PROTECT)
     order = models.ManyToManyField(Order)
-    checkout_datte = models.DateTimeField(auto_now_add=True)
+    checkout_date = models.DateTimeField(auto_now_add=True)
     total_amount_due = models.DecimalField(max_digits=10, decimal_places=0, default=0)
 
     def set_amount_due(self):
         customer = User.objects.get(username=self.customer.username)
         checkout = Checkout.objects.get(customer=customer)
         amount_due = [product.get_order_total() for product in checkout.order.all()]
-        self.total_amount_due = sum( amount_due)
-        return sum(amount_due)
+        checkout.total_amount_due = float(sum( amount_due))
+        checkout.save()
+        return float(sum( amount_due))
     
     def __str__(self):
         return f'{self.customer.username} - {self.order}'

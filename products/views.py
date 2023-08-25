@@ -149,6 +149,11 @@ def add_to_basket_view(request, id):
 
 @login_required
 def basket_view(request, str):
+    try:
+        user = User.objects.get(username=str)
+    except Exception as e:
+        messages.error(request, f'Username {str} does not exist.')
+        return redirect('products:product-list')
     user = User.objects.filter(username__iexact=str).first()
     query_set = user.order_set.all()
     context = {'query_set': query_set}
@@ -162,6 +167,11 @@ def basket_view(request, str):
 def update_basket_view(request, str):
     user = request.user
     qty = request.GET.get('amount')
+    try:
+        user = User.objects.get(username=user.username)
+    except Exception as e:
+        messages.error(request, f'Username {user.username} does not exist.')
+        return redirect('products:product-list')
     order = Order.objects.get(customer=user, product__name=str)
     if order.quantity == int(qty):
         order.delete()
@@ -175,6 +185,21 @@ def update_basket_view(request, str):
 
 @login_required
 def checkout_view(request, str):
-    checkout = Checkout.objects.get(customer__username=str)
-    print(checkout.set_amount_due())
+    try:
+        checkout = Checkout.objects.get(customer__username=str)
+    except Exception as e:
+        checkout = Checkout.objects.create(customer=User.objects.get(username=str))
+        orders = Order.objects.filter(customer__username=str)
+        for product in orders:
+            checkout.order.add(product)
+        # checkout.total_amount_due = checkout.set_amount_due()
+        # checkout.save()
+        print('AMOUNT DUE:', checkout.set_amount_due())
+        return redirect('products:product-list')
+    orders = Order.objects.filter(customer__username=str)
+    for product in orders:
+        checkout.order.add(product)
+    # checkout.total_amount_due = checkout.set_amount_due()
+    # checkout.save()
+    print('AMOUNT DUE:', checkout.set_amount_due())
     return redirect('products:product-list')
