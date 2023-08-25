@@ -52,6 +52,7 @@ header {
 
 main {
     background: var(--black-95);
+    min-height: 100vh;
 }
 
 /* Banner */
@@ -60,10 +61,12 @@ main {
     position: relative;
     display: flex;
     flex-wrap: nowrap;
+    /* align-content: start; */
     overflow: hidden;
 }
 
 .banner-img-container {
+    background: white;
     position: relative;
     flex: 0 0 100%;
     transition: transform 300ms linear;
@@ -72,7 +75,8 @@ main {
 .banner-img-container > img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    display: block;
+    object-fit: contain;
 }
 
 .banner-img-background-overlay {
@@ -82,7 +86,7 @@ main {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.301)
+    background: rgba(0, 0, 0, 0.200)
 }
 
 .translate-btns-container {
@@ -655,6 +659,21 @@ product_detail.html
     gap: 3rem;
 }
 
+.product-detail-back-to-product {
+    display: flex;
+    align-items: center;
+    /* gap: 0.3rem; */
+    color: rgb(94, 94, 94);
+    letter-spacing: 0.05rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.product-detail-back-to-product > span {
+    font-weight: 500;
+    font-size: 1.7rem;
+}
+
 .product-detail-container {
     display: flex;
     flex-direction: column;
@@ -674,8 +693,6 @@ product_detail.html
     width: 100%;
     height: auto;
     display: block;
-    /* aspect-ratio: 4/3;
-    display: block; */
 }
 
 .product-detail-extra-images {

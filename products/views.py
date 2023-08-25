@@ -130,31 +130,24 @@ def product_search_view(request):
     return render(request, 'products/search_result.html', context)
 
 
+@login_required
 def add_to_basket_view(request, id):
     product = Product.objects.get(id=id)
-    if request.user.is_authenticated:
-        order = Order.objects.filter(customer=request.user ,product=product).first()
-        if order:
-            order.quantity += 1
-            order.save()
-            messages.success(request, f'{product.name} quantity has been updated.')
-            return redirect('products:product-basket', request.user.username)
-        else:
-            Order.objects.create(customer=request.user, product=product, quantity=1)
-            messages.success(request, f'{product.name} has been added to the basket.')
-            return redirect('products:product-basket', request.user.username)
-    messages.error(request, 'You are not logged in.')
-    return redirect(product.get_absolute_url())
+    order = Order.objects.filter(customer=request.user ,product=product).first()
+    if order:
+        order.quantity += 1
+        order.save()
+        messages.success(request, f'{product.name} quantity has been updated.')
+        return redirect('products:product-basket')
+    else:
+        Order.objects.create(customer=request.user, product=product, quantity=1)
+        messages.success(request, f'{product.name} has been added to the basket.')
+        return redirect('products:product-basket')
 
 
 @login_required
-def basket_view(request, str):
-    try:
-        user = User.objects.get(username=str)
-    except Exception as e:
-        messages.error(request, f'Username {str} does not exist.')
-        return redirect('products:product-list')
-    user = User.objects.filter(username__iexact=str).first()
+def basket_view(request):
+    user = request.user
     query_set = user.order_set.all()
     context = {'query_set': query_set}
     if not query_set.exists():
@@ -167,39 +160,29 @@ def basket_view(request, str):
 def update_basket_view(request, str):
     user = request.user
     qty = request.GET.get('amount')
-    try:
-        user = User.objects.get(username=user.username)
-    except Exception as e:
-        messages.error(request, f'Username {user.username} does not exist.')
-        return redirect('products:product-list')
     order = Order.objects.get(customer=user, product__name=str)
     if order.quantity == int(qty):
         order.delete()
         messages.success(request, f'{str} has been deleted from your basket.')
-        return redirect('products:product-basket', user.username)
+        return redirect('products:product-basket')
     order.quantity = int(qty)
     order.save()
-    messages.success(request, f'{str} has been updated.')
-    return redirect('products:product-basket', user.username)
+    messages.success(request, f'{str} quantity has been updated.')
+    return redirect('products:product-basket')
 
 
 @login_required
-def checkout_view(request, str):
+def checkout_view(request):
+    user = request.user
     try:
-        checkout = Checkout.objects.get(customer__username=str)
-    except Exception as e:
-        checkout = Checkout.objects.create(customer=User.objects.get(username=str))
-        orders = Order.objects.filter(customer__username=str)
+        checkout = Checkout.objects.get(customer__username=user.username)
+    except:
+        checkout = Checkout.objects.create(customer=User.objects.get(username=user.username))
+        orders = Order.objects.filter(customer__username=user.username)
         for product in orders:
             checkout.order.add(product)
-        # checkout.total_amount_due = checkout.set_amount_due()
-        # checkout.save()
-        print('AMOUNT DUE:', checkout.set_amount_due())
         return redirect('products:product-list')
-    orders = Order.objects.filter(customer__username=str)
+    orders = Order.objects.filter(customer__username=user.username)
     for product in orders:
         checkout.order.add(product)
-    # checkout.total_amount_due = checkout.set_amount_due()
-    # checkout.save()
-    print('AMOUNT DUE:', checkout.set_amount_due())
     return redirect('products:product-list')

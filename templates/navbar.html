@@ -15,7 +15,7 @@
                 <a class="nav-link {% if url_name == 'product-create' %}active-nav-link{% endif %}" href="{% url 'products:product-create' %}">Create</a>
                 <a class="nav-link {% if url_name == 'user-logout' %}active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
                 <!-- <h3 style="color: white; letter-spacing: 0.07rem;">welcome back {{ request.user.username }}!</h3> -->
-                <a class="nav-basket {% if url_name == 'product-basket' %}active-nav-link{% endif %}" href="{% url 'products:product-basket' request.user.username %}">
+                <a class="nav-basket {% if url_name == 'product-basket' %}active-nav-link{% endif %}" href="{% url 'products:product-basket' %}">
                     <span class="material-symbols-outlined shopping-cart">shopping_cart</span> 
                     <span class="num-of-items">{{ num_of_product }}</span>
                 </a>

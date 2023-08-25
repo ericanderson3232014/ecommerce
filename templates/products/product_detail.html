@@ -69,6 +69,10 @@
 
 
     <div class="product-detail-container-wrapper">
+        <a class="product-detail-back-to-product" href="{% url 'products:product-list' %}">
+            <span class="material-symbols-outlined">keyboard_arrow_left</span>
+            Back to products
+        </a>
         <div class="product-detail-container">
             <div class="product-detail-img-container">
                 <img src="{{ query.get_product_image_url }}" alt="">
@@ -132,10 +136,17 @@
                     </div>
                     <p class="product-detail">{{ query.detail }}</p>
                 </div>
-                <div class="product-detail-btns">
-                    <a class="add-to-basket" href="{% url 'products:add-to-basket' query.id %}">Add to Basket</a>
-                    <a class="back-to-product" href="{% url 'products:product-list' %}">Back to Products</a>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="product-detail-btns">
+                        <a class="add-to-basket" href="{% url 'products:add-to-basket' query.id %}">Add to Basket</a>
+                        <a class="back-to-product" href="{% url 'products:product-list' %}">Back to Products</a>
+                    </div>
+                {% else %}
+                    <div class="product-detail-btns">
+                        <a class="add-to-basket" href="{% url 'users:user-login' %}?next=/product/{{query.id}}/detail/">Login to purchase</a>
+                        <a class="back-to-product" href="{% url 'products:product-list' %}">Back to Products</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
         <div id="reviews" class="product-reviews-wrapper">
