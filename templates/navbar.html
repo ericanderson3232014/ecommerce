@@ -7,20 +7,32 @@
     </a>
     {% with request.resolver_match.url_name as url_name %}
         <nav class="nav-links">
-            <a class="nav-link {% if url_name == 'product-list' %}active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Explore</a>
+            <a class="nav-link {% if url_name == 'product-list' %}active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Product</a>
+            <a href="{% url 'sellers:sellers-seller' %}" class="nav-link">Sell on market</a>
             {% if not request.user.is_authenticated %}
                 <a class="nav-link {% if url_name == 'user-login' %}active-nav-link{% endif %}" href="{% url 'users:user-login' %}">Login</a>
                 <a class="nav-link {% if url_name == 'user-register' %}active-nav-link{% endif %}" href="{% url 'users:user-register' %}">Register</a>
             {% else %}
-                <a class="nav-link {% if url_name == 'product-create' %}active-nav-link{% endif %}" href="{% url 'products:product-create' %}">Create</a>
-                <a class="nav-link {% if url_name == 'user-logout' %}active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
-                <!-- <h3 style="color: white; letter-spacing: 0.07rem;">welcome back {{ request.user.username }}!</h3> -->
-                <a class="nav-basket {% if url_name == 'product-basket' %}active-nav-link{% endif %}" href="{% url 'products:product-basket' %}">
-                    <span class="material-symbols-outlined shopping-cart">shopping_cart</span> 
-                    <span class="num-of-items">{{ num_of_product }}</span>
-                </a>
+                <div class="logged-in-user-nav-link-container">
+                    <div class="toggle-user-navbar">
+                        <h4>Welcome {{ request.user.username }}!</h4>
+                        <span class="material-symbols-outlined logged-in-navbar-arrow-down">
+                            keyboard_arrow_down
+                        </span>
+                        <span class="material-symbols-outlined logged-in-navbar-arrow-up">
+                            keyboard_arrow_up
+                        </span>
+                    </div>
+                    <div class="logged-in-user-nav-links">
+                        <a class="nav-basket {% if url_name == 'product-basket' %}active-nav-link{% endif %}" href="{% url 'products:product-basket' %}">
+                            <span class="material-symbols-outlined shopping-cart">shopping_cart</span> 
+                            <span class="num-of-items">{{ num_of_product }}</span>
+                        </a>
+                        <a class="nav-link {% if url_name == 'product-create' %}active-nav-link{% endif %}" href="{% url 'products:product-create' %}">Create</a>
+                        <a class="nav-link {% if url_name == 'user-logout' %}active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
+                    </div>
+                </div>
             {% endif %}
-            <a href="{% url 'sellers:sellers-seller' %}" class="nav-link">Sell on market</a>
         </nav>
     {% endwith %}
     <form class="search-form" action="{% url 'products:product-search' %}" method="GET">
@@ -68,6 +80,7 @@
     const searchInput = document.querySelector('.search-input')
     const submitInput = document.querySelector('.submit-input')
     const searchForm = document.querySelector('.search-form')
+    
 
     searchInput.addEventListener('click', (e) => {
         searchForm.style.outline = '2px solid rgb(143, 38, 255)'
@@ -77,5 +90,31 @@
         if(e.target != searchInput) {
             searchForm.style.outline = 'none'
         }
+    })
+
+    const toggleUserNavbar = document.querySelector('.toggle-user-navbar')
+    const loggedInUserNavLinks = document.querySelector('.logged-in-user-nav-links')
+    const loggedInNavbarArrowUp = document.querySelector('.logged-in-navbar-arrow-up')
+    const loggedInNavbarArrowDown = document.querySelector('.logged-in-navbar-arrow-down')
+
+    toggleUserNavbar.addEventListener('click', (e) => {
+        loggedInUserNavLinks.classList.toggle('show-logged-in-user-nav-links')
+        console.log(e.currentTarget)
+        if(loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')){
+            loggedInNavbarArrowUp.style.display = 'flex'
+            loggedInNavbarArrowDown.style.display = 'none'
+        }else{
+            loggedInNavbarArrowUp.style.display = 'none'
+            loggedInNavbarArrowDown.style.display = 'flex'
+        }
+    })
+
+    window.addEventListener('click', (e) =>{
+        console.log(e.target)
+        // if(e.target !=toggleUserNavbar) {
+        //     loggedInUserNavLinks.classList.remove('show-logged-in-user-nav-links')
+        //     loggedInNavbarArrowUp.style.display = 'flex'
+        //     loggedInNavbarArrowDown.style.display = 'none'
+        // }
     })
 </script>

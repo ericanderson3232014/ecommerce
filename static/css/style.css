@@ -313,12 +313,62 @@ index.html
         font-size: 15px;
     }
 
+    .logged-in-user-nav-link-container {
+        position: relative;
+    }
+
+    .toggle-user-navbar {
+        color: white; 
+        letter-spacing: 0.05rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.2rem
+    }
+
+    .logged-in-navbar-arrow-up {
+        display: none;
+    }
+
+    .logged-in-user-nav-links {
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 50px;
+        width: 170px;
+        max-height: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        background: white;
+        border-radius: 8px;
+        opacity: 0;
+        transition: max-height 500ms linear;
+    }
+
+    .show-logged-in-user-nav-links {
+        max-height: 1000px;
+        padding: 0.8rem 0;
+        opacity: 1;
+    }
+
+    .logged-in-user-nav-links > .nav-link {
+        padding: 0.8rem 2rem;
+        color: var(--black-10);
+        letter-spacing: 0.05rem;
+    }
+
     .nav-basket {
         position: relative;
-        color: rgb(236, 236, 236);
+        color: var(--black-25);
         letter-spacing: 0.07rem;
         display: flex;
         align-items: center;
+        margin-left: 2rem;
+        padding-top: 1.5rem;
+        padding-bottom: 0.3rem;
+        align-self: start;
     }
 
     .shopping-cart {
@@ -327,9 +377,9 @@ index.html
 
     .num-of-items {
         position: absolute;
-        top: -10px;
-        right: -15px;
-        min-width: 23px;
+        top: 4px;
+        right: -7px;
+        min-width: 25px;
         aspect-ratio: 1/1;
         color: white;
         display: flex;
@@ -338,6 +388,8 @@ index.html
         border-radius: 50%;
         background: var(--orange-50);
         font-size: 0.9rem;
+        padding-left: 0.1rem;
+        padding-top: 0.1rem;
     }
 
     .nav-link {
