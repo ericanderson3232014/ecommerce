@@ -22,6 +22,8 @@ from django.contrib.auth.models import User
 
 
 def home_view(request):
+    user = request.user
+    print(user.userprofile.profile_image.url)
     category = ProductCategory.objects.all()
     context = {'category': category}
     return render(request, 'products/home.html', context)
@@ -157,17 +159,22 @@ def basket_view(request):
 
 
 @login_required
-def update_basket_view(request, str):
+def update_basket_view(request, string):
     user = request.user
     qty = request.GET.get('amount')
-    order = Order.objects.get(customer=user, product__name=str)
+    order = Order.objects.get(customer=user, product__name=string)
     if order.quantity == int(qty):
         order.delete()
-        messages.success(request, f'{str} has been deleted from your basket.')
+        checkout = Checkout.objects.filter(customer=user).first()
+        checkout.set_amount_due()
+        checkout.save()
+        messages.success(request, f'{string} has been deleted from your basket.')
         return redirect('products:product-basket')
     order.quantity = int(qty)
     order.save()
-    messages.success(request, f'{str} quantity has been updated.')
+    checkout = Checkout.objects.filter(customer=user).first()
+    checkout.set_amount_due()
+    messages.success(request, f'{string} quantity has been updated.')
     return redirect('products:product-basket')
 
 
@@ -181,8 +188,10 @@ def checkout_view(request):
         orders = Order.objects.filter(customer__username=user.username)
         for product in orders:
             checkout.order.add(product)
+        checkout.set_amount_due()
         return redirect('products:product-list')
     orders = Order.objects.filter(customer__username=user.username)
     for product in orders:
         checkout.order.add(product)
+    checkout.set_amount_due()
     return redirect('products:product-list')

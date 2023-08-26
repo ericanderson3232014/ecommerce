@@ -26,6 +26,6 @@ urlpatterns = [
     path('product/search/', product_search_view, name='product-search'),
     path('product/<uuid:id>/add-to-basket/', add_to_basket_view, name='add-to-basket'),
     path('my/basket/', basket_view, name='product-basket'),
-    path('update/<str:str>/qty', update_basket_view, name='update-basket'),
+    path('update/<str:string>/qty', update_basket_view, name='update-basket'),
     path('checkout/', checkout_view, name='checkout')
 ]

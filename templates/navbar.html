@@ -15,7 +15,8 @@
             {% else %}
                 <div class="logged-in-user-nav-link-container">
                     <div class="toggle-user-navbar">
-                        <h4>Welcome {{ request.user.username }}!</h4>
+                        <img class="logged-in-navbar-user-profile-img" src="{{request.user.userprofile.profile_image.url}}" alt="">
+                        <h4 class="logged-in-navbar-username">{{ request.user.username }}</h4>
                         <span class="material-symbols-outlined logged-in-navbar-arrow-down">
                             keyboard_arrow_down
                         </span>
@@ -25,11 +26,13 @@
                     </div>
                     <div class="logged-in-user-nav-links">
                         <a class="nav-basket {% if url_name == 'product-basket' %}active-nav-link{% endif %}" href="{% url 'products:product-basket' %}">
+                            My cart
                             <span class="material-symbols-outlined shopping-cart">shopping_cart</span> 
                             <span class="num-of-items">{{ num_of_product }}</span>
                         </a>
                         <a class="nav-link {% if url_name == 'product-create' %}active-nav-link{% endif %}" href="{% url 'products:product-create' %}">Create</a>
                         <a class="nav-link {% if url_name == 'user-logout' %}active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
+                        <a class="nav-link" href="">Profile</a>
                     </div>
                 </div>
             {% endif %}
@@ -96,10 +99,11 @@
     const loggedInUserNavLinks = document.querySelector('.logged-in-user-nav-links')
     const loggedInNavbarArrowUp = document.querySelector('.logged-in-navbar-arrow-up')
     const loggedInNavbarArrowDown = document.querySelector('.logged-in-navbar-arrow-down')
+    const loggedInNavbarUsername = document.querySelector('.logged-in-navbar-username')
+    const loggedInNavbarUserProfileImg = document.querySelector('.logged-in-navbar-user-profile-img')
 
     toggleUserNavbar.addEventListener('click', (e) => {
         loggedInUserNavLinks.classList.toggle('show-logged-in-user-nav-links')
-        console.log(e.currentTarget)
         if(loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')){
             loggedInNavbarArrowUp.style.display = 'flex'
             loggedInNavbarArrowDown.style.display = 'none'
@@ -109,12 +113,23 @@
         }
     })
 
-    window.addEventListener('click', (e) =>{
-        console.log(e.target)
-        // if(e.target !=toggleUserNavbar) {
-        //     loggedInUserNavLinks.classList.remove('show-logged-in-user-nav-links')
-        //     loggedInNavbarArrowUp.style.display = 'flex'
-        //     loggedInNavbarArrowDown.style.display = 'none'
-        // }
+    window.addEventListener('click', (e) => {
+        if(e.target != loggedInNavbarUserProfileImg &&
+            e.target != loggedInNavbarUsername &&
+            e.target != loggedInNavbarArrowUp &&
+            e.target != loggedInNavbarArrowDown
+        ){
+            
+            if(!loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')) {
+                loggedInNavbarArrowUp.style.display = 'none'
+                loggedInNavbarArrowDown.style.display = 'flex'
+            }
+            else {
+                loggedInUserNavLinks.classList.remove('show-logged-in-user-nav-links')
+                loggedInNavbarArrowUp.style.display = 'none'
+                loggedInNavbarArrowDown.style.display = 'flex'
+            }
+        }
     })
+
 </script>

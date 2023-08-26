@@ -120,6 +120,7 @@ class Order(models.Model):
     def get_order_total(self):
         product = Order.objects.get(customer=self.customer, product=self.product)
         order_total = product.quantity * self.product.price
+        print('ORDER TOTAL:', order_total)
         return order_total
     
     def __str__(self):
@@ -135,6 +136,7 @@ class Checkout(models.Model):
     def set_amount_due(self):
         customer = User.objects.get(username=self.customer.username)
         checkout = Checkout.objects.get(customer=customer)
+        print('CHEKOUTS:', checkout)
         amount_due = [product.get_order_total() for product in checkout.order.all()]
         checkout.total_amount_due = float(sum( amount_due))
         checkout.save()

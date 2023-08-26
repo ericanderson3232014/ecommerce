@@ -149,24 +149,27 @@
                 {% endif %}
             </div>
         </div>
-        <div id="reviews" class="product-reviews-wrapper">
-            <h2 class="customer-reviews-header">Customer reviews</h2>
-            <div class="product-reviews">
-                {% for review in reviews %}
-                    <div class="product-review">
-                        <h4 class="review-author">User: {{ review.author.username }} </h4>
-                        <h4 class="review-rated">Rated: {{ review.rating }}/5</h4>
-                        <p>{{ review.created }}</p>
-                        
-                        {% if not review.content %}
-                            <p>content not available</p>
-                        {% else %}
-                            <p class="review-content">{{ review.content }}</p>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+        
+        {% if reviews %}
+            <div id="reviews" class="product-reviews-wrapper">
+                <h2 class="customer-reviews-header">Customer reviews</h2>
+                <div class="product-reviews">
+                    {% for review in reviews %}
+                        <div class="product-review">
+                            <h4 class="review-author">User: {{ review.author.username }} </h4>
+                            <h4 class="review-rated">Rated: {{ review.rating }}/5</h4>
+                            <p>{{ review.created }}</p>
+                            
+                            {% if not review.content %}
+                                <p>content not available</p>
+                            {% else %}
+                                <p class="review-content">{{ review.content }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 
 {% endblock content %}

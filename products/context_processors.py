@@ -9,9 +9,9 @@ def get_basket_total(request):
     except Exception as e:
         return {'error': f'{e}', 'num_of_product': 0}
     if customer:
-        orders = customer.order_set.all().count()
+        orders = [order.quantity for order in customer.order_set.all()]
         sub_total = [product.get_order_total() for product in customer.order_set.all()]
         print(sum(sub_total))
         if orders:
-            return {'num_of_product': orders, 'sub_total': sum(sub_total)}
+            return {'num_of_product': sum(orders), 'sub_total': sum(sub_total)}
         return {'num_of_product': 0}

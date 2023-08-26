@@ -17,6 +17,7 @@
     --purple-40: hsl(267, 90%, 40%);
     --purple-45: hsl(267, 90%, 45%);
     --purple-50: hsl(267, 90%, 50%);
+    --purple-70: hsl(267, 100%, 70%);
 
     
     --orange-50: hsl(12, 100%, 50%);
@@ -323,7 +324,29 @@ index.html
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 0.2rem
+        -webkit-tap-highlight-color: transparent !important;
+    }
+
+    @media (hover) {
+        .toggle-user-navbar:hover {
+            color: rgb(152, 56, 255) !important;
+        }
+    }
+
+    .toggle-user-navbar > span {
+        margin-top: 0.2rem;
+    }
+
+    .toggle-user-navbar > img {
+        width: 35px;
+        display: block;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        margin-right: 0.5rem
+    }
+
+    .toggle-user-navbar > h4 {
+        letter-spacing: 0.07rem;
     }
 
     .logged-in-navbar-arrow-up {
@@ -334,7 +357,7 @@ index.html
         position: absolute;
         z-index: 2;
         left: 0;
-        top: 50px;
+        top: 60px;
         width: 170px;
         max-height: 0;
         overflow: hidden;
@@ -365,10 +388,8 @@ index.html
         letter-spacing: 0.07rem;
         display: flex;
         align-items: center;
-        margin-left: 2rem;
-        padding-top: 1.5rem;
-        padding-bottom: 0.3rem;
-        align-self: start;
+        gap: 0.5rem;
+        padding: 1.5rem 2rem 0.3rem 2rem;
     }
 
     .shopping-cart {
@@ -377,9 +398,9 @@ index.html
 
     .num-of-items {
         position: absolute;
-        top: 4px;
-        right: -7px;
-        min-width: 25px;
+        top: 5px;
+        right: 30px;
+        min-width: 23px;
         aspect-ratio: 1/1;
         color: white;
         display: flex;
@@ -396,6 +417,7 @@ index.html
         color: rgb(236, 236, 236);
         letter-spacing: 0.07rem;
     }
+
     .active-nav-link {
         color: rgb(157, 66, 255) !important;
         font-weight: bold;
