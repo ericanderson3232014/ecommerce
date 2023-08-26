@@ -67,7 +67,8 @@ class Product(models.Model):
         if item.sub_category:
             if item.sub_category.name == 'Gaming Laptop':
                 discount = float(item.price) - float(item.price) * .10
-                return str(discount)[0:-2]
+                return int(str(discount)[0:-2])
+        return False
     
     class Meta:
         ordering = ['-created']
@@ -118,10 +119,13 @@ class Order(models.Model):
     open = models.BooleanField(default=True)
 
     def get_order_total(self):
-        product = Order.objects.get(customer=self.customer, product=self.product)
-        order_total = product.quantity * self.product.price
-        print('ORDER TOTAL:', order_total)
-        return order_total
+        order = Order.objects.get(customer=self.customer, product=self.product)
+        if self.product.get_discount_price():
+            order_total = self.quantity * self.product.get_discount_price()
+            return order_total
+        else:
+            order_total = self.quantity * self.product.price
+            return order_total
     
     def __str__(self):
         return f'{self.customer.username} - {self.product.name}'
