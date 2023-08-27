@@ -71,6 +71,7 @@ main {
     position: relative;
     flex: 0 0 100%;
     transition: transform 300ms linear;
+    display: flex;
 }
 
 .banner-img-container > img {

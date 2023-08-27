@@ -68,7 +68,7 @@ class Product(models.Model):
             if item.sub_category.name == 'Gaming Laptop':
                 discount = float(item.price) - float(item.price) * .10
                 return int(str(discount)[0:-2])
-        return False
+        return 0
     
     class Meta:
         ordering = ['-created']
@@ -122,7 +122,9 @@ class Order(models.Model):
         order = Order.objects.get(customer=self.customer, product=self.product)
         if self.product.get_discount_price():
             order_total = self.quantity * self.product.get_discount_price()
+            discount_amount = self.quantity * self.product.price - order_total
             return order_total
+            # return {'order_total':order_total, 'discount_amount': discount_amount}
         else:
             order_total = self.quantity * self.product.price
             return order_total
@@ -148,3 +150,22 @@ class Checkout(models.Model):
     
     def __str__(self):
         return f'{self.customer.username} - {self.order}'
+    
+
+class ShippingAddress(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length= 100)
+    email = models.EmailField(max_length=100)
+    phone_number = models.IntegerField()
+    address = models.CharField(max_length=1000)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    province = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100)
+    zip_code = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.customer.username}'
+    
+    class Meta:
+        verbose_name_plural = 'Addresses'

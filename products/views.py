@@ -9,11 +9,13 @@ from .models import (
     ProductReview,
     Order,
     Checkout,
+    ShippingAddress,
 )
 from .forms import (
     CreateProductForm, 
     CreateProductImageForm, 
-    ProductReviewForm
+    ProductReviewForm,
+    ShippingAddressForm,
 )
 
 from django.http import JsonResponse
@@ -166,8 +168,9 @@ def update_basket_view(request, string):
     if order.quantity == int(qty):
         order.delete()
         checkout = Checkout.objects.filter(customer=user).first()
-        checkout.set_amount_due()
-        checkout.save()
+        if checkout:
+            checkout.set_amount_due()
+            checkout.save()
         messages.success(request, f'{string} has been deleted from your basket.')
         return redirect('products:product-basket')
     order.quantity = int(qty)
@@ -189,9 +192,31 @@ def checkout_view(request):
         for product in orders:
             checkout.order.add(product)
         checkout.set_amount_due()
-        return redirect('products:product-list')
+        return redirect('products:shipping-address')
     orders = Order.objects.filter(customer__username=user.username)
     for product in orders:
         checkout.order.add(product)
     checkout.set_amount_due()
-    return redirect('products:product-list')
+    return redirect('products:shipping-address')
+
+
+@login_required
+def customer_address_view(request):
+    instance = ShippingAddress.objects.filter(customer=request.user).first()
+    form = ShippingAddressForm(request.POST or None, instance=instance)
+    context = {'form': form}
+    if form.is_valid():
+        shipping_address = form.save()
+        shipping_address.customer = request.user
+        shipping_address.save()
+        return redirect('products:payment-center')
+    return render(request, 'products/address.html', context)
+
+
+@login_required 
+def payment_center_view(request):
+    checkout = Checkout.objects.filter(customer=request.user).first()
+    query_set = checkout.order.all()
+    context = {'checkout':checkout, 'query_set': query_set}
+    print(checkout.set_amount_due())
+    return render(request, 'products/payment.html', context)

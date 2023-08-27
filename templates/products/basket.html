@@ -114,7 +114,6 @@
         align-items: stretch;
         justify-content: center;
         gap: 0.5rem;
-        /* padding-right: 2rem; */
     }
 
     .basket-minus-item,
@@ -143,7 +142,7 @@
     .basket-minus-item,
     .quantity > input,
     .basket-add-item {
-        width: 33px;
+        width: 25px;
         aspect-ratio: 1/1;
         text-align: center;
         border: none;
@@ -157,13 +156,13 @@
     }
 
     .update-or-delete {
-        padding: 0.3rem 0.6rem;
+        padding: 0.4rem 0.6rem;
         letter-spacing: 0.05rem;
         border-radius: 5px;
         background: orangered;
         color: white;
         border: none;
-        font-size: 1rem;
+        font-size: 0.9rem;
         cursor: pointer;
     }
 
@@ -175,25 +174,68 @@
         letter-spacing: 0.05rem;
     }
 
-    .basket-sub-total {
+    .basket-sub-total-container {
         width: 90%;
         max-width: 1000px;
         margin: 0 auto;
-        letter-spacing: 0.05rem;
         display: flex;
         flex-direction: column;
         justify-content: start;
         align-items: end;
-        gap: 0.5rem;
-        padding: 1rem 2rem;
     }
 
-    .basket-sub-total > a {
+    .basket-sub-total {
+        width: 50%;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1.3rem;
+        background: white;
+        border-radius: 5px;
+    }
+
+    .basket-sub-total > h2 {
         letter-spacing: 0.05rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgb(219, 219, 219)
+    }
+
+    .basket-sub-total-info {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 1rem;
+        /* border: 1px solid black; */
+    }
+
+    .basket-sub-total-info > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        letter-spacing: 0.07rem;
+        /* padding-right: 5rem; */
+        text-align: center;
+    }
+
+    .sub-total-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    .sub-total-btns > a {
+        letter-spacing: 0.07rem;
         padding: 0.8rem 1rem;
         background: orangered;
         color: white;
         border-radius: 5px;
+        /* width: 200px; */
+        text-align: center;
+    }
+
+    .basket-continue-shopping-btn {
+        background: rgb(116, 13, 242) !important;
     }
 
 </style>
@@ -251,10 +293,33 @@
             </div>
         {% endfor %}
     </div>
-    <div class="basket-sub-total">
-        <!-- coming from context_processors.py -->
-        <h3>Sub total: P{{ sub_total }}</h3>
-        <a href="{% url 'products:checkout' %}">Precede to chheckout</a>
+    <div class="basket-sub-total-container">
+        <div class="basket-sub-total">
+            <h2>Order summary</h2>
+            <div class="basket-sub-total-info">
+                <div class="sub-total-basket-quantity">
+                    <h4>Quantity</h4>
+                    <p>{{ num_of_product }} items</p>
+                </div>
+                <div class="sub-total-basket-savings">
+                    <h4>Savings</h4>
+                    {% if discount_amount %}
+                        <p>-P{{ discount_amount }}</p>
+                    {% else %}
+                        <p>none</p>
+                    {% endif %}
+                </div>
+                <div class="sub-total-basket-subtotal">
+                    <h4>Subtotal</h4>
+                    <p>P{{ sub_total }}</p>
+                    <!-- coming from context_processors.py -->
+                </div>
+            </div>
+            <div class="sub-total-btns">
+                <a class="basket-checkout-btn" href="{% url 'products:checkout' %}">Precede to checkout</a>
+                <a class="basket-continue-shopping-btn" href="{% url 'products:product-list' %}">Continue shopping</a>
+            </div>
+        </div>
     </div>
 </div>
 

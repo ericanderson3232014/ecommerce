@@ -6,7 +6,8 @@ from .models import (
     ProductReview,
     ProductSubCategory,
     Order,
-    Checkout
+    Checkout,
+    ShippingAddress,
 )
 
 
@@ -53,3 +54,9 @@ class CheckoutAdmin(admin.ModelAdmin):
     list_display = ['customer', 'total_amount_due']
 
 admin.site.register(Checkout, CheckoutAdmin)
+
+
+class ShippingAddressAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'first_name', 'last_name']
+
+admin.site.register(ShippingAddress, ShippingAddressAdmin)
