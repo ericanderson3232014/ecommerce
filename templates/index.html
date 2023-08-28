@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="description" content="shop, online market, gadgets, PC, laptop">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -25,11 +28,44 @@
 
         {% block content %}
         {% endblock content %}
+
+        {% block scrollbar %}
+            <div class="scroll-btns">
+                <a href="#header" class="scroll-up">
+                    <span class="material-symbols-outlined">keyboard_arrow_up</span>
+                </a>
+                <a href="#footer" class="scroll-down">
+                    <span class="material-symbols-outlined">keyboard_arrow_down</span>
+                </a>
+            </div>
+        {% endblock scrollbar %}
+
     </main>
-    <footer>
-
+    <footer id="footer">
+        {% include 'footer.html' %}
     </footer>
+    
 
+    <script>
+        const scrollDown = document.querySelector('.scroll-down')
+        const scrollUp = document.querySelector('.scroll-up')
+
+
+        if(scrollDown && scrollUp) {
+            window.addEventListener('scroll', (e) => {
+                if(window.pageYOffset >= 300) {
+                    scrollDown.style.display = 'none'
+                    scrollUp.style.display = 'flex'
+                }else if(window.pageYOffset <= 300) {
+                    scrollDown.style.display = 'flex'
+                    scrollUp.style.display = 'none'
+                }
+            })
+        }
+
+        
+
+    </script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

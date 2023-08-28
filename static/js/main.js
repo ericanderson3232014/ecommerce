@@ -46,7 +46,9 @@ const circles = [...document.querySelectorAll('.circle')]
 
 let index = 0
 
-circles[0].style.background = 'white'
+if(circles && circles[0]) {
+    circles[0].style.background = 'white'
+}
 
 TranslateBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {

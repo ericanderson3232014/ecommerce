@@ -7,8 +7,8 @@
     </a>
     {% with request.resolver_match.url_name as url_name %}
         <nav class="nav-links">
-            <a class="nav-link {% if url_name == 'product-list' %}active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Product</a>
-            <a href="{% url 'sellers:sellers-seller' %}" class="nav-link">Sell on market</a>
+            <a class="nav-link {% if url_name == 'product-home' %}active-nav-link{% endif %}" href="{% url 'products:product-home' %}">Home</a>
+            <a class="nav-link {% if url_name == 'product-list' %}active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Products</a>
             {% if not request.user.is_authenticated %}
                 <a class="nav-link {% if url_name == 'user-login' %}active-nav-link{% endif %}" href="{% url 'users:user-login' %}">Login</a>
                 <a class="nav-link {% if url_name == 'user-register' %}active-nav-link{% endif %}" href="{% url 'users:user-register' %}">Register</a>
@@ -36,14 +36,22 @@
                     </div>
                 </div>
             {% endif %}
+            <a href="{% url 'sellers:sellers-seller' %}" class="nav-link">Sell on market</a>
+            <button type="button" class="nav-link nav-link-button">
+                Search
+                <span class="material-symbols-outlined">search</span>
+            </button>
         </nav>
     {% endwith %}
-    <form class="search-form" action="{% url 'products:product-search' %}" method="GET">
-        <input class="search-input" type="text", name='q' required placeholder="Search">
-        <button class="submit-input" type="submit">
-            <span class="material-symbols-outlined">search</span>
-        </button>
-    </form>
+
+    {% comment %}
+        <form class="search-form" action="{% url 'products:product-search' %}" method="GET">
+            <input class="search-input" type="text", name='q' required placeholder="Search">
+            <button class="submit-input" type="submit">
+                <span class="material-symbols-outlined">search</span>
+            </button>
+        </form>
+    {% endcomment %}
 </div>
 
 
@@ -59,7 +67,8 @@
     {% with request.resolver_match.url_name as url_name %}
         <nav class="mobile-nav-links">
             <span class="material-symbols-outlined mobile-nav-close-btn">close</span>
-            <a class="mobile-nav mobile-nav-link {% if url_name == 'product-list' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Explore</a>
+            <a class="mobile-nav mobile-nav-link {% if url_name == 'product-home' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-home' %}">Home</a>
+            <a class="mobile-nav mobile-nav-link {% if url_name == 'product-list' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Products</a>
             {% if not request.user.is_authenticated %}
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-login' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-login' %}">Login</a>
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-register' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-register' %}">Register</a>
@@ -85,15 +94,15 @@
     const searchForm = document.querySelector('.search-form')
     
 
-    searchInput.addEventListener('click', (e) => {
-        searchForm.style.outline = '2px solid rgb(143, 38, 255)'
-    })
+    // searchInput.addEventListener('click', (e) => {
+    //     searchForm.style.outline = '2px solid rgb(143, 38, 255)'
+    // })
 
-    window.addEventListener('click', (e) => {
-        if(e.target != searchInput) {
-            searchForm.style.outline = 'none'
-        }
-    })
+    // window.addEventListener('click', (e) => {
+    //     if(e.target != searchInput) {
+    //         searchForm.style.outline = 'none'
+    //     }
+    // })
 
     const toggleUserNavbar = document.querySelector('.toggle-user-navbar')
     const loggedInUserNavLinks = document.querySelector('.logged-in-user-nav-links')
@@ -102,16 +111,19 @@
     const loggedInNavbarUsername = document.querySelector('.logged-in-navbar-username')
     const loggedInNavbarUserProfileImg = document.querySelector('.logged-in-navbar-user-profile-img')
 
-    toggleUserNavbar.addEventListener('click', (e) => {
-        loggedInUserNavLinks.classList.toggle('show-logged-in-user-nav-links')
-        if(loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')){
-            loggedInNavbarArrowUp.style.display = 'flex'
-            loggedInNavbarArrowDown.style.display = 'none'
-        }else{
-            loggedInNavbarArrowUp.style.display = 'none'
-            loggedInNavbarArrowDown.style.display = 'flex'
-        }
-    })
+    if (toggleUserNavbar) {
+        toggleUserNavbar.addEventListener('click', (e) => {
+            loggedInUserNavLinks.classList.toggle('show-logged-in-user-nav-links')
+            if(loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')){
+                loggedInNavbarArrowUp.style.display = 'flex'
+                loggedInNavbarArrowDown.style.display = 'none'
+            }else{
+                loggedInNavbarArrowUp.style.display = 'none'
+                loggedInNavbarArrowDown.style.display = 'flex'
+            }
+        })
+    }
+    
 
     window.addEventListener('click', (e) => {
         if(e.target != loggedInNavbarUserProfileImg &&

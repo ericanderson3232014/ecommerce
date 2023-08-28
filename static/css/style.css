@@ -17,6 +17,8 @@
     --purple-40: hsl(267, 90%, 40%);
     --purple-45: hsl(267, 90%, 45%);
     --purple-50: hsl(267, 90%, 50%);
+    --purple-55: hsl(267, 90%, 55%);
+    --purple-60: hsl(267, 90%, 60%);
     --purple-70: hsl(267, 100%, 70%);
 
     
@@ -29,6 +31,8 @@
     
     --black-10: hsl(0, 0%, 10%);
     --black-25: hsl(0, 0%, 25%);
+    --black-30: hsl(0, 0%, 30%);
+    --black-40: hsl(0, 0%, 40%);
     --black-50: hsl(0, 0%, 50%);
     --black-70: hsl(0, 0%, 70%);
     --black-80: hsl(0, 0%, 80%);
@@ -180,20 +184,25 @@ index.html
 }
 
 .mobile-brand-name {
-    line-height: 1.3;
+    /* line-height: 1.3; */
+    display: flex;
+    flex-direction: column;
+    /* gap: 0.2rem; */
+    align-items: center;
 }
 
 .mobile-brand-name > h1 {
-    font-size: 1.6rem;
-    letter-spacing: 0.08rem;
+    font-size: 1.9rem;
+    letter-spacing: 0.05rem;
     font-weight: 700;
     color: rgb(255, 110, 58);
+    font-family: 'Lobster', 'Roboto', sans-serif;
 }
 
 .mobile-brand-name > p {
     color: white;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13.8px;
     letter-spacing: 0.05rem;
 }
 
@@ -270,7 +279,7 @@ index.html
     display: none;
 }
 
-@media screen and (min-width: 970px) {
+@media screen and (min-width: 1055px) {
 
     /* Mobile navbar disabled */
     .mobile-nav-bar-wrapper {
@@ -298,21 +307,26 @@ index.html
     }
 
     .brand-name {
-        line-height: 1.3;
+        /* line-height: 1.3; */
+        display: flex;
+        flex-direction: column;
+        /* gap: 0.2rem; */
+        align-items: center;
     }
 
     .brand-name > h1 {
-        font-size: 1.9rem;
+        font-size: 2.1rem;
         letter-spacing: 0.05rem;
         font-weight: 700;
         color: rgb(255, 110, 58);
+        font-family: 'Lobster', 'Roboto', sans-serif;
     }
 
     .brand-name > p {
         color: white;
-        letter-spacing: 0.1rem;
+        letter-spacing: 0.07rem;
         font-weight: 500;
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .logged-in-user-nav-link-container {
@@ -419,6 +433,19 @@ index.html
         letter-spacing: 0.07rem;
     }
 
+    .nav-link-button {
+        background: var(--purple-40);
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent !important;
+    }
+
     .active-nav-link {
         color: rgb(157, 66, 255) !important;
         font-weight: bold;
@@ -426,14 +453,22 @@ index.html
 
     @media (hover) {
         .nav-basket:hover {
-            color: rgb(152, 56, 255) !important;
+            color: var(--purple-70) !important;
         }
     }
 
     @media (hover) {
         .nav-link:hover {
-            color: rgb(152, 56, 255) !important;
+            color: var(--purple-70) !important;
             text-decoration: underline;
+        }
+    }
+
+    @media (hover) {
+        .nav-link-button:hover {
+            color: white !important;
+            text-decoration: none !important;
+            background: var(--purple-50);
         }
     }
 
@@ -498,6 +533,47 @@ index.html
     }
 }
 
+
+/* scroll up and down */
+.scroll-btns {
+    position: fixed;
+    right: 15px;
+    bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.scroll-up,
+.scroll-down {
+    width: 50px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black-40);
+    border: none;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 300ms linear;
+}
+
+@media (hover) {
+    body:hover .scroll-up,
+    body:hover .scroll-down {
+        opacity: 1;
+    }
+}
+
+.scroll-btns > a > span {
+    font-size: 2rem;
+    color: white;
+}
+
+.scroll-up {
+    display: none;
+}
+
 /*
 =================
 home.html
@@ -533,7 +609,7 @@ home.html
     font-weight: 500;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-    background: linear-gradient(to right, var(--purple-10), var(--purple-45))
+    background: linear-gradient(to right, var(--purple-15), var(--purple-50))
 }
 
 .category-img > img {
@@ -738,7 +814,7 @@ product_detail.html
     display: flex;
     align-items: center;
     /* gap: 0.3rem; */
-    color: rgb(94, 94, 94);
+    color: var(--black-25);
     letter-spacing: 0.05rem;
     font-size: 1.1rem;
     font-weight: 500;
@@ -947,7 +1023,7 @@ product_detail.html
 
 .back-to-product {
     padding: 0.8rem;
-    background: rgb(77, 77, 77);
+    background: var(--purple-40);
     color: white;
     letter-spacing: 0.05rem;
     border-radius: 5px;

@@ -139,12 +139,12 @@
                 {% if user.is_authenticated %}
                     <div class="product-detail-btns">
                         <a class="add-to-basket" href="{% url 'products:add-to-basket' query.id %}">Add to Basket</a>
-                        <a class="back-to-product" href="{% url 'products:product-list' %}">Back to Products</a>
+                        <a class="back-to-product" href="{% url 'products:product-list' %}">Continue shopping</a>
                     </div>
                 {% else %}
                     <div class="product-detail-btns">
                         <a class="add-to-basket" href="{% url 'users:user-login' %}?next=/product/{{query.id}}/detail/">Login to purchase</a>
-                        <a class="back-to-product" href="{% url 'products:product-list' %}">Back to Products</a>
+                        <a class="back-to-product" href="{% url 'products:product-list' %}">Continue shopping</a>
                     </div>
                 {% endif %}
             </div>

@@ -159,9 +159,9 @@ class ShippingAddress(models.Model):
     email = models.EmailField(max_length=100)
     phone_number = models.IntegerField()
     address = models.CharField(max_length=1000)
-    city = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=100)
     province = models.CharField(max_length=100, null=True, blank=True)
-    state = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, null=True, blank=True)
     zip_code = models.IntegerField()
 
     def __str__(self):

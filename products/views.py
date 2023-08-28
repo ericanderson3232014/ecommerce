@@ -25,7 +25,6 @@ from django.contrib.auth.models import User
 
 def home_view(request):
     user = request.user
-    print(user.userprofile.profile_image.url)
     category = ProductCategory.objects.all()
     context = {'category': category}
     return render(request, 'products/home.html', context)
@@ -218,5 +217,4 @@ def payment_center_view(request):
     checkout = Checkout.objects.filter(customer=request.user).first()
     query_set = checkout.order.all()
     context = {'checkout':checkout, 'query_set': query_set}
-    print(checkout.set_amount_due())
     return render(request, 'products/payment.html', context)
