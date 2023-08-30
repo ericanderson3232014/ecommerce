@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <title>{% block title %}{% endblock title %}</title>
 </head>
-<body>
+<body id="body">
     <header id="header">
         {% include 'navbar.html' %}
     </header>
@@ -29,6 +29,7 @@
         {% block content %}
         {% endblock content %}
 
+        
         {% block scrollbar %}
             <div class="scroll-btns">
                 <a href="#header" class="scroll-up">
@@ -39,33 +40,19 @@
                 </a>
             </div>
         {% endblock scrollbar %}
-
     </main>
+
     <footer id="footer">
-        {% include 'footer.html' %}
+        <div class="footer-wrapper">
+            <div class="footer-contents">
+                <h2>Footer</h2>
+            </div>
+            <div class="copy-right">
+                <p>Copyright 2023 by AiAi Market team. All Rights Reserved.</p>
+            </div>
+        </div>
     </footer>
     
-
-    <script>
-        const scrollDown = document.querySelector('.scroll-down')
-        const scrollUp = document.querySelector('.scroll-up')
-
-
-        if(scrollDown && scrollUp) {
-            window.addEventListener('scroll', (e) => {
-                if(window.pageYOffset >= 300) {
-                    scrollDown.style.display = 'none'
-                    scrollUp.style.display = 'flex'
-                }else if(window.pageYOffset <= 300) {
-                    scrollDown.style.display = 'flex'
-                    scrollUp.style.display = 'none'
-                }
-            })
-        }
-
-        
-
-    </script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

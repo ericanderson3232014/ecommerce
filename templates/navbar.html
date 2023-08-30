@@ -37,36 +37,39 @@
                 </div>
             {% endif %}
             <a href="{% url 'sellers:sellers-seller' %}" class="nav-link">Sell on market</a>
-            <button type="button" class="nav-link nav-link-button">
+            <button type="button" class="nav-link nav-link-search-button">
                 Search
-                <span class="material-symbols-outlined">search</span>
+                <span class="material-symbols-outlined search-icon">search</span>
             </button>
         </nav>
     {% endwith %}
-
-    {% comment %}
-        <form class="search-form" action="{% url 'products:product-search' %}" method="GET">
-            <input class="search-input" type="text", name='q' required placeholder="Search">
-            <button class="submit-input" type="submit">
-                <span class="material-symbols-outlined">search</span>
-            </button>
-        </form>
-    {% endcomment %}
 </div>
 
+<div class="search-form-wrapper">
+    <form class="search-form" action="{% url 'products:product-search' %}" method="GET">
+        <input class="search-form-input" type="text", name='q' required placeholder="Search">
+        <button class="search-form-submit-btn" type="submit">
+            <span class="material-symbols-outlined">search</span>
+        </button>
+    </form>
+    <span class="material-symbols-outlined search-form-close-btn">close</span>
+</div>
 
 <div class="mobile-nav-bar-wrapper">
     <a class="mobile-brand-name" href="{% url 'products:product-home' %}">
         <h1>AiAi Market</h1>
         <p>THE PLACE TO SHOP</p>
     </a>
-
     <div class="mobile-toggle-nav-btn">
         <span class="material-symbols-outlined mobile-menu-btn">menu</span>
     </div>
     {% with request.resolver_match.url_name as url_name %}
         <nav class="mobile-nav-links">
             <span class="material-symbols-outlined mobile-nav-close-btn">close</span>
+            <button type="button" class="mobile-nav mobile-nav-link-search-button  mobile-nav-link">
+                Search
+                <!-- <span class="material-symbols-outlined">search</span> -->
+            </button>
             <a class="mobile-nav mobile-nav-link {% if url_name == 'product-home' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-home' %}">Home</a>
             <a class="mobile-nav mobile-nav-link {% if url_name == 'product-list' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Products</a>
             {% if not request.user.is_authenticated %}
@@ -77,71 +80,7 @@
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-logout' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
             {% endif %}
             <a href="{% url 'sellers:sellers-seller' %}" class="mobile-nav mobile-nav-link">Sell on market</a>
-            <!-- <form class="mobile-search-form" action="{% url 'products:product-search' %}" method="GET">
-                <input class="mobile-search-input" type="text", name='q' required placeholder="Search">
-                <button class="mobile-submit-btn" type="submit">
-                    <span class="material-symbols-outlined">search</span>
-                </button>
-            </form> -->
         </nav>
     {% endwith %}
     <div class="mobile-nav-background-layout"></div>
 </div>
-
-<script>
-    const searchInput = document.querySelector('.search-input')
-    const submitInput = document.querySelector('.submit-input')
-    const searchForm = document.querySelector('.search-form')
-    
-
-    // searchInput.addEventListener('click', (e) => {
-    //     searchForm.style.outline = '2px solid rgb(143, 38, 255)'
-    // })
-
-    // window.addEventListener('click', (e) => {
-    //     if(e.target != searchInput) {
-    //         searchForm.style.outline = 'none'
-    //     }
-    // })
-
-    const toggleUserNavbar = document.querySelector('.toggle-user-navbar')
-    const loggedInUserNavLinks = document.querySelector('.logged-in-user-nav-links')
-    const loggedInNavbarArrowUp = document.querySelector('.logged-in-navbar-arrow-up')
-    const loggedInNavbarArrowDown = document.querySelector('.logged-in-navbar-arrow-down')
-    const loggedInNavbarUsername = document.querySelector('.logged-in-navbar-username')
-    const loggedInNavbarUserProfileImg = document.querySelector('.logged-in-navbar-user-profile-img')
-
-    if (toggleUserNavbar) {
-        toggleUserNavbar.addEventListener('click', (e) => {
-            loggedInUserNavLinks.classList.toggle('show-logged-in-user-nav-links')
-            if(loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')){
-                loggedInNavbarArrowUp.style.display = 'flex'
-                loggedInNavbarArrowDown.style.display = 'none'
-            }else{
-                loggedInNavbarArrowUp.style.display = 'none'
-                loggedInNavbarArrowDown.style.display = 'flex'
-            }
-        })
-    }
-    
-
-    window.addEventListener('click', (e) => {
-        if(e.target != loggedInNavbarUserProfileImg &&
-            e.target != loggedInNavbarUsername &&
-            e.target != loggedInNavbarArrowUp &&
-            e.target != loggedInNavbarArrowDown
-        ){
-            
-            if(!loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')) {
-                loggedInNavbarArrowUp.style.display = 'none'
-                loggedInNavbarArrowDown.style.display = 'flex'
-            }
-            else {
-                loggedInUserNavLinks.classList.remove('show-logged-in-user-nav-links')
-                loggedInNavbarArrowUp.style.display = 'none'
-                loggedInNavbarArrowDown.style.display = 'flex'
-            }
-        }
-    })
-
-</script>
