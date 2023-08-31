@@ -69,10 +69,6 @@
 
 
     <div class="product-detail-container-wrapper">
-        <a class="product-detail-back-to-product" href="{% url 'products:product-list' %}">
-            <span class="material-symbols-outlined">keyboard_arrow_left</span>
-            Back to products
-        </a>
         <div class="product-detail-container">
             <div class="product-detail-img-container">
                 <img src="{{ query.get_product_image_url }}" alt="">
@@ -98,10 +94,8 @@
                             <a href="#reviews" class="product-detail-rating">
                                 {% if query.productreview_set.count > 1%}
                                     {{ query.productreview_set.count }} 
-                                    <span>reviews</span>
                                 {% else %}
-                                    {{ query.productreview_set.count }} 
-                                    <span>review</span>
+                                   0
                                 {% endif %}
                             </a>
                         {% else %}
@@ -109,8 +103,8 @@
                         {% endif %}
                     </div>
                     <div class="product-detail-favorite-icon-container">
+                        <span class="product-detail-rating">{{ query.likes }}</span>
                         <span class="material-symbols-outlined product-detail-favorite-icon">favorite</span>
-                        <span class="product-detail-rating">{{ query.likes }}/5 <span>rating</span></span>
                     </div>
                 </div>
                 {% if can_review %}
