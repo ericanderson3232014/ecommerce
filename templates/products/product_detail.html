@@ -92,11 +92,7 @@
                         <span class="material-symbols-outlined product-detail-review-icon">rate_review</span>
                         {% if query.productreview_set.all %}
                             <a href="#reviews" class="product-detail-rating">
-                                {% if query.productreview_set.count > 1%}
-                                    {{ query.productreview_set.count }} 
-                                {% else %}
-                                   0
-                                {% endif %}
+                                {{ query.productreview_set.count }} 
                             </a>
                         {% else %}
                             <span class="product-detail-rating">0</span>

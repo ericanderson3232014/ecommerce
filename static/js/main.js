@@ -52,10 +52,14 @@ if((window.innerWidth - bodyWidth.clientWidth)/2 != 0) {
 
 if(scrollDown && scrollUp) {
     window.addEventListener('scroll', (e) => {
-        if(window.pageYOffset >= 300) {
+        if(window.pageYOffset === 0) {
+            scrollDown.style.display = 'none'
+            scrollUp.style.display = 'none'
+        }
+        else if(window.pageYOffset >= 300) {
             scrollDown.style.display = 'none'
             scrollUp.style.display = 'flex'
-        }else if(window.pageYOffset <= 300) {
+        }else if(window.pageYOffset <= 300 && window.pageYOffset > 0) {
             scrollDown.style.display = 'flex'
             scrollUp.style.display = 'none'
         }

@@ -22,15 +22,19 @@
     --purple-70: hsl(267, 100%, 70%);
     --purple-97: hsl(263, 30%, 92%);
 
-    
+    --orange-40: hsl(12, 100%, 40%);
+    --orange-45: hsl(12, 100%, 45%);
     --orange-50: hsl(12, 100%, 50%);
     --orange-55: hsl(12, 100%, 55%);
     --orange-60: hsl(12, 100%, 60%);
     --orange-65: hsl(12, 100%, 65%);
+    --orange-yellow-54: hsl(34, 100%, 54%);
     
     --red-60: hsl(349, 85%, 60%);
     
     --black-10: hsl(0, 0%, 10%);
+    --black-15: hsl(0, 0%, 15%);
+    --black-20: hsl(0, 0%, 20%);
     --black-25: hsl(0, 0%, 25%);
     --black-30: hsl(0, 0%, 30%);
     --black-40: hsl(0, 0%, 40%);
@@ -756,29 +760,31 @@ product_list.html
 
 .product-available-review-likes {
     display: flex;
-    align-items: end;
+    align-items: center;
     justify-content: space-between;
 }
 
+.product-available {
+    color: var(--purple-50);
+}
+
 .product-review-container, 
-.product-favorite-container {
+.product-like-container {
     display: flex;
     align-items: center;
     gap: 0.2rem;
-    color: var(--purple-45);
+    color: var(--purple-50);
+    font-size: 0.95rem;
 }
 
-.product-favorite-container {
-    color: var(--red-60)
+.review-icon {
+    font-size: 1.5rem;
+    color: var(--orange-50)
 }
 
-.product-available {
-    color: var(--purple-45);
-}
-
-.review-icon,
-.favorite-icon {
-    font-size: 1.4rem;
+.like-icon{
+    font-size: 1.5rem;
+    color: var(--orange-yellow-54)
 }
 
 .product-name-and-description {
@@ -790,24 +796,41 @@ product_list.html
 .product-price-and-discount {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
 }
 
 .product-price {
     color: var(--orange-50);
     font-weight: 700;
-    letter-spacing: 0.07rem;
-    font-size: 1.2rem;
+    letter-spacing: 0.05rem;
+    font-size: 1.3rem;
 }
 .product-discount-price {
     color: var(--black-50);
     font-size: 0.9rem;
-    letter-spacing: 0.07rem;
+    letter-spacing: 0.05rem;
     font-weight: 700;
 }
 
 .product-discount-price > span {
-    color: var(--black-10);
+    color: var(--black-25);
+}
+
+@media screen and (max-width: 627px) {
+    .product-available {
+        font-size: 1.1rem;
+    }
+    .product-review-container, 
+    .product-like-container {
+        font-size: 1.1rem;
+    }
+
+    .review-icon {
+        font-size: 1.6rem;
+    }
+
+    .like-icon{
+        font-size: 1.6rem;
+    }
 }
 
 @media screen and (max-width: 500px) {
@@ -826,6 +849,30 @@ product_list.html
     
     .product-list-header > a {
         font-size: 0.9rem;
+    }
+
+    .product-available {
+        font-size: 1rem;
+    }
+    .product-review-container, 
+    .product-like-container {
+        font-size: 1rem;
+    }
+
+    .review-icon {
+        font-size: 1.5rem !important;
+    }
+
+    .like-icon{
+        font-size: 1.5rem !important;
+    }
+
+    .product-price {
+        font-size: 1.2rem;
+    }
+
+    .product-discount-price {
+        font-size: 0.85rem;
     }
 }
 
@@ -847,11 +894,6 @@ product_list.html
 
     .product-list-wrapper:last-child {
         margin-bottom: 4rem !important
-    }
-
-    .product-list-header {
-        width: 100%;
-        /* padding: 0 2rem */
     }
 
     .product-list-header > a {
@@ -1134,16 +1176,7 @@ product_detail.html
         flex: 1 ;
     }
     
-    .product-detail-img-container > img
-    In stock
-    
-    rate_review
-    2
-    2
-    favorite
-    HP 2022 Stream The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those …
-    
-    P25000 {
+    .product-detail-img-container > img {
         width: 90%;
         /* height: auto;
         display: block; */
