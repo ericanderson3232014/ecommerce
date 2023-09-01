@@ -5,6 +5,7 @@
     margin: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 :root {
@@ -68,12 +69,12 @@ main {
 }
 
 /* Banner */
-.banner-wrapper {
+
+.large-screen-banner-wrapper {
     height: 45vh;
     position: relative;
     display: flex;
     flex-wrap: nowrap;
-    /* align-content: start; */
     overflow: hidden;
 }
 
@@ -87,7 +88,6 @@ main {
 
 .banner-img-container > img {
     width: 100%;
-    height: 100%;
     display: block;
     object-fit: contain;
 }
@@ -177,6 +177,55 @@ main {
     border-radius: 50%;
     background: rgb(90, 90, 90);
 }
+
+@media screen and (max-width: 500px) {
+    .large-screen-banner-wrapper {
+        height: 35vh;
+    }
+}
+
+@media screen and (max-width: 700px) {
+
+    .banner-arrow-left {
+        margin-left: 0.5rem;
+        width: 30px;
+    }
+
+    .banner-arrow-left > span {
+        font-size: 2rem;
+    }
+
+    .banner-arrow-right {
+        margin-right: 0.5rem;
+        width: 30px;
+
+    }
+
+    .banner-arrow-right > span {
+        font-size: 2rem;
+    }
+
+    .indicator {
+        gap: 0.4rem;
+    }
+
+    .circle {
+        width: 13px;
+    }
+}
+
+@media  screen and (max-width: 910px) {
+    .banner-img-container {
+        padding: 0rem;
+    }
+}
+
+@media  screen and (max-width: 1340px) {
+    .banner-img-container {
+        padding: 0 1rem;
+    }
+}
+
 /* 
 ==========
 index.html
@@ -911,10 +960,10 @@ product_list.html
 product_detail.html
 ================ */
 .product-detail-container-wrapper {
-    width: 90%;
+    width: 95%;
     max-width: 1000px;
     margin: 0 auto;
-    padding: 3rem 0;
+    padding: 2rem 0;
     display: flex;
     flex-direction: column;
 }
@@ -1140,8 +1189,61 @@ product_detail.html
     max-height: 0;
     overflow: hidden;
 }
-
 /* end hide and show  */
+
+.product-reviews-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.product-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.customer-reviews-header {
+    letter-spacing: 0.07rem;
+    color: rgb(37, 37, 37);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgb(201, 201, 201);
+}
+
+.product-review {
+    border-radius: 5px;
+    padding: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: white;
+}
+
+.product-review > .review-author {
+    letter-spacing: 0.07rem;
+    color: rgb(37, 37, 37);
+}
+
+.product-review > .review-rated {
+    letter-spacing: 0.07rem;
+    color: rgb(53, 53, 53);
+    font-weight: 500;
+}
+
+.product-review > p {
+    letter-spacing: 0.07rem;
+    color: rgb(66, 66, 66);
+    
+}
+
+.review-content {
+    line-height: 1.5;
+}
+
+
 @media screen and (max-width: 693px) {
     .product-detail-container-wrapper {
         width: 95%;
