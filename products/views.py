@@ -1,7 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.utils import timezone
 from .models import (
     Product, 
     ProductImage,  
@@ -18,10 +23,12 @@ from .forms import (
     ShippingAddressForm,
 )
 
-from django.http import JsonResponse
-from django.forms.models import model_to_dict
-from django.contrib.auth.models import User
+from django.conf import settings
+import stripe
 
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 def home_view(request):
     user = request.user
@@ -91,11 +98,9 @@ def product_create_view(request):
 
 
 @login_required
-def product_review_view(request, id):
+def write_product_review_view(request, id):
     product = Product.objects.get(id=id)
-    # here check if the user is verified buyer
-    # purchased_item = Purchase.bojects.filter(product__id=id).first()
-    # if purchased_item == True, then able to write review
+    user = request.user
     if request.method == 'POST':
         form = ProductReviewForm(request.POST)
         if form.is_valid():
@@ -114,16 +119,35 @@ def product_review_view(request, id):
             product.likes = reveiw.calculate_rating()
             product.save()
             messages.success(request, f'{author.username}, thank you for the review!')
-            return redirect('products:product-list')
-        # print(form.errors)
+            return redirect('products:product-detail', id)
+        print(form.errors)
         messages.error(request, 'There was an error. Try again later.')
         return redirect('products:product-review', id)
-    return render(request, 'products/product_review.html', {'query': product})
-
-
+    else:
+        checkouts = Checkout.objects.filter(customer=user, open=False)
+        if not checkouts.exists():
+            messages.error(request, 'You are not authorized to write review on this product.')
+            return redirect('products:product-detail', id)
+        elif checkouts.exists():
+            purchase_verified = []
+            for checkout in checkouts:
+                orders = checkout.order.all().filter(product=product)
+                for order in orders:
+                    if order.product == product:
+                        purchase_verified.append(order)
+            print('PURCHASE VERIFIED:', purchase_verified)
+            if purchase_verified:
+                return render(request, 'products/product_review.html', {'query': product})
+            else:
+                messages.error(request, 'You are not authorized to write review on this product.')
+                return redirect('products:product-detail', id)
+    
+    
 def product_search_view(request):
     q = request.GET.get('q')
-    query_set = Product.objects.filter(Q(category__name__icontains = q) | Q(sub_category__name__icontains = q) |Q(name__icontains = q))
+    query_set = Product.objects.filter(Q(category__name__icontains = q) | 
+                                       Q(sub_category__name__icontains = q) |
+                                       Q(name__icontains = q))
     for query in query_set:
         obj = str(query.likes)
         if obj[2] == '0':
@@ -136,7 +160,7 @@ def product_search_view(request):
 @login_required
 def add_to_basket_view(request, id):
     product = Product.objects.get(id=id)
-    order = Order.objects.filter(customer=request.user ,product=product).first()
+    order = Order.objects.filter(customer=request.user ,product=product, open=True).first()
     if order:
         order.quantity += 1
         order.save()
@@ -151,7 +175,7 @@ def add_to_basket_view(request, id):
 @login_required
 def basket_view(request):
     user = request.user
-    query_set = user.order_set.all()
+    query_set = user.order_set.all().filter(open=True)
     context = {'query_set': query_set}
     if not query_set.exists():
         messages.info(request, 'Your basket is empty.')
@@ -163,10 +187,10 @@ def basket_view(request):
 def update_basket_view(request, string):
     user = request.user
     qty = request.GET.get('amount')
-    order = Order.objects.get(customer=user, product__name=string)
+    order = Order.objects.get(customer=user, product__name=string, open=True)
     if order.quantity == int(qty):
         order.delete()
-        checkout = Checkout.objects.filter(customer=user).first()
+        checkout = Checkout.objects.filter(customer=user, open=True).first()
         if checkout:
             checkout.set_amount_due()
             checkout.save()
@@ -174,8 +198,6 @@ def update_basket_view(request, string):
         return redirect('products:product-basket')
     order.quantity = int(qty)
     order.save()
-    checkout = Checkout.objects.filter(customer=user).first()
-    checkout.set_amount_due()
     messages.success(request, f'{string} quantity has been updated.')
     return redirect('products:product-basket')
 
@@ -184,15 +206,15 @@ def update_basket_view(request, string):
 def checkout_view(request):
     user = request.user
     try:
-        checkout = Checkout.objects.get(customer__username=user.username)
+        checkout = Checkout.objects.get(customer__username=user.username, open=True)
     except:
         checkout = Checkout.objects.create(customer=User.objects.get(username=user.username))
-        orders = Order.objects.filter(customer__username=user.username)
+        orders = Order.objects.filter(customer__username=user.username, open=True)
         for product in orders:
             checkout.order.add(product)
         checkout.set_amount_due()
         return redirect('products:shipping-address')
-    orders = Order.objects.filter(customer__username=user.username)
+    orders = Order.objects.filter(customer__username=user.username, open=True)
     for product in orders:
         checkout.order.add(product)
     checkout.set_amount_due()
@@ -208,13 +230,98 @@ def customer_address_view(request):
         shipping_address = form.save()
         shipping_address.customer = request.user
         shipping_address.save()
-        return redirect('products:payment-center')
+        return redirect('products:purchase-summary')
     return render(request, 'products/address.html', context)
 
 
 @login_required 
-def payment_center_view(request):
-    checkout = Checkout.objects.filter(customer=request.user).first()
+def purchase_summary_view(request):
+    checkout = Checkout.objects.filter(customer=request.user, open=True).first()
     query_set = checkout.order.all()
     context = {'checkout':checkout, 'query_set': query_set}
-    return render(request, 'products/payment.html', context)
+    return render(request, 'products/purchase_summary.html', context)
+
+
+def create_checkout_session_view(request):
+    amount_due = request.GET.get('str')
+    # print(amount)
+    # total_due = '2000.00'
+    # before_decimal = int(total_due[0:-3])
+    # after_decimal = int(total_due[-2:])
+    DOMAIN = 'http://127.0.0.1:8000/'
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[{ 
+                'price_data': { 
+                    'currency': 'php', 
+                    'unit_amount': f'{int(amount_due)*100}',
+                    'product_data':{ 
+                        'name': 'Total amount due'
+                        }, 
+                },
+                'quantity': 1
+            }],
+        metadata={'purchases': ''},
+        mode='payment',
+        success_url=DOMAIN + 'payment/success/',
+        cancel_url=DOMAIN + 'payment/cancel/',
+    )
+    return redirect(checkout_session.url, code=303)
+
+
+@login_required
+def payment_cancel_view(request):
+    return render(request, 'products/payment_cancel.html')
+
+
+@login_required
+def payment_success_view(request):
+    customer = request.user
+    orders = customer.order_set.all().filter(open=True)
+    checkout = Checkout.objects.get(customer=customer, open=True)
+    for order in orders:
+        order.open = False
+        order.save()
+    checkout.open = False
+    checkout.checkout_date = timezone.now()
+    checkout.save()
+    return render(request, 'products/payment_success.html')
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+    
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        # Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
+        session = stripe.checkout.Session.retrieve(
+            event['data']['object']['id'],
+            expand=['line_items'],
+        )
+
+        line_items = session.line_items
+        # Fulfill the purchase...
+        # fulfill_order(line_items)
+        print(session)
+        customer_email = session['customer_details']['email']
+        items = session['metadata']["purchases"]
+        email_from = settings.EMAIL_HOST_USER
+        send_mail(
+            subject = 'Your ordered items',
+            message = f'Thank you for shopping at AiAi Market. Here are your ordered items-{items}',
+            recipient_list = [customer_email],
+            from_email = email_from
+        )
+    return HttpResponse(status=200)

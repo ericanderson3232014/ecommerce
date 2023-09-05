@@ -45,13 +45,13 @@ admin.site.register(ProductReview, ProductReviewAdmin)
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'product', 'quantity', 'ordered_date']
+    list_display = ['customer', 'product', 'open', 'quantity', 'ordered_date']
 
 admin.site.register(Order, OrderAdmin)
 
 
 class CheckoutAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'total_amount_due']
+    list_display = ['customer', 'total_amount_due', 'open', 'date_created', 'checkout_date']
 
 admin.site.register(Checkout, CheckoutAdmin)
 

@@ -16,7 +16,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.226.37', 'ericanderson3262014.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.226.37', 'ericanderson3262014.pythonanywhere.com']
 # ALLOWED_HOSTS = []
 
 # Application definition
@@ -129,3 +129,17 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
+
+
+# Stripe payment
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51NMiBGGc2BRGe9DEdQB4uFXo4cXsyIrsmOZWEqzjcEwncSEkSXFmpChhckGDXA63HT5rScE6xFmZkvgvCKvfeeEP00lbHOx2KK'
+STRIPE_SECRET_KEY = 'sk_test_51NMiBGGc2BRGe9DEuMhhtg7J7gJSyrkLWj4YQWyei8Kpc3NIN7i7QESI03yaxZTnxSHt8SaZT2R7qPAbV8jqedBF0013Eb2BBn'
+STRIPE_WEBHOOK_SECRET = 'whsec_6687e864ee5553cdd76003b259c456af97f2ba119a6e61753b7eb6d08483bde4'
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ericanderson3262014@gmail.com'
+EMAIL_HOST_PASSWORD = 'aunplxnxdrfefkpk'

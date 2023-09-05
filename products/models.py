@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 import uuid
 
-
+from django.utils import timezone
 
 
 class ProductCategory(models.Model):
@@ -119,12 +119,9 @@ class Order(models.Model):
     open = models.BooleanField(default=True)
 
     def get_order_total(self):
-        order = Order.objects.get(customer=self.customer, product=self.product)
         if self.product.get_discount_price():
             order_total = self.quantity * self.product.get_discount_price()
-            discount_amount = self.quantity * self.product.price - order_total
             return order_total
-            # return {'order_total':order_total, 'discount_amount': discount_amount}
         else:
             order_total = self.quantity * self.product.price
             return order_total
@@ -136,13 +133,14 @@ class Order(models.Model):
 class Checkout(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.ManyToManyField(Order)
-    checkout_date = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    checkout_date = models.DateTimeField(null=True)
     total_amount_due = models.DecimalField(max_digits=10, decimal_places=0, default=0)
+    open = models.BooleanField(default=True)
 
     def set_amount_due(self):
         customer = User.objects.get(username=self.customer.username)
-        checkout = Checkout.objects.get(customer=customer)
-        print('CHEKOUTS:', checkout)
+        checkout = Checkout.objects.get(customer=customer, open=True)
         amount_due = [product.get_order_total() for product in checkout.order.all()]
         checkout.total_amount_due = float(sum( amount_due))
         checkout.save()
@@ -151,6 +149,8 @@ class Checkout(models.Model):
     def __str__(self):
         return f'{self.customer.username} - {self.order}'
     
+    class Meta:
+        ordering = ['-date_created']
 
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
