@@ -9,7 +9,31 @@
 {% block content %}
 
     <div class="cancel-payment-wrapper">
-        <h1>Payment was successful</h1>
+        <h2>Payment was successful</h2>
+        <p>Customer: {{ checkout_obj.customer.username }}</p>
+        {% for obj in checkout_obj.order.all %}
+        <div>
+           <p>Product name: {{ obj.product.name }}</p>
+           <p>Price: P{{ obj.product.price }}</p>
+           {% if obj.product.get_discount_price %}
+                <p>Discount price: P{{ obj.product.get_discount_price }}</p>
+                {% for item in discount %}
+                    {% if item.name == obj.product.name %}
+                        <p>Discount: -P{{ item.discount }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>Discount: {{ obj.product.get_discount_price }}</p>
+                hello world
+           {% endif %}
+           <p>
+            Product url: 
+            <a href="{{ domain }}{{ obj.product.get_absolute_url }}" target="_blank" >{{ domain }}{{ obj.product.get_absolute_url }}</a>
+           </p>
+        </div>
+        <br>
+        {% endfor %}
+        <h3>Amount paid: {{ checkout_obj.total_amount_due }}</h3>
     </div>
 
 {% endblock content %}

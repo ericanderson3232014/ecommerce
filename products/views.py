@@ -15,6 +15,7 @@ from .models import (
     Order,
     Checkout,
     ShippingAddress,
+    CheckoutReceipt,
 )
 from .forms import (
     CreateProductForm, 
@@ -230,25 +231,30 @@ def customer_address_view(request):
         shipping_address = form.save()
         shipping_address.customer = request.user
         shipping_address.save()
-        return redirect('products:purchase-summary')
+        return redirect('products:checkout-summary')
     return render(request, 'products/address.html', context)
 
 
 @login_required 
-def purchase_summary_view(request):
+def checkout_summary_view(request):
     checkout = Checkout.objects.filter(customer=request.user, open=True).first()
+    if not checkout:
+        return redirect('products:product-list')
     query_set = checkout.order.all()
     context = {'checkout':checkout, 'query_set': query_set}
-    return render(request, 'products/purchase_summary.html', context)
+    return render(request, 'products/checkout_summary.html', context)
 
 
-def create_checkout_session_view(request):
-    amount_due = request.GET.get('str')
-    # print(amount)
-    # total_due = '2000.00'
-    # before_decimal = int(total_due[0:-3])
-    # after_decimal = int(total_due[-2:])
+@login_required 
+def create_checkout_session_view(request, id):
     DOMAIN = 'http://127.0.0.1:8000/'
+
+    try:
+        checkout_obj = Checkout.objects.get(id=id)
+    except:
+        return redirect('products:product-list')
+    
+    amount_due = (checkout_obj.total_amount_due / 100)*100
     checkout_session = stripe.checkout.Session.create(
         line_items=[{ 
                 'price_data': { 
@@ -260,9 +266,9 @@ def create_checkout_session_view(request):
                 },
                 'quantity': 1
             }],
-        metadata={'purchases': ''},
+        metadata={'receipt_url': 'http://127.0.0.1:8000/payment/success/7/'},
         mode='payment',
-        success_url=DOMAIN + 'payment/success/',
+        success_url=DOMAIN + f'payment/success/{id}/',
         cancel_url=DOMAIN + 'payment/cancel/',
     )
     return redirect(checkout_session.url, code=303)
@@ -274,17 +280,71 @@ def payment_cancel_view(request):
 
 
 @login_required
-def payment_success_view(request):
+def payment_success_view(request, id):
+    DOMAIN = 'http://127.0.0.1:8000'
     customer = request.user
-    orders = customer.order_set.all().filter(open=True)
-    checkout = Checkout.objects.get(customer=customer, open=True)
+    orders = customer.order_set.filter(open=True)
+    checkout_obj = Checkout.objects.filter(id=id, open=True).first()
+
+    if not orders.exists() and not checkout_obj:
+        return redirect('products:product-list')
+    
+    your_purchase = ''
+    for item in checkout_obj.order.all():
+        discount = ''
+        if item.product.get_discount_price():
+            discount = item.product.price - item.product.get_discount_price()
+        else:
+            discount = 0
+        your_purchase += f'''
+        Customer: {checkout_obj.customer.username},
+        Product name: {item.product.name}, 
+        Price: P{item.product.price}, 
+        Discount price: P{item.product.get_discount_price()},
+        Discount amount: P{discount}, 
+        Quantity: {item.quantity},
+        item_url: {DOMAIN}{item.product.get_absolute_url()}
+        --------------------------------------------------
+        '''
+    your_purchase += f'Amount paid: {checkout_obj.set_amount_due()}'
+
     for order in orders:
         order.open = False
         order.save()
-    checkout.open = False
-    checkout.checkout_date = timezone.now()
-    checkout.save()
-    return render(request, 'products/payment_success.html')
+    checkout_obj.open = False
+    checkout_obj.checkout_date = timezone.now()
+    checkout_obj.save()
+    discount = []
+    for order in checkout_obj.order.all():
+        if order.product.get_discount_price():
+            discount.append(
+                {
+                    'discount' : order.product.price - order.product.get_discount_price(),
+                    'name' : order.product.name
+                }
+            )
+    context = {
+        'checkout_obj': checkout_obj, 
+        'domain': DOMAIN,
+        'discount': discount
+    }
+    
+    receipt = CheckoutReceipt.objects.create(customer=customer, checkout_summary=your_purchase)
+    address = ShippingAddress.objects.get(customer=request.user)
+    email_from = settings.EMAIL_HOST_USER
+    send_mail(
+        subject = 'Your ordered items',
+        message = f'''Thank you for shopping at AiAi Market. Here is your receipt:
+        \nReceipt ID: {receipt.id}
+        {your_purchase}
+        ''',
+        recipient_list = [address.email],
+        from_email = email_from
+    )
+    receipt.receipt_sent_date = timezone.now()
+    receipt.sent = True
+    receipt.save()
+    return render(request, 'products/payment_success.html', context)
 
 
 @csrf_exempt
@@ -312,15 +372,14 @@ def stripe_webhook(request):
         )
 
         line_items = session.line_items
-        # Fulfill the purchase...
-        # fulfill_order(line_items)
+
         print(session)
         customer_email = session['customer_details']['email']
-        items = session['metadata']["purchases"]
+        receipt_url = session['metadata']["receipt_url"]
         email_from = settings.EMAIL_HOST_USER
         send_mail(
             subject = 'Your ordered items',
-            message = f'Thank you for shopping at AiAi Market. Here are your ordered items-{items}',
+            message = f'Thank you for shopping at AiAi Market. Here is your receipt @{receipt_url}',
             recipient_list = [customer_email],
             from_email = email_from
         )

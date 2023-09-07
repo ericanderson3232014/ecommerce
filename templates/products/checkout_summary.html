@@ -147,7 +147,7 @@
                     <h3>Total savings: 0</h3>
                 {% endif %}
                 <h3>Total amount due: P{{ sub_total }}</h3>
-                <form class="checkout-form" action="{% url 'products:checkout-session' %}?str={{ sub_total }}" method="POST">
+                <form class="checkout-form" action="{% url 'products:checkout-session' checkout.id %}?str={{ sub_total }}" method="POST">
                     {% csrf_token %}
                     <button class="purchase-btn" type="submit" id="checkout-button">Purchase</button>
                 </form>

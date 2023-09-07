@@ -18,19 +18,15 @@ class ProductCategory(models.Model):
         verbose_name_plural = 'Product Categories'
 
 
-
 class ProductSubCategory(models.Model):
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
     
     class Meta:
+        verbose_name_plural = 'Product Sub-categories'
         ordering = ['name']
-        verbose_name_plural = 'Product Sub-Categories'
-        ordering = ['name']
-
 
 
 class Product(models.Model):
@@ -75,7 +71,6 @@ class Product(models.Model):
         verbose_name_plural = 'Products'
 
 
-
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_images')
@@ -85,7 +80,6 @@ class ProductImage(models.Model):
 
     class Meta:
         verbose_name_plural = 'Product Images'
-
 
 
 class ProductReview(models.Model):
@@ -109,6 +103,7 @@ class ProductReview(models.Model):
     
     class Meta:
         ordering = ['-created']
+        verbose_name_plural = 'Product Reviews'
 
 
 class Order(models.Model):
@@ -152,6 +147,7 @@ class Checkout(models.Model):
     class Meta:
         ordering = ['-date_created']
 
+
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=100)
@@ -169,3 +165,18 @@ class ShippingAddress(models.Model):
     
     class Meta:
         verbose_name_plural = 'Addresses'
+
+
+class CheckoutReceipt(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    checkout_summary = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    receipt_sent_date = models.DateTimeField(null=True)
+    sent = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.customer.username
+    
+    class Meta:
+        ordering = ['-created']
+        verbose_name_plural = 'Checkout Receipts'

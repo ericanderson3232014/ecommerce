@@ -8,6 +8,7 @@ from .models import (
     Order,
     Checkout,
     ShippingAddress,
+    CheckoutReceipt
 )
 
 
@@ -60,3 +61,8 @@ class ShippingAddressAdmin(admin.ModelAdmin):
     list_display = ['customer', 'first_name', 'last_name']
 
 admin.site.register(ShippingAddress, ShippingAddressAdmin)
+
+class CheckoutReceiptAdmin(admin.ModelAdmin):
+    list_display = ['customer']
+
+admin.site.register(CheckoutReceipt, CheckoutReceiptAdmin)
