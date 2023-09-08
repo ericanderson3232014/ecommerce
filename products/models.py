@@ -36,10 +36,10 @@ class Product(models.Model):
         editable=False
     )
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    sub_category = models.ForeignKey(ProductSubCategory, on_delete=models.CASCADE, null=True, blank=True)
+    sub_category = models.ForeignKey(ProductSubCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    brand = models.CharField(max_length=100, blank=True, null=True)
-    product_image = models.ImageField(upload_to='product_image', null=True, blank=True)
+    brand = models.CharField(max_length=100)
+    product_image = models.ImageField(upload_to='product_image')
     description = models.TextField(max_length=300)
     detail = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=0, default=0.0)
@@ -61,7 +61,7 @@ class Product(models.Model):
     def get_discount_price(self):
         item = Product.objects.get(name=self.name)
         if item.sub_category:
-            if item.sub_category.name == 'Gaming Laptop':
+            if item.sub_category.name == 'High-end':
                 discount = float(item.price) - float(item.price) * .10
                 return int(str(discount)[0:-2])
         return 0
@@ -72,6 +72,11 @@ class Product(models.Model):
 
 
 class ProductImage(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_images')
 
@@ -83,8 +88,13 @@ class ProductImage(models.Model):
 
 
 class ProductReview(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
     rating = models.IntegerField()
@@ -107,6 +117,11 @@ class ProductReview(models.Model):
 
 
 class Order(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     ordered_date = models.DateTimeField(auto_now_add=True)
@@ -124,8 +139,16 @@ class Order(models.Model):
     def __str__(self):
         return f'{self.customer.username} - {self.product.name}'
     
+    class Meta:
+        ordering = ['-open']
+    
 
 class Checkout(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.ManyToManyField(Order)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -145,10 +168,15 @@ class Checkout(models.Model):
         return f'{self.customer.username} - {self.order}'
     
     class Meta:
-        ordering = ['-date_created']
+        ordering = ['-open']
 
 
 class ShippingAddress(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length= 100)
@@ -168,7 +196,13 @@ class ShippingAddress(models.Model):
 
 
 class CheckoutReceipt(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    checkout = models.ForeignKey(Checkout, on_delete=models.PROTECT)
+    customer = models.ForeignKey(User, on_delete=models.PROTECT)
     checkout_summary = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     receipt_sent_date = models.DateTimeField(null=True)
@@ -178,5 +212,5 @@ class CheckoutReceipt(models.Model):
         return self.customer.username
     
     class Meta:
-        ordering = ['-created']
+        ordering = ['-receipt_sent_date']
         verbose_name_plural = 'Checkout Receipts'

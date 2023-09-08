@@ -54,6 +54,7 @@
             padding: 0 1rem;
         }
 
+        .product-brand-input,
         .product-sub-category-input,
         .product-category-input,
         .product-name-input,
@@ -71,6 +72,7 @@
             gap: 0.5rem;
         }
 
+        .product-brand-input > p > input,
         .product-sub-category-input > p > select,
         .product-category-input > p > select,
         .product-price-input > p > input,
@@ -109,6 +111,7 @@
             aspect-ratio: 1/1;
         }
 
+        .product-brand-input > label,
         .product-category-input > label
         .product-image-input > label,
         .product-price-input > label,
@@ -120,7 +123,7 @@
            color: rgb(39, 39, 39);
         }
 
-
+        .product-brand-input > p > input:focus,
         .product-sub-category-input > p > select:focus,
         .product-category-input > p > select:focus,
         .product-price-input > p > input:focus,
@@ -167,27 +170,31 @@
                 <h2>Add your product</h2>
                 <div class="product-category-input">
                     {{ product_form.category.label_tag}}
-                    <p>{{ product_form.category}}</p>
+                    <p>{{ product_form.category }}</p>
                 </div>
                 <div class="product-sub-category-input">
                     {{ product_form.sub_category.label_tag}}
-                    <p>{{ product_form.sub_category}}</p>
+                    <p>{{ product_form.sub_category }}</p>
                 </div>
                 <div class="product-name-input">
                     {{ product_form.name.label_tag}}
-                    <p>{{ product_form.name}}</p>
+                    <p>{{ product_form.name }}</p>
+                </div>
+                <div class="product-brand-input">
+                    {{ product_form.brand.label_tag}}
+                    <p>{{ product_form.brand }}</p>
                 </div>
                 <div class="product-image-input">
                     {{ product_form.product_image.label_tag}}
-                    <p>{{ product_form.product_image}}</p>
+                    <p>{{ product_form.product_image }}</p>
                 </div>
                 <div class="product-price-input">
                     {{ product_form.price.label_tag}}
-                    <p>{{ product_form.price}}</p>
+                    <p>{{ product_form.price }}</p>
                 </div>
                 <div class="product-available-input">
                     {{ product_form.available.label_tag}}
-                    {{ product_form.available}}
+                    {{ product_form.available }}
                 </div>
             </div>
             <div class="product-create-input-container">

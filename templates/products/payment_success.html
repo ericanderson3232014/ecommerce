@@ -8,32 +8,31 @@
 
 {% block content %}
 
-    <div class="cancel-payment-wrapper">
+    <div class="success-payment-wrapper">
         <h2>Payment was successful</h2>
-        <p>Customer: {{ checkout_obj.customer.username }}</p>
-        {% for obj in checkout_obj.order.all %}
-        <div>
-           <p>Product name: {{ obj.product.name }}</p>
-           <p>Price: P{{ obj.product.price }}</p>
-           {% if obj.product.get_discount_price %}
-                <p>Discount price: P{{ obj.product.get_discount_price }}</p>
-                {% for item in discount %}
-                    {% if item.name == obj.product.name %}
-                        <p>Discount: -P{{ item.discount }}</p>
-                    {% endif %}
-                {% endfor %}
+        <h4>Receipt ID: {{ receipt_id }}</h4>
+        <p>Customer: {{ customer }}</p>
+        {% for order in orders %}
+            <p>Name: {{ order.product.name }}</p>
+            <p>Quantity: {{ order.quantity }}</p>
+            {% if order.product.get_discount_price %}
+                <p>Price: P{{ order.product.get_discount_price}}</p>
+                <p>Orginal price: P{{ order.product.price }}</p>
             {% else %}
-                <p>Discount: {{ obj.product.get_discount_price }}</p>
-                hello world
-           {% endif %}
-           <p>
-            Product url: 
-            <a href="{{ domain }}{{ obj.product.get_absolute_url }}" target="_blank" >{{ domain }}{{ obj.product.get_absolute_url }}</a>
-           </p>
-        </div>
-        <br>
+                <p>Price: {{ order.product.price}}</p>
+            {% endif %}
+            {% for discount in discount_amount %}
+                {% if discount.name == order.product.name %}
+                    <p>Amount saved: P{{ discount.discount_amount}}</p>
+                {% endif %}
+            {% endfor %}
+            <p>Url: <a href="{{ domain }}{{ order.product.get_absolute_url }}" target="_blank">
+                    {{ domain }}{{ order.product.get_absolute_url }}
+                </a>
+            </p>
+            <h4>Total: P{{ order.get_order_total }}</h4>
         {% endfor %}
-        <h3>Amount paid: {{ checkout_obj.total_amount_due }}</h3>
+        <h4>Total amount paid: P{{ total_amount_paid }}</h4>
     </div>
 
 {% endblock content %}

@@ -63,6 +63,6 @@ class ShippingAddressAdmin(admin.ModelAdmin):
 admin.site.register(ShippingAddress, ShippingAddressAdmin)
 
 class CheckoutReceiptAdmin(admin.ModelAdmin):
-    list_display = ['customer']
+    list_display = ['customer', 'sent', 'receipt_sent_date', 'created']
 
 admin.site.register(CheckoutReceipt, CheckoutReceiptAdmin)

@@ -36,8 +36,8 @@ urlpatterns = [
     path('checkout/', checkout_view, name='checkout'),
     path('shipping/address/', customer_address_view, name='shipping-address'),
     path('checkout/summary/', checkout_summary_view, name='checkout-summary'),
-    path('create/checkout/session/<int:id>/', create_checkout_session_view, name='checkout-session'),
-    path('payment/success/<int:id>/', payment_success_view, name='payment-success'),
+    path('create/checkout/session/<uuid:id>/', create_checkout_session_view, name='checkout-session'),
+    path('payment/success/<uuid:id>/', payment_success_view, name='payment-success'),
     path('payment/cancel/', payment_cancel_view, name='payment-cancel'),
     path('stripe/webhook/', stripe_webhook, name='stripe-webhook')
 ]
