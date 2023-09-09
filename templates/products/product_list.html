@@ -54,10 +54,10 @@
                             </p>
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
-                                    <p class="product-price">P{{ product.get_discount_price }}</p>
-                                    <p class="product-discount-price">P{{ product.price }} <span>-10%</span></p>
+                                    <p class="product-price">P{{ product.discount_price_str_format }}</p>
+                                    <p class="product-discount-price">P{{ product.price_str_format }} <span>-10%</span></p>
                                 {% else %}
-                                    <p class="product-price">P{{ product.price }}</p>
+                                    <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -111,10 +111,10 @@
                             </p>
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
-                                    <p class="product-price">P{{ product.get_discount_price }}</p>
-                                    <p class="product-discount-price">P{{ product.price }} <span>-10%</span></p>
+                                    <p class="product-price">P{{ product.discount_price_str_format }}</p>
+                                    <p class="product-discount-price">P{{ product.price_str_format }} <span>-10%</span></p>
                                 {% else %}
-                                    <p class="product-price">P{{ product.price }}</p>
+                                    <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -168,10 +168,10 @@
                             </p>
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
-                                    <p class="product-price">P{{ product.get_discount_price }}</p>
-                                    <p class="product-discount-price">P{{ product.price }} <span>-10%</span></p>
+                                    <p class="product-price">P{{ product.discount_price_str_format }}</p>
+                                    <p class="product-discount-price">P{{ product.price_str_format }} <span>-10%</span></p>
                                 {% else %}
-                                    <p class="product-price">P{{ product.price }}</p>
+                                    <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
                             </div>
                         </div>

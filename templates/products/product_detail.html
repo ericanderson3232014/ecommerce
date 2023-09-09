@@ -50,7 +50,12 @@
                 {% endif %}
                 <div class="product-detail-price-and-name">
                     <h2 class="product-detail-name">{{ query.name }}</h2>
-                    <h3 class="product-detail-price">P{{ query.price }}</h3>
+                    {% if query.get_discount_price %}
+                        <h3 class="product-detail-price">P{{ query.discount_price_str_format }}</h3>
+                        <p class="product-discount-price">P{{ query.price_str_format }} <span>-10%</span></p>
+                    {% else %}
+                        <h3 class="product-detail-price">P{{ query.price_str_format }}</h3>
+                    {% endif %}
                 </div>
                 <div class="product-description-drop-container">
                     <div class="product-description-drop product-detail-toggle-btn">

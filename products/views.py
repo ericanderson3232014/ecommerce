@@ -33,6 +33,9 @@ endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 def home_view(request):
     category = ProductCategory.objects.all()
+    products = Product.objects.all()
+    for product in products:
+        product.save()
     context = {'category': category}
     return render(request, 'products/home.html', context)
 
@@ -40,7 +43,7 @@ def home_view(request):
 def product_list_view(request):
     query_set = Product.objects.all()
     laptops = query_set.filter(category__name__iexact='laptop')
-    entry_level = laptops.filter(sub_category__name__iexact='entry level laptop')
+    entry_level = laptops.filter(sub_category__name__iexact='entry-level')
     for query in query_set:
         obj = str(query.likes)
         if obj[2] == '0':
@@ -251,7 +254,6 @@ def customer_address_view(request):
 @login_required 
 def checkout_summary_view(request):
     checkout = Checkout.objects.filter(customer=request.user, open=True).first()
-    print('CHECKOUT:', checkout)
 
     if not checkout:
         messages.error(request, 'You do not have any pending orders.')
@@ -272,12 +274,13 @@ def create_checkout_session_view(request, id):
         messages.error(request, 'You do not have any pending orders.')
         return redirect('products:product-list')
     
-    amount_due = (checkout_obj.total_amount_due / 100)*100
+    amount_due = int((checkout_obj.total_amount_due) * 100)
+    print(amount_due)
     checkout_session = stripe.checkout.Session.create(
         line_items=[{ 
                 'price_data': { 
                     'currency': 'php', 
-                    'unit_amount': f'{int(amount_due)*100}',
+                    'unit_amount': f'{amount_due}',
                     'product_data':{ 
                         'name': 'Total amount due'
                         }, 

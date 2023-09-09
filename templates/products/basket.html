@@ -10,259 +10,29 @@
 
 {% block content %}
 
-<style>
-
-    .product-basket-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        padding: 2rem 0;
-    }
-
-    .product-basket-header {
-        width: 90%;
-        max-width: 1000px;
-        margin: 0 auto;
-        border-bottom: 2px solid rgb(216, 216, 216);
-        padding-bottom: 0.5rem;
-    }
-
-    .basket-list {
-        width: 90%;
-        max-width: 1000px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        border-radius: 5px;
-        background: white;
-    }
-
-    .basket-product {
-        display: flex;
-        align-items: center;
-        padding: 1rem 2rem;
-        border-bottom: 1px solid rgb(204, 204, 204);
-        /* background: white; */
-
-    }
-
-    .basket-product:last-child {
-        border-bottom: none;
-    }
-
-    .basket-product > * {
-        flex: 1;
-        /* border: 1px solid black; */
-    } 
-
-    .basket-product-info-container {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .basket-product-image {
-        flex: 0 0 45%;
-    }
-
-    .basket-product-image > img {
-        width: 100%;
-        aspect-ratio: 4/3;
-        display: block;
-    }
-
-    .basket-product-info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.7rem;
-    }
-
-    .basket-product-name {
-        font-size: 1.1rem;
-        font-weight: 500;
-        letter-spacing: 0.05rem;
-        color: rgb(36, 36, 36);
-    }
-
-    .basket-product-price {
-        letter-spacing: 0.05rem;
-        font-weight: 500;
-        color: orangered
-    }
-
-    .basket-product-discount-price {
-        letter-spacing: 0.05rem;
-        font-size: 0.9rem;
-        color: gray;
-    }
-
-    .basket-product-discount-price > span {
-        color: rgb(31, 31, 31);
-    }
-
-    .basket-product-available {
-        letter-spacing: 0.05rem;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: rgb(68, 0, 177)
-    }
-
-    .basket-total-product {
-        flex: 2;
-        display: flex;
-        align-items: stretch;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-
-    .basket-minus-item,
-    .basket-add-item {
-        cursor: pointer;
-    }
-
-    .basket-minus-item,
-    .basket-add-item,
-    .quantity {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 5px;
-    }
-
-    .quantity {
-        border: 1px solid rgb(197, 197, 197);
-        padding: 0 0.4rem;
-        padding-right: 0.2rem;
-        font-size: 0.9rem;
-        letter-spacing: 0.05rem;
-        color: rgb(59, 59, 59)
-    }
-
-    .basket-minus-item,
-    .quantity > input,
-    .basket-add-item {
-        width: 25px;
-        aspect-ratio: 1/1;
-        text-align: center;
-        border: none;
-    }
-
-    .quantity > input {
-        width: 20px;
-        aspect-ratio: 1/1;
-        border-radius: 5px;
-        font-size: 1rem;
-    }
-
-    .update-or-delete {
-        padding: 0.4rem 0.6rem;
-        letter-spacing: 0.05rem;
-        border-radius: 5px;
-        background: orangered;
-        color: white;
-        border: none;
-        font-size: 0.9rem;
-        cursor: pointer;
-    }
-
-    .total-price {
-        flex: 0 1 auto;
-        display: flex;
-        align-items: center;
-        justify-content: end;
-        letter-spacing: 0.05rem;
-    }
-
-    .basket-sub-total-container {
-        width: 90%;
-        max-width: 1000px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: end;
-    }
-
-    .basket-sub-total {
-        width: 50%;
-        max-width: 500px;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-        padding: 1.3rem;
-        background: white;
-        border-radius: 5px;
-    }
-
-    .basket-sub-total > h2 {
-        letter-spacing: 0.05rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid rgb(219, 219, 219)
-    }
-
-    .basket-sub-total-info {
-        display: flex;
-        align-items: start;
-        justify-content: space-between;
-        gap: 1rem;
-        /* border: 1px solid black; */
-    }
-
-    .basket-sub-total-info > div {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        letter-spacing: 0.07rem;
-        /* padding-right: 5rem; */
-        text-align: center;
-    }
-
-    .sub-total-btns {
-        display: flex;
-        flex-direction: column;
-        gap: 0.7rem;
-    }
-
-    .sub-total-btns > a {
-        letter-spacing: 0.07rem;
-        padding: 0.8rem 1rem;
-        background: orangered;
-        color: white;
-        border-radius: 5px;
-        /* width: 200px; */
-        text-align: center;
-    }
-
-    .basket-continue-shopping-btn {
-        background: rgb(116, 13, 242) !important;
-    }
-
-</style>
-
 <div class="product-basket-wrapper">
     <h2 class="product-basket-header">{{ request.user.username }}'s basket</h2>
     <div class="basket-list">
-        {% for product in query_set %}
+        {% for order in query_set %}
             <div class="basket-product">
                 <div class="basket-product-info-container">
                     <div class="basket-product-image">
-                        <img src="{{ product.product.get_product_image_url }}" alt="">
+                        <img src="{{ order.product.get_product_image_url }}" alt="">
                     </div>
                     <div class="basket-product-info">
                         <p class="basket-product-name">
-                            {{ product.product.name }} 
+                            {{ order.product.name }} 
                         </p>
                         <div class="basket-product-price-and-discount">
-                            {% if product.product.get_discount_price %}
-                                <p class="basket-product-price">P{{ product.product.get_discount_price }}</p>
-                                <p class="basket-product-discount-price">P{{ product.product.price }} <span>-10%</span></p>
+                            {% if order.product.get_discount_price %}
+                                <p class="basket-product-price">P{{ order.product.discount_price_str_format }}</p>
+                                <p class="basket-product-discount-price">P{{ order.product.price_str_format }} <span>-10%</span></p>
                             {% else %}
-                                <p class="basket-product-price">P{{ product.product.price }}</p>
+                                <p class="basket-product-price">P{{ order.product.price_str_format }}</p>
                             {% endif %}
                         </div>
                         <div class="basket-product-available">
-                            {% if product.product.available %}
+                            {% if order.product.available %}
                                 <p>In stock</p>
                             {% else %}
                                 <p>Out of stock</p>
@@ -270,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <form class="basket-total-product" action="{% url 'products:update-basket' product.product.name %}" method="GET">
+                <form class="basket-total-product" action="{% url 'products:update-basket' order.product.name %}" method="GET">
                     <button type="button"class="basket-minus-item">
                         <span class="material-symbols-outlined">
                             remove
@@ -278,7 +48,7 @@
                     </button>
                     <div class="quantity">
                         Qty:
-                        <input class="total-amount" type="text" readonly name='amount' value="{{ product.quantity }}" min="{{ product.quantity }}">
+                        <input class="total-amount" type="text" readonly name='amount' value="{{ order.quantity }}" min="{{ order.quantity }}">
                     </div>
                     <button  type="button" class="basket-add-item">
                         <span class="material-symbols-outlined">
@@ -288,7 +58,12 @@
                     <button class='update-or-delete' type="submit">Delete</button>
                 </form>
                 <div class="total-price">
-                    <h3>P{{ product.get_order_total }}</h3>
+                    {% for obj in order_total %}
+                        {% if order.product.id == obj.id %}
+                            <h3>P{{ obj.order_total }}</h3>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- comming from context_processor get_basket_total()-->
                 </div>
             </div>
         {% endfor %}
@@ -300,11 +75,13 @@
                 <div class="sub-total-basket-quantity">
                     <h4>Quantity</h4>
                     <p>{{ num_of_product }} items</p>
+                    <!-- coming from context_processors.py -->
                 </div>
                 <div class="sub-total-basket-savings">
                     <h4>Savings</h4>
                     {% if discount_amount %}
                         <p>-P{{ discount_amount }}</p>
+                        <!-- coming from context_processors.py -->
                     {% else %}
                         <p>none</p>
                     {% endif %}

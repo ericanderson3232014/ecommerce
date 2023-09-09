@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 import uuid
-
+from decimal import Decimal
 from django.utils import timezone
 
 
@@ -42,7 +42,9 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='product_image')
     description = models.TextField(max_length=300)
     detail = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=0, default=0.0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price_str_format = models.CharField(max_length=1000, null=True, blank=True)
+    discount_price_str_format = models.CharField(max_length=1000, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     available = models.BooleanField(default=True)
@@ -52,6 +54,14 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+    def save(self, *arg, **kwarg):
+        price = str(self.price)
+        if price[-2:] == '00':
+             self.price_str_format = f'{price[0:-6]},{price[-6:-3]}'
+        else:
+             self.price_str_format = f'{price[0:-6]},{price[-6:]}'
+        super().save(*arg, **kwarg)
+
     def get_product_image_url(self):
         return self.product_image.url
     
@@ -62,8 +72,12 @@ class Product(models.Model):
         item = Product.objects.get(name=self.name)
         if item.sub_category:
             if item.sub_category.name == 'High-end':
-                discount = float(item.price) - float(item.price) * .10
-                return int(str(discount)[0:-2])
+                discount = item.price - Decimal(int(item.price) * .10)
+                if str(discount)[-2:] == '00':
+                    self.discount_price_str_format = f'{str(discount)[0:-6]},{str(discount)[-6:-3]}'
+                else:
+                    self.discount_price_str_format = f'{str(discount)[0:-6]},{str(discount)[-6:]}'
+                return discount
         return 0
     
     class Meta:
@@ -153,16 +167,16 @@ class Checkout(models.Model):
     order = models.ManyToManyField(Order)
     date_created = models.DateTimeField(auto_now_add=True)
     checkout_date = models.DateTimeField(null=True)
-    total_amount_due = models.DecimalField(max_digits=10, decimal_places=0, default=0)
+    total_amount_due = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     open = models.BooleanField(default=True)
 
     def set_amount_due(self):
         customer = User.objects.get(username=self.customer.username)
         checkout = Checkout.objects.get(customer=customer, open=True)
         amount_due = [product.get_order_total() for product in checkout.order.all()]
-        checkout.total_amount_due = float(sum( amount_due))
+        checkout.total_amount_due = sum( amount_due)
         checkout.save()
-        return float(sum( amount_due))
+        return sum( amount_due)
     
     def __str__(self):
         return f'{self.customer.username} - {self.order}'
