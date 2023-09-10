@@ -44,21 +44,21 @@ def product_list_view(request):
     query_set = Product.objects.all()
     laptops = query_set.filter(category__name__iexact='laptop')
     entry_level = laptops.filter(sub_category__name__iexact='entry-level')
-    for query in query_set:
-        obj = str(query.likes)
-        if obj[2] == '0':
-            query.likes = int(obj[0])
-            query.save()
-    for query in laptops:
-        obj = str(query.likes)
-        if obj[2] == '0':
-            query.likes = int(obj[0])
-            query.save()
-    for query in entry_level:
-        obj = str(query.likes)
-        if obj[2] == '0':
-            query.likes = int(obj[0])
-            query.save()
+    # for query in query_set:
+    #     obj = str(query.likes)
+    #     if obj[2] == '0':
+    #         query.likes = int(obj[0])
+    #         query.save()
+    # for query in laptops:
+    #     obj = str(query.likes)
+    #     if obj[2] == '0':
+    #         query.likes = int(obj[0])
+    #         query.save()
+    # for query in entry_level:
+    #     obj = str(query.likes)
+    #     if obj[2] == '0':
+    #         query.likes = int(obj[0])
+    #         query.save()
     context = {'query_set': query_set[0:5], 'laptops':laptops[0:5], 'entry_level':entry_level}
     return render(request, 'products/product_list.html', context)
 

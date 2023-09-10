@@ -37,10 +37,10 @@ class Product(models.Model):
     )
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     sub_category = models.ForeignKey(ProductSubCategory, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    brand = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    brand = models.CharField(max_length=50)
     product_image = models.ImageField(upload_to='product_image')
-    description = models.TextField(max_length=300)
+    description = models.CharField(max_length=100)
     detail = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     price_str_format = models.CharField(max_length=1000, null=True, blank=True)
@@ -56,10 +56,7 @@ class Product(models.Model):
     
     def save(self, *arg, **kwarg):
         price = str(self.price)
-        if price[-2:] == '00':
-             self.price_str_format = f'{price[0:-6]},{price[-6:-3]}'
-        else:
-             self.price_str_format = f'{price[0:-6]},{price[-6:]}'
+        self.price_str_format = f'{price[0:-6]},{price[-6:]}'
         super().save(*arg, **kwarg)
 
     def get_product_image_url(self):
@@ -73,10 +70,7 @@ class Product(models.Model):
         if item.sub_category:
             if item.sub_category.name == 'High-end':
                 discount = item.price - Decimal(int(item.price) * .10)
-                if str(discount)[-2:] == '00':
-                    self.discount_price_str_format = f'{str(discount)[0:-6]},{str(discount)[-6:-3]}'
-                else:
-                    self.discount_price_str_format = f'{str(discount)[0:-6]},{str(discount)[-6:]}'
+                self.discount_price_str_format = f'{str(discount)[0:-6]},{str(discount)[-6:]}'
                 return discount
         return 0
     

@@ -1,8 +1,10 @@
+// scroll to top and bottom
 const scrollBtns = document.querySelector('.scroll-btns')
 const scrollDown = document.querySelector('.scroll-down')
 const scrollUp = document.querySelector('.scroll-up')
 const bodyWidth = document.querySelector('body')
 
+// mobile navigation
 const mobileNavs = [...document.querySelectorAll('.mobile-nav')]
 const mobileNavLinks = document.querySelector('.mobile-nav-links')
 const mobileNavCloseBtn = document.querySelector('.mobile-nav-close-btn')
@@ -10,12 +12,13 @@ const mobileToggleNavBtn = document.querySelector('.mobile-toggle-nav-btn')
 const mobileNavBackgroundLayout = document.querySelector('.mobile-nav-background-layout')
 const mobileNavLinkSearchButton = document.querySelector('.mobile-nav-link-search-button')
 
-
+// search form
 const navLinkSearchButton = document.querySelector('.nav-link-search-button')
 const searchIcon = document.querySelector('.search-icon')
 const searchFormWrapper = document.querySelector('.search-form-wrapper')
 const searchFormCloseButton = document.querySelector('.search-form-close-btn')
 
+// user drop-down menu navigation bar
 const toggleUserNavbar = document.querySelector('.toggle-user-navbar')
 const loggedInUserNavLinks = document.querySelector('.logged-in-user-nav-links')
 const loggedInNavbarArrowUp = document.querySelector('.logged-in-navbar-arrow-up')
@@ -23,12 +26,14 @@ const loggedInNavbarArrowDown = document.querySelector('.logged-in-navbar-arrow-
 const loggedInNavbarUsername = document.querySelector('.logged-in-navbar-username')
 const loggedInNavbarUserProfileImg = document.querySelector('.logged-in-navbar-user-profile-img')
 
+// banner image to right and to left buttons
 const bannerImgContainers = [...document.querySelectorAll('.banner-img-container')]
 const bannerArrowLeft = document.querySelector('.banner-arrow-left')
 const bannerArrowRight = document.querySelector('.banner-arrow-right')
 const TranslateBtns = [...document.querySelectorAll('.translate-btn')]
 const circles = [...document.querySelectorAll('.circle')]
 
+// product detail and description on product detail page
 const productDetailToggleBtns = [...document.querySelectorAll('.product-detail-toggle-btn')]
 const productDescription = document.querySelector('.product-description')
 const productDetail = document.querySelector('.product-detail')
@@ -37,6 +42,13 @@ const productDescriptionArrowDown = document.querySelector('.product-description
 const productDetailArrowUp = document.querySelector('.product-detail-arrow-up')
 const productDetailArrowDown = document.querySelector('.product-detail-arrow-down')
 const productDetailExtraImage = [...document.querySelectorAll('.product-detail-extra-image')]
+
+// product likes rating stars
+// const productLikeContainer = document.querySelectorAll('.product-like-container')
+
+
+
+
 
 const body = document.querySelector('body')
 
@@ -138,24 +150,25 @@ mobileNavLinkSearchButton.addEventListener('click', (e) => {
 
 })
 
-
-window.addEventListener('click', (e) => {
-    if(e.target != loggedInNavbarUserProfileImg &&
-        e.target != loggedInNavbarUsername &&
-        e.target != loggedInNavbarArrowUp &&
-        e.target != loggedInNavbarArrowDown
-    ){
-        if(!loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')) {
-            loggedInNavbarArrowUp.style.display = 'none'
-            loggedInNavbarArrowDown.style.display = 'flex'
+if(toggleUserNavbar) {
+    window.addEventListener('click', (e) => {
+        if(e.target != loggedInNavbarUserProfileImg &&
+            e.target != loggedInNavbarUsername &&
+            e.target != loggedInNavbarArrowUp &&
+            e.target != loggedInNavbarArrowDown
+        ){
+            if(!loggedInUserNavLinks.classList.contains('show-logged-in-user-nav-links')) {
+                loggedInNavbarArrowUp.style.display = 'none'
+                loggedInNavbarArrowDown.style.display = 'flex'
+            }
+            else {
+                loggedInUserNavLinks.classList.remove('show-logged-in-user-nav-links')
+                loggedInNavbarArrowUp.style.display = 'none'
+                loggedInNavbarArrowDown.style.display = 'flex'
+            }
         }
-        else {
-            loggedInUserNavLinks.classList.remove('show-logged-in-user-nav-links')
-            loggedInNavbarArrowUp.style.display = 'none'
-            loggedInNavbarArrowDown.style.display = 'flex'
-        }
-    }
-})
+    })
+}
 
 window.addEventListener('resize', (e) => {
     // searchFormWrapper.classList.remove('show-search-form-wrapper')
@@ -166,6 +179,7 @@ window.addEventListener('resize', (e) => {
     mobileNavBackgroundLayout.style.display = 'none'
     body.style.overflow = 'auto'
 })
+
 /*
 =============
 BANNER IMAGES
@@ -245,7 +259,6 @@ PRODUCT DETAIL PAGE
 ===================
 */ 
 
-
 productDetailToggleBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         const element = e.currentTarget
@@ -302,3 +315,35 @@ productDetailExtraImage.forEach((img) => {
 })
 
 
+/*
+============================
+PRODUCT LIST PAGE STAR ICONS
+============================ */
+ const productLikeContainer = document.querySelectorAll('.product-like-container')
+ const RatestarIcons = document.querySelectorAll('.rate-star-itcon')
+
+for(let num = 0; num < productLikeContainer.length; num++){
+
+    const ratingNum = productLikeContainer[num].firstElementChild
+    const rateStarIcons = productLikeContainer[num].querySelector('.rate-star-icons')
+    
+    let firstNum = ''
+    let lastNum = ''
+
+    if(ratingNum && rateStarIcons){
+        firstNum = parseInt(ratingNum.textContent.slice(0,-2))
+        lastNum = parseInt(ratingNum.textContent.slice(-1))
+        console.log(rateStarIcons)
+    }
+
+    let add = ''
+
+    for(let rateNum = 0; rateNum < firstNum; rateNum++) {
+        add += '<span class="material-symbols-rounded like-icon">star</span>'
+    }
+    if (lastNum){
+        add += '<span class="material-symbols-rounded like-icon">star_half</span>'
+    }
+   
+    rateStarIcons.innerHTML += add
+}

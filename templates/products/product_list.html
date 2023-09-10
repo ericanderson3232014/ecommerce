@@ -9,6 +9,7 @@
 
 
 {% block content %}
+
     <!-- PRODUCT 1 -->
     <div class="product-main-container">
         <div class="product-list-wrapper">
@@ -28,29 +29,11 @@
                             <img src="{{ product.get_product_image_url }}" alt="">
                         </div>
                         <div class="product-info">
-                            <div class="product-available-review-likes">
-                                {% if product.available %}
-                                    <p class="product-available">In stock</p>
-                                {% else %}
-                                    <p class="product-available">Out of stock</p>
-                                {% endif %}
-                                <div class="product-review-container">
-                                    <span class="material-symbols-outlined review-icon">rate_review</span>
-                                    {% if product.productreview_set.all %}
-                                        <span class="reviews">{{ product.productreview_set.count }}</span>
-                                    {% else %}
-                                        <span class="reviews">0</span>
-                                    {% endif %}
-                                </div>
-                                <div class="product-like-container">
-                                    <span class="likes">{{product.likes}}</span>
-                                    <!-- <span class="material-symbols-outlined favorite-icon">favorite</span> -->
-                                    <span class="material-symbols-outlined like-icon">star_rate</span>
-                                </div>
-                            </div>
                             <p class="product-name-and-description">
-                                <strong>{{ product.name }}</strong> 
-                                {{ product.description|truncatewords:15 }}
+                                <strong>
+                                    {{ product.name }}
+                                </strong> 
+                                {{ product.description}}
                             </p>
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
@@ -58,6 +41,20 @@
                                     <p class="product-discount-price">P{{ product.price_str_format }} <span>-10%</span></p>
                                 {% else %}
                                     <p class="product-price">P{{ product.price_str_format }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="product-like-container">
+                                {% if product.likes %}
+                                    <span class="likes">{{ product.likes }}</span>
+                                {% endif %}
+                                <div class="rate-star-icons">
+                                    <!-- insert star rating from js -->
+                                </div>
+                                {% if product.productreview_set.all%}
+                                    <div class="product-list-reviews">
+                                        <span class="material-symbols-rounded review-icon">rate_review</span>
+                                        <span class="reviews">{{ product.productreview_set.count }}</span>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -85,29 +82,9 @@
                             <img src="{{ product.get_product_image_url }}" alt="">
                         </div>
                         <div class="product-info">
-                            <div class="product-available-review-likes">
-                                {% if product.available %}
-                                    <p class="product-available">In stock</p>
-                                {% else %}
-                                    <p class="product-available">Out of stock</p>
-                                {% endif %}
-                                <div class="product-review-container">
-                                    <span class="material-symbols-outlined review-icon">rate_review</span>
-                                    {% if product.productreview_set.all %}
-                                        <span class="reviews">{{ product.productreview_set.count }}</span>
-                                    {% else %}
-                                        <span class="reviews">0</span>
-                                    {% endif %}
-                                </div>
-                                <div class="product-like-container">
-                                    <span class="likes">{{product.likes}}</span>
-                                    <!-- <span class="material-symbols-outlined favorite-icon">favorite</span> -->
-                                    <span class="material-symbols-outlined like-icon">star_rate</span>
-                                </div>
-                            </div>
                             <p class="product-name-and-description">
                                 <strong>{{ product.name }}</strong> 
-                                {{ product.description|truncatewords:15 }}
+                                {{ product.description }}
                             </p>
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
@@ -116,6 +93,20 @@
                                 {% else %}
                                     <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
+                            </div>
+                            <div class="product-like-container">
+                                {% if product.likes %}
+                                    <span class="likes">{{ product.likes }}</span>
+                                {% endif %}
+                                <div class="rate-star-icons">
+                                    <!-- insert star rating from js -->
+                                </div>
+                                {% if product.productreview_set.all%}
+                                    <div class="product-list-reviews">
+                                        <span class="material-symbols-rounded review-icon">rate_review</span>
+                                        <span class="reviews">{{ product.productreview_set.count }}</span>
+                                    </div>
+                            {% endif %}
                             </div>
                         </div>
                     </a>
@@ -142,29 +133,9 @@
                             <img src="{{ product.get_product_image_url }}" alt="">
                         </div>
                         <div class="product-info">
-                            <div class="product-available-review-likes">
-                                {% if product.available %}
-                                    <p class="product-available">In stock</p>
-                                {% else %}
-                                    <p class="product-available">Out of stock</p>
-                                {% endif %}
-                                <div class="product-review-container">
-                                    <span class="material-symbols-outlined review-icon">rate_review</span>
-                                    {% if product.productreview_set.all %}
-                                        <span class="reviews">{{ product.productreview_set.count }}</span>
-                                    {% else %}
-                                        <span class="reviews">0</span>
-                                    {% endif %}
-                                </div>
-                                <div class="product-like-container">
-                                    <span class="likes">{{product.likes}}</span>
-                                    <!-- <span class="material-symbols-outlined favorite-icon">favorite</span> -->
-                                    <span class="material-symbols-outlined like-icon">star_rate</span>
-                                </div>
-                            </div>
                             <p class="product-name-and-description">
                                 <strong>{{ product.name }}</strong> 
-                                {{ product.description|truncatewords:15 }}
+                                {{ product.description }}
                             </p>
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
@@ -174,6 +145,20 @@
                                     <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
                             </div>
+                            <div class="product-like-container">
+                                {% if product.likes %}
+                                    <span class="likes">{{ product.likes }}</span>
+                                {% endif %}
+                                <div class="rate-star-icons">
+                                    <!-- insert star rating from js -->
+                                </div>
+                                {% if product.productreview_set.all%}
+                                    <div class="product-list-reviews">
+                                        <span class="material-symbols-rounded review-icon">rate_review</span>
+                                        <span class="reviews">{{ product.productreview_set.count }}</span>
+                                    </div>
+                            {% endif %}
+                            </div>
                         </div>
                     </a>
                 {% endfor %}
@@ -181,4 +166,5 @@
         </div>
         <!-- END OF PRODUCT 3 -->
     </div>
+
 {% endblock content %}
