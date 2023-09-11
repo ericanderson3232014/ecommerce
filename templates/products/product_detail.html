@@ -24,47 +24,43 @@
                 </div>
             </div>
             <div class="prduct-detail-info-container">
-                <div class="product-detail-available-review-favorite">
-                    {% if query.available %}
-                        <h4 class="product-detail-available">In Stock</h4>
-                    {% else %}
-                        <h4 class="product-detail-available">Out of Stock</h4>
-                    {% endif %}
-                    <div class="product-detail-review-icon-container">
-                        <span class="material-symbols-outlined product-detail-review-icon">rate_review</span>
-                        {% if query.productreview_set.all %}
-                            <a href="#reviews" class="product-detail-rating">
-                                {{ query.productreview_set.count }} 
-                            </a>
-                        {% else %}
-                            <span class="product-detail-rating">0</span>
-                        {% endif %}
-                    </div>
-                    <div class="product-detail-favorite-icon-container">
-                        <span class="product-detail-rating">{{ query.likes }}</span>
-                        <span class="material-symbols-outlined product-detail-favorite-icon">favorite</span>
-                    </div>
-                </div>
-                {% if can_review %}
-                    <a class="write-review" href="{% url 'products:product-review' query.id %}">Write a review</a>
-                {% endif %}
-                <div class="product-detail-price-and-name">
-                    <h2 class="product-detail-name">{{ query.name }}</h2>
+                <h2 class="product-detail-name">{{ query.name }} <span>{{ query.description }}</span></h2>
+                <div class="product-detail-price-and-discount">
                     {% if query.get_discount_price %}
                         <h3 class="product-detail-price">P{{ query.discount_price_str_format }}</h3>
-                        <p class="product-discount-price">P{{ query.price_str_format }} <span>-10%</span></p>
+                        <div class="product-detail-discount-price-container">
+                            <p class="product-detail-discount-price">P{{ query.price_str_format }}</p>
+                            <span>-10%</span>
+                        </div>
                     {% else %}
                         <h3 class="product-detail-price">P{{ query.price_str_format }}</h3>
                     {% endif %}
+                    {% if query.available %}
+                        <p class="product-detail-in-stock">In stock</p>
+                    {% else %}
+                        <p class="product-detail-out-of-stock">Out of stock</p>
+                    {% endif %}
                 </div>
-                <div class="product-description-drop-container">
-                    <div class="product-description-drop product-detail-toggle-btn">
-                        <h4 class="product-detail-description-header">Description</h4>
-                        <span class="material-symbols-outlined product-description-arrow-up">keyboard_arrow_up</span>
-                        <span class="material-symbols-outlined product-description-arrow-down">keyboard_arrow_down</span>
+                <div class="product-detail-brand-and-seller">
+                    <p class="product-detail-brand-name">Brand: <a href="">{{ query.brand }}</a></p>
+                    <p>|</p>
+                    <p class="product-detail-seller-organization">Sold by: <a href="">{{ query.seller_organization }}</a></p>
+                </div>
+                {% if query.likes  and query.productreview_set.all%}
+                    <div class="product-detail-available-review-favorite">
+                        <div class="product-detail-favorite-icon-container">
+                            <span class="product-detail-rating-count">{{ query.likes }}</span>
+                            <!-- <span class="material-symbols-rounded product-detail-favorite-icon">star</span> -->
+                            <!-- inserted from js -->
+                        </div>
+                        <a  href="#reviews" class="product-detail-review-icon-container">
+                            <span class="material-symbols-outlined product-detail-review-icon">rate_review</span>
+                            <span class="product-detail-review-count">
+                                {{ query.productreview_set.count }} 
+                            </span>
+                        </a>
                     </div>
-                    <p class="product-description">{{ query.description }}</p>
-                </div>
+                {% endif %}
                 <div class="product-detail-drop-container">
                     <div class="product-detail-drop product-detail-toggle-btn">
                         <h4 class="product-detail-detail-header">Detail</h4>
@@ -88,11 +84,16 @@
         </div>
         
         {% if reviews %}
-            <div id="reviews" class="product-reviews-wrapper">
-                <h2 class="customer-reviews-header">Customer reviews</h2>
-                <div class="product-reviews">
+            <div id="reviews" class="product-detail-reviews-wrapper">
+                <h2 class="customer-reviews-header">
+                    Customer reviews
+                    {% if can_review %}
+                        <a class="write-review" href="{% url 'products:product-review' query.id %}">Write a review</a>
+                    {% endif %}
+                </h2>
+                <div class="product-detail-reviews">
                     {% for review in reviews %}
-                        <div class="product-review">
+                        <div class="product-detail-review">
                             <h4 class="review-author">User: {{ review.author.username }} </h4>
                             <h4 class="review-rated">Rated: {{ review.rating }}/5</h4>
                             <p>{{ review.created }}</p>
@@ -108,5 +109,27 @@
             </div>
         {% endif %}
     </div>
+
+    <script>
+
+        const productDetailFavoriteIconContainer = document.querySelector('.product-detail-favorite-icon-container')
+        const productDetailRatingCount = document.querySelector('.product-detail-rating-count')
+        
+        if(productDetailFavoriteIconContainer) {
+
+            let first_num = productDetailRatingCount.textContent.slice(0, -2)
+            let second_num = productDetailRatingCount.textContent.slice(-1)
+            let start = ''
+
+            for(let i = 0; i < parseInt(first_num); i++){
+                start += '<span class="material-symbols-rounded product-detail-favorite-icon">star</span>'
+            }
+            if(parseInt(second_num)){
+                start += '<span class="material-symbols-rounded product-detail-favorite-icon">star_half</span>'
+            }
+            productDetailFavoriteIconContainer.innerHTML += start
+        }
+        
+    </script>
 
 {% endblock content %}

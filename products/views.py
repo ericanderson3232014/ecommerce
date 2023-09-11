@@ -44,21 +44,6 @@ def product_list_view(request):
     query_set = Product.objects.all()
     laptops = query_set.filter(category__name__iexact='laptop')
     entry_level = laptops.filter(sub_category__name__iexact='entry-level')
-    # for query in query_set:
-    #     obj = str(query.likes)
-    #     if obj[2] == '0':
-    #         query.likes = int(obj[0])
-    #         query.save()
-    # for query in laptops:
-    #     obj = str(query.likes)
-    #     if obj[2] == '0':
-    #         query.likes = int(obj[0])
-    #         query.save()
-    # for query in entry_level:
-    #     obj = str(query.likes)
-    #     if obj[2] == '0':
-    #         query.likes = int(obj[0])
-    #         query.save()
     context = {'query_set': query_set[0:5], 'laptops':laptops[0:5], 'entry_level':entry_level}
     return render(request, 'products/product_list.html', context)
 
@@ -72,10 +57,6 @@ def product_detail_view(request, id):
     except Exception as e:
         messages.error(request, f'{e}')
         return redirect('products:home')
-    obj = str(query.likes)
-    if obj[2] == '0':
-        query.likes = int(obj[0])
-        query.save()
     context['query'] = query
     context['images'] = images
     context['reviews'] = reviews
@@ -149,13 +130,7 @@ def write_product_review_view(request, id):
 def product_search_view(request):
     q = request.GET.get('q')
     query_set = Product.objects.filter(Q(category__name__icontains = q) | 
-                                       Q(sub_category__name__icontains = q) |
-                                       Q(name__icontains = q))
-    for query in query_set:
-        obj = str(query.likes)
-        if obj[2] == '0':
-            query.likes = int(obj[0])
-            query.save()
+            Q(sub_category__name__icontains = q) | Q(name__icontains = q))
     context = {'query_set': query_set, 'q':q}
     return render(request, 'products/search_result.html', context)
 

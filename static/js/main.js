@@ -333,7 +333,6 @@ for(let num = 0; num < productLikeContainer.length; num++){
     if(ratingNum && rateStarIcons){
         firstNum = parseInt(ratingNum.textContent.slice(0,-2))
         lastNum = parseInt(ratingNum.textContent.slice(-1))
-        console.log(rateStarIcons)
     }
 
     let add = ''

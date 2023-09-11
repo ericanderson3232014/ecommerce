@@ -38,7 +38,10 @@
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
                                     <p class="product-price">P{{ product.discount_price_str_format }}</p>
-                                    <p class="product-discount-price">P{{ product.price_str_format }} <span>-10%</span></p>
+                                    <div class="product-discount-price-container">
+                                        <p class="product-discount-price">P{{ product.price_str_format }}</p>
+                                        <span>-10%</span>
+                                    </div>
                                 {% else %}
                                     <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
@@ -89,7 +92,10 @@
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
                                     <p class="product-price">P{{ product.discount_price_str_format }}</p>
-                                    <p class="product-discount-price">P{{ product.price_str_format }} <span>-10%</span></p>
+                                    <div class="product-discount-price-container">
+                                        <p class="product-discount-price">P{{ product.price_str_format }}</p>
+                                        <span>-10%</span>
+                                    </div>
                                 {% else %}
                                     <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
@@ -140,7 +146,10 @@
                             <div class="product-price-and-discount">
                                 {% if product.get_discount_price %}
                                     <p class="product-price">P{{ product.discount_price_str_format }}</p>
-                                    <p class="product-discount-price">P{{ product.price_str_format }} <span>-10%</span></p>
+                                    <div class="product-discount-price-container">
+                                        <p class="product-discount-price">P{{ product.price_str_format }}</p>
+                                        <span>-10%</span>
+                                    </div>
                                 {% else %}
                                     <p class="product-price">P{{ product.price_str_format }}</p>
                                 {% endif %}
@@ -157,7 +166,7 @@
                                         <span class="material-symbols-rounded review-icon">rate_review</span>
                                         <span class="reviews">{{ product.productreview_set.count }}</span>
                                     </div>
-                            {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </a>
