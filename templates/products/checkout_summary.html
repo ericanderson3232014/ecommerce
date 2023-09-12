@@ -147,15 +147,15 @@
             {% endfor %}
             <div class="purchase-items-total-amount">
                 <h3>Number of items: {{ num_of_product }}</h3>
-                {% if discount_amount %}
+                {% if not discount_amount == '0' %}
                     <h3>Total savings: P{{ discount_amount }}</h3>
                     <!-- coming from context_processor get_basket_total() -->
                 {% else %}
-                    <h3>Total savings: 0</h3>
+                    <h3>Total savings: n/a</h3>
                 {% endif %}
                 <h3>Total amount due: P{{ sub_total }}</h3>
                 <!-- coming from context_processor get_basket_total() -->
-                <form class="checkout-form" action="{% url 'products:checkout-session' checkout.id %}?str={{ sub_total }}" method="POST">
+                <form class="checkout-form" action="{% url 'products:checkout' %}?str={{ sub_total }}" method="POST">
                     {% csrf_token %}
                     <button class="purchase-btn" type="submit" id="checkout-button">Purchase</button>
                 </form>

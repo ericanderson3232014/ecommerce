@@ -84,7 +84,7 @@
         </div>
         
         {% if reviews %}
-            <div id="reviews" class="product-detail-reviews-wrapper">
+            <div id="reviews" class="product-detail-customer-reviews-wrapper">
                 <h2 class="customer-reviews-header">
                     Customer reviews
                     {% if can_review %}
@@ -109,27 +109,5 @@
             </div>
         {% endif %}
     </div>
-
-    <script>
-
-        const productDetailFavoriteIconContainer = document.querySelector('.product-detail-favorite-icon-container')
-        const productDetailRatingCount = document.querySelector('.product-detail-rating-count')
-        
-        if(productDetailFavoriteIconContainer) {
-
-            let first_num = productDetailRatingCount.textContent.slice(0, -2)
-            let second_num = productDetailRatingCount.textContent.slice(-1)
-            let start = ''
-
-            for(let i = 0; i < parseInt(first_num); i++){
-                start += '<span class="material-symbols-rounded product-detail-favorite-icon">star</span>'
-            }
-            if(parseInt(second_num)){
-                start += '<span class="material-symbols-rounded product-detail-favorite-icon">star_half</span>'
-            }
-            productDetailFavoriteIconContainer.innerHTML += start
-        }
-        
-    </script>
 
 {% endblock content %}

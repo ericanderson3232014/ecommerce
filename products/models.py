@@ -38,12 +38,12 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     sub_category = models.ForeignKey(ProductSubCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    brand = models.CharField(max_length=50, default='no brand')
+    brand = models.CharField(max_length=50, default='No brand')
     seller_organization = models.CharField(max_length=50, default='No name')
     product_image = models.ImageField(upload_to='product_image')
     description = models.CharField(max_length=100)
     detail = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     price_str_format = models.CharField(max_length=1000, null=True, blank=True)
     discount_price_str_format = models.CharField(max_length=1000, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -67,9 +67,10 @@ class Product(models.Model):
         return reverse('products:product-detail', args=[str(self.id)])
     
     def get_discount_price(self):
-        item = Product.objects.get(name=self.name)
+        sub_cat = ['High-end', 'Entry-level']
+        item = Product.objects.get(id=self.id)
         if item.sub_category:
-            if item.sub_category.name == 'High-end':
+            if item.sub_category.name in sub_cat:
                 discount = item.price - Decimal(int(item.price) * .10)
                 self.discount_price_str_format = f'{str(discount)[0:-6]},{str(discount)[-6:]}'
                 return discount
@@ -169,7 +170,7 @@ class Checkout(models.Model):
         customer = User.objects.get(username=self.customer.username)
         checkout = Checkout.objects.get(customer=customer, open=True)
         amount_due = [product.get_order_total() for product in checkout.order.all()]
-        checkout.total_amount_due = sum( amount_due)
+        self.total_amount_due = sum( amount_due)
         checkout.save()
         return sum( amount_due)
     

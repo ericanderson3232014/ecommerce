@@ -13,6 +13,7 @@ class CreateProductForm(forms.ModelForm):
             'sub_category',
             'name',
             'brand',
+            'seller_organization',
             'product_image',
             'description', 
             'detail', 

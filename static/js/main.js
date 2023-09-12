@@ -316,9 +316,10 @@ productDetailExtraImage.forEach((img) => {
 
 
 /*
-============================
-PRODUCT LIST PAGE STAR ICONS
-============================ */
+===================================
+PRODUCT LIST PAGE RATING STAR ICONS
+=================================== */
+
  const productLikeContainer = document.querySelectorAll('.product-like-container')
  const RatestarIcons = document.querySelectorAll('.rate-star-itcon')
 
@@ -345,4 +346,27 @@ for(let num = 0; num < productLikeContainer.length; num++){
     }
    
     rateStarIcons.innerHTML += add
+}
+
+/*
+=====================================
+PRODUCT DETAIL PAGE RATING STAR ICONS
+===================================== */
+
+const productDetailFavoriteIconContainer = document.querySelector('.product-detail-favorite-icon-container')
+const productDetailRatingCount = document.querySelector('.product-detail-rating-count')
+
+if(productDetailFavoriteIconContainer) {
+
+    let first_num = productDetailRatingCount.textContent.slice(0, -2)
+    let second_num = productDetailRatingCount.textContent.slice(-1)
+    let start = ''
+
+    for(let i = 0; i < parseInt(first_num); i++){
+        start += '<span class="material-symbols-rounded product-detail-favorite-icon">star</span>'
+    }
+    if(parseInt(second_num)){
+        start += '<span class="material-symbols-rounded product-detail-favorite-icon">star_half</span>'
+    }
+    productDetailFavoriteIconContainer.innerHTML += start
 }

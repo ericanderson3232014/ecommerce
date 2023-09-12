@@ -44,7 +44,7 @@ def product_list_view(request):
     query_set = Product.objects.all()
     laptops = query_set.filter(category__name__iexact='laptop')
     entry_level = laptops.filter(sub_category__name__iexact='entry-level')
-    context = {'query_set': query_set[0:5], 'laptops':laptops[0:5], 'entry_level':entry_level}
+    context = {'query_set': query_set[0:6], 'laptops':laptops[0:6], 'entry_level':entry_level[0:6]}
     return render(request, 'products/product_list.html', context)
 
 
@@ -171,10 +171,10 @@ def update_basket_view(request, string):
 
     if order.quantity == int(qty):
         order.delete()
-        checkout = Checkout.objects.filter(customer=user, open=True).first()
-        if checkout:
-            checkout.set_amount_due()
-            checkout.save()
+        # checkout = Checkout.objects.filter(customer=user, open=True).first()
+        # if checkout:
+        #     checkout.set_amount_due()
+        #     checkout.save()
         messages.success(request, f'{string} has been deleted from your basket.')
         return redirect('products:product-basket')
     
@@ -183,29 +183,6 @@ def update_basket_view(request, string):
 
     messages.success(request, f'{string} quantity has been updated.')
     return redirect('products:product-basket')
-
-
-@login_required
-def checkout_view(request):
-    user = request.user
-    try:
-        checkout = Checkout.objects.get(customer__username=user.username, open=True)
-    except:
-        checkout = Checkout.objects.create(customer=User.objects.get(username=user.username))
-        orders = Order.objects.filter(customer__username=user.username, open=True)
-        for product in orders:
-            checkout.order.add(product)
-        checkout.set_amount_due()
-        return redirect('products:shipping-address')
-    
-    orders = Order.objects.filter(customer__username=user.username, open=True)
-
-    for product in orders:
-        checkout.order.add(product)
-
-    checkout.set_amount_due()
-
-    return redirect('products:shipping-address')
 
 
 @login_required
@@ -228,15 +205,36 @@ def customer_address_view(request):
 
 @login_required 
 def checkout_summary_view(request):
-    checkout = Checkout.objects.filter(customer=request.user, open=True).first()
+    query_set = Order.objects.filter(customer=request.user, open=True)
 
-    if not checkout:
+    if not query_set.exists():
         messages.error(request, 'You do not have any pending orders.')
         return redirect('products:product-list')
     
-    query_set = checkout.order.all()
-    context = {'checkout':checkout, 'query_set': query_set}
+    context = {'query_set': query_set}
     return render(request, 'products/checkout_summary.html', context)
+
+
+@login_required
+def checkout_view(request):
+    user= request.user
+    orders = Order.objects.filter(customer__username=user, open=True)
+
+    try:
+        checkout = Checkout.objects.get(customer=user, open=True)
+    except:
+        checkout = Checkout.objects.create(customer=user)
+        for product in orders:
+            checkout.order.add(product)
+        checkout.set_amount_due()
+        checkout.save()
+        return redirect('products:checkout-session', checkout.id)
+
+    for product in orders:
+        checkout.order.add(product)
+    checkout.set_amount_due()
+    checkout.save()
+    return redirect('products:checkout-session', checkout.id)
 
 
 @login_required 
@@ -324,7 +322,7 @@ def payment_success_view(request, id):
     )
 
     receipt.receipt_sent_date = timezone.now()
-    # receipt.sent = True
+    receipt.sent = True
     receipt.save()
 
     for order in orders:
@@ -333,15 +331,15 @@ def payment_success_view(request, id):
     checkout_obj.open = False
     checkout_obj.checkout_date = timezone.now()
     checkout_obj.save()
-    discount = []
-    for order in checkout_obj.order.all():
-        if order.product.get_discount_price():
-            discount.append(
-                {
-                    'discount' : order.product.price - order.product.get_discount_price(),
-                    'name' : order.product.name
-                }
-            )
+    # discount = []
+    # for order in checkout_obj.order.all():
+    #     if order.product.get_discount_price():
+    #         discount.append(
+    #             {
+    #                 'discount' : order.product.price - order.product.get_discount_price(),
+    #                 'name' : order.product.name
+    #             }
+    #         )
 
     context = {
         'domain': DOMAIN
