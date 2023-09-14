@@ -11,6 +11,12 @@
 {% block content %}
 
     <div class="product-detail-container-wrapper">
+        <div class="product-detail-back-to-product-btn-container">
+            <a href="{% url 'products:product-list' %}" class="back-to-product-btn">
+                <span class="material-symbols-outlined">arrow_left_alt</span>
+                back to product
+            </a>
+        </div>
         <div class="product-detail-container">
             <div class="product-detail-img-container">
                 <img src="{{ query.get_product_image_url }}" alt="">
@@ -48,11 +54,11 @@
                 </div>
                 {% if query.likes  and query.productreview_set.all%}
                     <div class="product-detail-available-review-favorite">
-                        <div class="product-detail-favorite-icon-container">
+                        <a href="#reviews" class="product-detail-favorite-icon-container">
                             <span class="product-detail-rating-count">{{ query.likes }}</span>
                             <!-- <span class="material-symbols-rounded product-detail-favorite-icon">star</span> -->
                             <!-- inserted from js -->
-                        </div>
+                        </a>
                         <a  href="#reviews" class="product-detail-review-icon-container">
                             <span class="material-symbols-outlined product-detail-review-icon">rate_review</span>
                             <span class="product-detail-review-count">
@@ -60,6 +66,13 @@
                             </span>
                         </a>
                     </div>
+                {% endif %}
+                {% if request.user.is_authenticated and purchase_verified %}
+                    {% if has_review %}
+                        <a class="write-a-review" href="{% url 'products:product-review' query.id %}?update={{ review_id }}">Update review</a>
+                    {% else %}
+                        <a class="write-a-review" href="{% url 'products:product-review' query.id %}">Write a review</a>
+                    {% endif %}
                 {% endif %}
                 <div class="product-detail-drop-container">
                     <div class="product-detail-drop product-detail-toggle-btn">
@@ -71,7 +84,7 @@
                 </div>
                 {% if user.is_authenticated %}
                     <div class="product-detail-btns">
-                        <a class="add-to-basket" href="{% url 'products:add-to-basket' query.id %}">Add to Basket</a>
+                        <a class="add-to-basket" href="{% url 'products:add-to-basket' query.id %}">Add to cart</a>
                         <a class="back-to-product" href="{% url 'products:product-list' %}">Continue shopping</a>
                     </div>
                 {% else %}
@@ -85,29 +98,49 @@
         
         {% if reviews %}
             <div id="reviews" class="product-detail-customer-reviews-wrapper">
-                <h2 class="customer-reviews-header">
-                    Customer reviews
-                    {% if can_review %}
-                        <a class="write-review" href="{% url 'products:product-review' query.id %}">Write a review</a>
-                    {% endif %}
-                </h2>
+                <h2 class="customer-reviews-header">Customer reviews</h2>
                 <div class="product-detail-reviews">
                     {% for review in reviews %}
                         <div class="product-detail-review">
-                            <h4 class="review-author">User: {{ review.author.username }} </h4>
-                            <h4 class="review-rated">Rated: {{ review.rating }}/5</h4>
-                            <p>{{ review.created }}</p>
-                            
-                            {% if not review.content %}
-                                <p>content not available</p>
-                            {% else %}
-                                <p class="review-content">{{ review.content }}</p>
-                            {% endif %}
+                            <div class="review-author-info-container">
+                                <img src="{{ review.author.userprofile.profile_image.url }}" alt="img">
+                                <h4 class="review-author">{{ review.author.username }} </h4>
+                            </div>
+                            <div class="customer-review-rating-container">
+                                <p class="review-rated">{{ review.rating }}.0</p>
+                                <div class="customer-review-ratiing-stars">
+                                    <!-- <span class="material-symbols-rounded customer-review-star-rating">star</span> -->
+                                    <!-- insert stars from js -->
+                                </div>
+                            </div>
+                            <p class="review-created-data">Reviewed on {{ review.created|date:"N, d, Y" }}</p>
+                            <div class="customer-purchased-the-product">
+                                <input type="checkbox" checked>
+                                <h4 class="review-product-verified-purchase">Verified purchase</h4>
+                            </div>
+                            <h3 class="customer-review-title">{{ review.title }}</h3>
+                            <p class="review-content">{{ review.content }}</p>
                         </div>
                     {% endfor %}
                 </div>
             </div>
         {% endif %}
     </div>
+
+    <script>
+        
+        const reviewRated = document.querySelectorAll('.review-rated')
+        
+        reviewRated.forEach((rating) => {
+            const sibling = rating.nextElementSibling
+            const rate = parseInt(rating.textContent)
+            stars = ''
+            for(let i = 0; i < rate; i++) {
+                stars += '<span class="material-symbols-rounded customer-review-star-rating">star</span>'
+            }
+            sibling.innerHTML += stars
+        })
+
+    </script>
 
 {% endblock content %}

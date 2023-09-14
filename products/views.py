@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.utils import timezone
+from .context_processors import get_basket_total
 from .models import (
     Product, 
     ProductImage,  
@@ -49,6 +50,7 @@ def product_list_view(request):
 
 
 def product_detail_view(request, id):
+    user = request.user
     context = {}
     try:
         query = Product.objects.get(id=id)
@@ -57,11 +59,26 @@ def product_detail_view(request, id):
     except Exception as e:
         messages.error(request, f'{e}')
         return redirect('products:home')
+    
     context['query'] = query
     context['images'] = images
     context['reviews'] = reviews
-    if request.user.is_authenticated:
-        context['can_review'] = True
+
+    # checks if customer has purchased this product
+    if user.is_authenticated:
+        checkouts = user.checkout_set.filter(open=False)
+
+        # this is to check if customer previously has written a review on this product
+        has_review = user.productreview_set.filter(product__id=id).first()
+
+        if checkouts.exists():
+            for checkout in checkouts:
+                orders = checkout.order.filter(product__id=id)
+                if orders.exists():
+                    context['purchase_verified'] = True
+                if has_review: # if this is true, customer will be updating the review
+                    context['has_review'] = True
+                    context['review_id'] = has_review.id
     return render(request, 'products/product_detail.html', context)
 
 
@@ -83,8 +100,10 @@ def product_create_view(request):
 
 @login_required
 def write_product_review_view(request, id):
+    existing_review = ProductReview.objects.filter(id=request.GET.get('update')).first()
     product = Product.objects.get(id=id)
     user = request.user
+
     if request.method == 'POST':
         form = ProductReviewForm(request.POST)
         if form.is_valid():
@@ -92,19 +111,30 @@ def write_product_review_view(request, id):
             content = form.cleaned_data.get('content')
             rating = int(form.cleaned_data.get('rating'))
             title = form.cleaned_data.get('title')
-            reveiw = ProductReview.objects.create(
-                product=product, 
-                author=author, 
-                rating=rating, 
-                title = title,
-                content=content
-            )
-            product = Product.objects.get(id=id)
-            product.likes = reveiw.calculate_rating()
-            product.save()
+
+            if existing_review:
+                existing_review.rating=rating
+                existing_review.title = title
+                existing_review.content=content
+                existing_review.save()
+                product.likes = existing_review.calculate_rating()
+                product.save()
+                messages.success(request, f'{author.username}, thank you for the review!')
+                return redirect('products:product-detail', id)
+            
+            else:
+                new_review = ProductReview.objects.create(
+                    product=product, 
+                    author=author, 
+                    rating=rating, 
+                    title = title,
+                    content=content
+                )
+                product.likes = new_review.calculate_rating()
+                product.save()
             messages.success(request, f'{author.username}, thank you for the review!')
             return redirect('products:product-detail', id)
-        print(form.errors)
+        
         messages.error(request, 'There was an error. Try again later.')
         return redirect('products:product-review', id)
     else:
@@ -119,9 +149,12 @@ def write_product_review_view(request, id):
                 for order in orders:
                     if order.product == product:
                         purchase_verified.append(order)
-            print('PURCHASE VERIFIED:', purchase_verified)
             if purchase_verified:
-                return render(request, 'products/product_review.html', {'query': product})
+                context= {'query': product}
+                if existing_review:
+                    context['existing_review_id'] = existing_review.id
+                    context['existing_review'] = existing_review
+                return render(request, 'products/product_review.html', context)
             else:
                 messages.error(request, 'You are not authorized to write review on this product.')
                 return redirect('products:product-detail', id)
@@ -164,24 +197,19 @@ def basket_view(request):
 
 
 @login_required
-def update_basket_view(request, string):
+def update_basket_view(request, id):
     user = request.user
     qty = request.GET.get('amount')
-    order = Order.objects.get(customer=user, product__name=string, open=True)
+    order = Order.objects.get(customer=user, product__id=id, open=True)
 
     if order.quantity == int(qty):
         order.delete()
-        # checkout = Checkout.objects.filter(customer=user, open=True).first()
-        # if checkout:
-        #     checkout.set_amount_due()
-        #     checkout.save()
-        messages.success(request, f'{string} has been deleted from your basket.')
+        messages.success(request, f'{order.product.name} has been deleted from your basket.')
         return redirect('products:product-basket')
     
     order.quantity = int(qty)
     order.save()
-
-    messages.success(request, f'{string} quantity has been updated.')
+    messages.success(request, f'{order.product.name} quantity has been updated.')
     return redirect('products:product-basket')
 
 

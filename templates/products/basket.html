@@ -11,7 +11,7 @@
 {% block content %}
 
 <div class="product-basket-wrapper">
-    <h2 class="product-basket-header">{{ request.user.username }}'s basket</h2>
+    <h2 class="product-basket-header">My cart</h2>
     <div class="basket-list">
         {% for order in query_set %}
             <div class="basket-product">
@@ -20,17 +20,21 @@
                         <img src="{{ order.product.get_product_image_url }}" alt="">
                     </div>
                     <div class="basket-product-info">
-                        <p class="basket-product-name">
+                        <h4 class="basket-product-name">
                             {{ order.product.name }} 
-                        </p>
+                        </h4>
                         <div class="basket-product-price-and-discount">
                             {% if order.product.get_discount_price %}
                                 <p class="basket-product-price">P{{ order.product.discount_price_str_format }}</p>
-                                <p class="basket-product-discount-price">P{{ order.product.price_str_format }} <span>-10%</span></p>
+                                <div class="basket-price-discount-container">
+                                    <p class="basket-product-discount-price">P{{ order.product.price_str_format }}</p>
+                                    <span>-10%</span>
+                                </div>
                             {% else %}
                                 <p class="basket-product-price">P{{ order.product.price_str_format }}</p>
                             {% endif %}
                         </div>
+                        {% comment %}
                         <div class="basket-product-available">
                             {% if order.product.available %}
                                 <p>In stock</p>
@@ -38,9 +42,10 @@
                                 <p>Out of stock</p>
                             {% endif %}
                         </div>
+                        {% endcomment %}
                     </div>
                 </div>
-                <form class="basket-total-product" action="{% url 'products:update-basket' order.product.name %}" method="GET">
+                <form class="basket-total-product" action="{% url 'products:update-basket' order.product.id %}" method="GET">
                     <button type="button"class="basket-minus-item">
                         <span class="material-symbols-outlined">
                             remove

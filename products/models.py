@@ -119,6 +119,7 @@ class ProductReview(models.Model):
         total_reviews = reviews.count()
         added_review = sum([review.rating for review in reviews])
         rating_average = (added_review / ( total_reviews * 5)) * 5
+        # self.product.likes = rating_average
         return rating_average
     
     class Meta:

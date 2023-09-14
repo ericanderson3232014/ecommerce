@@ -5,11 +5,13 @@ from .models import CheckoutReceipt
 def get_basket_total(request):
     user = request.user
     discount_amount = []
+    order_total = []
     
     try:
         customer = User.objects.get(username=user.username)
     except Exception as e:
         return {'error': f'{e}', 'num_of_product': 0}
+    
     if customer:
         query_set = customer.order_set.all().filter(open=True)
         for obj in query_set:
@@ -22,7 +24,6 @@ def get_basket_total(request):
         sub_total = [order.get_order_total() for order in customer.order_set.all().filter(open=True)]
 
         # format get_order_total() from Order model
-        order_total = []
         for order in customer.order_set.all().filter(open=True):
             total = order.get_order_total()
             decimal_to_str = f'{str(total)[:-6]},{str(total)[-6:]}'
@@ -39,7 +40,6 @@ def get_basket_total(request):
         total_amount = f'{str(sum(sub_total))[0:-6]},{str(sum(sub_total))[-6:]}'
         sub_total = total_amount
        
-        
         if order_quantity:
             return {
                 'num_of_product': sum(order_quantity), 
@@ -47,11 +47,12 @@ def get_basket_total(request):
                 'discount_amount': discount_amount,
                 'order_total': order_total
             }
-        return {'num_of_product': 0}
+    return {'num_of_product': 0}
     
 
 def get_customer_receipt(request):
     customer = request.user
+
     try:
         receipt = CheckoutReceipt.objects.get(customer=customer, sent=False)
     except Exception as e:
@@ -68,6 +69,7 @@ def get_customer_receipt(request):
                     'discount_amount': amount
                 }
             )
+
     receipt.sent = True
     receipt.save()
     return {

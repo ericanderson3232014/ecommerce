@@ -321,7 +321,6 @@ PRODUCT LIST PAGE RATING STAR ICONS
 =================================== */
 
  const productLikeContainer = document.querySelectorAll('.product-like-container')
- const RatestarIcons = document.querySelectorAll('.rate-star-itcon')
 
 for(let num = 0; num < productLikeContainer.length; num++){
 
@@ -331,7 +330,7 @@ for(let num = 0; num < productLikeContainer.length; num++){
     let firstNum = ''
     let lastNum = ''
 
-    if(ratingNum && rateStarIcons){
+    if(ratingNum){
         firstNum = parseInt(ratingNum.textContent.slice(0,-2))
         lastNum = parseInt(ratingNum.textContent.slice(-1))
     }
