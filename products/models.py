@@ -77,7 +77,7 @@ class Product(models.Model):
                     if char == '.':
                         index = str(discount).index(char)
                         discount = f'{str(discount)[0 : index - 3]},{str(discount)[index - 3 : index  + 3]} '
-                self.discount_price_str_format = discount
+                self.discount_price_str_format = discount.strip()
                 return discount
         return 0
     
@@ -146,7 +146,7 @@ class Order(models.Model):
 
     def get_order_total(self):
         if self.product.get_discount_price():
-            order_total = self.quantity * self.product.get_discount_price()
+            order_total = self.quantity * Decimal(self.product.get_discount_price().replace(',', ''))
             return order_total
         else:
             order_total = self.quantity * self.product.price

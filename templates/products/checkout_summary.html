@@ -146,14 +146,16 @@
                 </a>
             {% endfor %}
             <div class="purchase-items-total-amount">
-                <h3>Number of items: {{ num_of_product }}</h3>
+                <h4>Number of items: {{ num_of_product }}</h4>
                 {% if not discount_amount == '0' %}
-                    <h3>Total savings: P{{ discount_amount }}</h3>
+                    <h4>Total savings: P{{ discount_amount }}</h4>
                     <!-- coming from context_processor get_basket_total() -->
                 {% else %}
-                    <h3>Total savings: n/a</h3>
+                    <h4>Total savings: n/a</h4>
                 {% endif %}
-                <h3>Total amount due: P{{ sub_total }}</h3>
+                <h4>Sub-total: P{{ sub_total }}</h4>
+                <h4>VAT: P{{ vat }}</h4>
+                <h4>Total: P{{ total }}</h4>
                 <!-- coming from context_processor get_basket_total() -->
                 <form class="checkout-form" action="{% url 'products:checkout' %}?str={{ sub_total }}" method="POST">
                     {% csrf_token %}

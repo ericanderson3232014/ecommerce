@@ -295,13 +295,15 @@ def create_checkout_session_view(request, id):
         messages.error(request, 'You do not have any pending orders.')
         return redirect('products:product-list')
     
+    total = get_basket_total(request)['total'].replace(',','')
+    total = int(Decimal(total)*100)
+
     amount_due = int((checkout_obj.total_amount_due) * 100)
-    print(amount_due)
     checkout_session = stripe.checkout.Session.create(
         line_items=[{ 
                 'price_data': { 
                     'currency': 'php', 
-                    'unit_amount': f'{amount_due}',
+                    'unit_amount': f'{total}',
                     'product_data':{ 
                         'name': 'Total amount due'
                         }, 

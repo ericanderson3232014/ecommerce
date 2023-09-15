@@ -11,11 +11,11 @@
 {% block content %}
 
 <div class="product-basket-wrapper">
-    <h2 class="product-basket-header">My cart</h2>
+    <h2 class="product-basket-header">Order summary</h2>
     <div class="basket-list">
         {% for order in query_set %}
             <div class="basket-product">
-                <div class="basket-product-info-container">
+                <a href="{{ order.product.get_absolute_url }}" class="basket-product-info-container">
                     <div class="basket-product-image">
                         <img src="{{ order.product.get_product_image_url }}" alt="">
                     </div>
@@ -34,16 +34,15 @@
                                 <p class="basket-product-price">P{{ order.product.price_str_format }}</p>
                             {% endif %}
                         </div>
-                        {% comment %}
-                        <div class="basket-product-available">
-                            {% if order.product.available %}
-                                <p>In stock</p>
-                            {% else %}
-                                <p>Out of stock</p>
-                            {% endif %}
-                        </div>
-                        {% endcomment %}
                     </div>
+                </a>
+                <div class="total-price very-small-screen-total-price" style="flex: 0 0 100%; ">
+                    {% for obj in order_total %}
+                        {% if order.product.id == obj.id %}
+                            <h4><span style="color: rgb(31, 31, 31)">Total: </span>P{{ obj.order_total }}</h4>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- coming from context_processor order_total -->
                 </div>
                 <form class="basket-total-product" action="{% url 'products:update-basket' order.product.id %}" method="GET">
                     <button type="button"class="basket-minus-item">
@@ -60,45 +59,64 @@
                             add
                         </span>
                     </button>
-                    <button class='update-or-delete' type="submit">Delete</button>
+                    <button class='update-or-delete' type="submit">Remove</button>
                 </form>
-                <div class="total-price">
+                <div class="total-price large-screen-total-price">
                     {% for obj in order_total %}
                         {% if order.product.id == obj.id %}
-                            <h3>P{{ obj.order_total }}</h3>
+                            <h4>P{{ obj.order_total }}</h4>
                         {% endif %}
                     {% endfor %}
-                    <!-- comming from context_processor get_basket_total()-->
+                    <!-- coming from context_processor order_total -->
+                </div>
+                <div class="total-price small-screen-total-price" style="flex: 0 0 100%; ">
+                    {% for obj in order_total %}
+                        {% if order.product.id == obj.id %}
+                            <h4><span style="color: rgb(31, 31, 31)">Total: </span>P{{ obj.order_total }}</h4>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- coming from context_processor order_total -->
                 </div>
             </div>
         {% endfor %}
     </div>
     <div class="basket-sub-total-container">
         <div class="basket-sub-total">
-            <h2>Order summary</h2>
             <div class="basket-sub-total-info">
                 <div class="sub-total-basket-quantity">
                     <h4>Quantity</h4>
-                    <p>{{ num_of_product }} items</p>
+                    {% if num_of_product > 1 %}
+                        <p>{{ num_of_product }} items</p>
+                    {% else %}
+                        <p>{{ num_of_product }} item</p>
+                    {% endif %}
                     <!-- coming from context_processors.py -->
                 </div>
-                <div class="sub-total-basket-savings">
-                    <h4>Savings</h4>
-                    {% if discount_amount %}
-                        <p>-P{{ discount_amount }}</p>
+                {% if discount_amount != '0' %}
+                    <div class="sub-total-basket-savings">
+                        <h4>Saved</h4>
+                        <p>P{{ discount_amount }}</p> 
                         <!-- coming from context_processors.py -->
-                    {% else %}
-                        <p>none</p>
-                    {% endif %}
+                    </div>
+                {% endif %}
+                <div class="sub-total-basket-subtotal">
+                    <h4>Sub-total</h4>
+                    <p>P{{ sub_total }}</p>
+                    <!-- coming from context_processors.py -->
                 </div>
                 <div class="sub-total-basket-subtotal">
-                    <h4>Subtotal</h4>
-                    <p>P{{ sub_total }}</p>
+                    <h4>VAT<small style="color: rgb(87, 87, 87); font-size: 14px;">12%</small></h4>
+                    <p>P{{ vat }}</p>
+                    <!-- coming from context_processors.py -->
+                </div>
+                <div class="sub-total-basket-subtotal">
+                    <h4>Total</h4>
+                    <p>P{{ total }}</p>
                     <!-- coming from context_processors.py -->
                 </div>
             </div>
             <div class="sub-total-btns">
-                <a class="basket-checkout-btn" href="{% url 'products:shipping-address' %}">Checkout</a>
+                <a class="basket-checkout-btn" href="{% url 'products:shipping-address' %}">Go to heckout</a>
                 <a class="basket-continue-shopping-btn" href="{% url 'products:product-list' %}">Continue shopping</a>
             </div>
         </div>
@@ -108,6 +126,7 @@
 
 <script>
 
+    const basketProduct = document.querySelectorAll('.basket-product')
     const basketMinusItem = document.querySelectorAll('.basket-minus-item')
     const basketAddItem = document.querySelectorAll('.basket-add-item')
     const totalAmount = document.querySelectorAll('.total-amount')
