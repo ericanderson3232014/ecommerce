@@ -57,10 +57,12 @@ const body = document.querySelector('body')
 SCROLL UP AND DOWN
 ==================
 */ 
-
-if((window.innerWidth - bodyWidth.clientWidth)/2 != 0) {
-    scrollBtns.style.right = `${(window.innerWidth - bodyWidth.clientWidth)/2}px`
+if(scrollDown && scrollUp) {
+    if((window.innerWidth - bodyWidth.clientWidth)/2 != 0) {
+        scrollBtns.style.right = `${(window.innerWidth - bodyWidth.clientWidth)/2}px`
+    }
 }
+
 
 if(scrollDown && scrollUp) {
     window.addEventListener('scroll', (e) => {

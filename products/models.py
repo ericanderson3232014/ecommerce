@@ -19,6 +19,7 @@ class ProductCategory(models.Model):
 
 
 class ProductSubCategory(models.Model):
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
@@ -26,7 +27,7 @@ class ProductSubCategory(models.Model):
     
     class Meta:
         verbose_name_plural = 'Product Sub-categories'
-        ordering = ['name']
+        ordering = ['category']
 
 
 class Product(models.Model):
@@ -71,8 +72,12 @@ class Product(models.Model):
         item = Product.objects.get(id=self.id)
         if item.sub_category:
             if item.sub_category.name in sub_cat:
-                discount = item.price - Decimal(int(item.price) * .10)
-                self.discount_price_str_format = f'{str(discount)[0:-6]},{str(discount)[-6:]}'
+                discount = item.price - (item.price * Decimal(.10))
+                for char in str(discount):
+                    if char == '.':
+                        index = str(discount).index(char)
+                        discount = f'{str(discount)[0 : index - 3]},{str(discount)[index - 3 : index  + 3]} '
+                self.discount_price_str_format = discount
                 return discount
         return 0
     

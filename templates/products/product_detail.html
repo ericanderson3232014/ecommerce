@@ -11,12 +11,6 @@
 {% block content %}
 
     <div class="product-detail-container-wrapper">
-        <div class="product-detail-back-to-product-btn-container">
-            <a href="{% url 'products:product-list' %}" class="back-to-product-btn">
-                <span class="material-symbols-outlined">arrow_left_alt</span>
-                back to product
-            </a>
-        </div>
         <div class="product-detail-container">
             <div class="product-detail-img-container">
                 <img src="{{ query.get_product_image_url }}" alt="">

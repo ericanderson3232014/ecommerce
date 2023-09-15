@@ -66,9 +66,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
 
-
-print('HELLO WORLD')
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

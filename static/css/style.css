@@ -103,7 +103,8 @@ BANNER SLIDER
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.200)
+    background: rgba(0, 0, 0, 0.200);
+    /* background: rgba(32, 19, 65, 0.411) */
 }
 
 .translate-btns-container {
@@ -953,31 +954,10 @@ PRODUCT_DETAIL.HTML/PRODUCT DETAIL
 .product-detail-container-wrapper {
     width: 95%;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: 3rem 0;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-}
-
-.product-detail-back-to-product-btn-container {
-    width: 100%;
-    display: flex;
-   
-}
-
-.back-to-product-btn {
-    display: flex;
-    align-items: center;
-    color: var(--purple-50);
-    letter-spacing: 0.05rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
-.back-to-product-btn > span {
-    color: var(--purple-50);
-    font-size: 1.4rem;
-    font-weight: 700;
+    gap: 3rem;
 }
 
 .product-detail-container {
@@ -1252,8 +1232,8 @@ PRODUCT_DETAIL.HTML/PRODUCT DETAIL
 
 .customer-reviews-header {
     letter-spacing: 0.05rem;
-    color: rgb(37, 37, 37);
-    font-size: 1.18rem;
+    color: var(--black-10);
+    font-size: 1.2rem;
 }
 .product-detail-reviews {
     display: flex;
@@ -1446,7 +1426,9 @@ PRODUCT_DETAIL.HTML/PRODUCT DETAIL
     .product-detail-price {
         font-size: 1.3rem;
     }
-    
+    .customer-reviews-header {
+        font-size: 1.5rem;
+    }
     
 
 }

@@ -178,7 +178,7 @@
                 </div>
                 <div class="product-sub-category-input">
                     {{ product_form.sub_category.label_tag}}
-                    <p>{{ product_form.sub_category }}</p>
+                    <p id="sub-category">{{ product_form.sub_category }}</p>
                 </div>
                 <div class="product-name-input">
                     {{ product_form.name.label_tag}}
@@ -229,6 +229,50 @@
             </div>
         </form>
     </div>
+
+    <script>
+
+        const productSubCategoryInput = document.querySelector('.product-sub-category-input')
+        const subCategories = '{{ sub_categories|safe }}'
+        const json_obj = JSON.parse(subCategories)
+        
+        const idCategory = document.querySelector('#id_category')
+        const idSubCategory = document.querySelector('#id_sub_category')
+        const select = ''
+
+        productSubCategoryInput.style.display = 'none'
+
+        idCategory.addEventListener('click', (e) => {
+            const id = e.currentTarget.value
+            json_obj.map((obj) => {
+                console.log('TARGET:',parseInt(id), 'OBJ ID:',obj.id)
+                if(obj.id === parseInt(id)) {
+                    productSubCategoryInput.style.display = 'flex'
+                    const subCats = obj.sub_categories
+                    const data = subCats.map((subCat) => {
+                        return(
+                            `<option value=${subCat.id}>${subCat.name}</option>`
+                        )
+                    })
+
+                    data.splice(0, 0, '<option value="" selected="">---------</option>')
+                    idSubCategory.innerHTML = data.join(' ')
+                }
+                else {
+                    const new_obj = json_obj.find((obj) => {
+                        if(obj.id === parseInt(id)) {
+                            return obj
+                        }
+                    })
+                    if(!new_obj) {
+                        productSubCategoryInput.style.display = 'none'
+                    }
+                }
+            })
+        })
+    
+
+    </script>
 
 {% endblock content %}
 

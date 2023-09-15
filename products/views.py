@@ -12,6 +12,7 @@ from .models import (
     Product, 
     ProductImage,  
     ProductCategory,
+    ProductSubCategory,
     ProductReview,
     Order,
     Checkout,
@@ -27,6 +28,9 @@ from .forms import (
 
 from django.conf import settings
 import stripe
+import json
+from decimal import Decimal
+
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -84,11 +88,27 @@ def product_detail_view(request, id):
 
 @login_required()
 def product_create_view(request):
+    query_set = ProductSubCategory.objects.all()
+
+    category_name = []
+    sub_categories = []
+
+    for obj in query_set:
+        if obj.category.name not in category_name:
+            category_name.append(obj.category.name)
+            sub_categories.append({'id':obj.category.id ,'category_name':obj.category.name, 'sub_categories':[{'id':obj.id, 'name':obj.name}]})
+        else:
+            for sub_cat in sub_categories:
+                for key, value in sub_cat.items():
+                    if value == obj.category.name:
+                        sub_cat['sub_categories'] += [{'id':obj.id, 'name':obj.name}]
+    
     image_form = CreateProductImageForm(request.POST or None, request.FILES or None)
     product_form = CreateProductForm(request.POST or None, request.FILES or None)
     context = {
         'product_form': product_form,
-        'image_form': image_form
+        'image_form': image_form,
+        'sub_categories': json.dumps(sub_categories)
     }
     if image_form.is_valid() and product_form.is_valid():
         images = request.FILES.getlist('image')
