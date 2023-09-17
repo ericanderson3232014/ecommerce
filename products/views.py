@@ -222,7 +222,7 @@ def update_basket_view(request, id):
     qty = request.GET.get('amount')
     order = Order.objects.get(customer=user, product__id=id, open=True)
 
-    if order.quantity == int(qty):
+    if int(qty) == 0 or order.quantity == int(qty):
         order.delete()
         messages.success(request, f'{order.product.name} has been deleted from your basket.')
         return redirect('products:product-basket')
@@ -330,38 +330,49 @@ def payment_success_view(request, id):
     orders = customer.order_set.filter(open=True)
     checkout_obj = Checkout.objects.filter(id=id, open=True).first()
 
+    context = {
+        'domain': DOMAIN,
+        'basket_total': get_basket_total(request),
+    }
+
     if not orders.exists() and not checkout_obj:
         messages.error(request, 'You do not have any pending orders.')
-        return redirect('products:product-list')
+        return redirect('products:order-history')
     
     your_purchase = ''
 
     for item in checkout_obj.order.all():
         discount = ''
         if item.product.get_discount_price():
-            discount = item.product.price - item.product.get_discount_price()
+            discount = item.product.price - Decimal(item.product.get_discount_price().replace(',',''))
+            discount = f'{str(discount)[0:-6]},{str(discount)[-6:]}'
         else:
             discount = 0
         your_purchase += f'''
         Customer: {checkout_obj.customer.username},
         Product name: {item.product.name}, 
-        Price: P{item.product.price}, 
-        Discount price: P{item.product.get_discount_price()},
-        Discount amount: P{discount}, 
+        Price: P{item.product.price_str_format}, 
+        Discount price: P{item.product.discount_price_str_format},
+        Saved: P{discount}, 
         Quantity: {item.quantity},
         item_url: {DOMAIN}{item.product.get_absolute_url()}
         --------------------------------------------------
         '''
-    your_purchase += f'Amount paid: {checkout_obj.set_amount_due()}'
+    your_purchase += 'Sub-total: {0},{1}\n'.format(str(checkout_obj.set_amount_due())[0:-6], str(checkout_obj.set_amount_due())[-6:])
+    your_purchase += 'VAT: {0}\n'.format(get_basket_total(request)['vat'])
+    your_purchase += 'Total: {0}'.format(get_basket_total(request)['total'])
 
+    # create CheckoutReceipt
     receipt = CheckoutReceipt.objects.create(
         checkout=checkout_obj, 
         customer=customer, 
         checkout_summary=your_purchase
     )
+
     address = ShippingAddress.objects.get(customer=request.user)
     email_from = settings.EMAIL_HOST_USER
 
+    # send customer the receipt
     send_mail(
         subject = 'Your ordered items',
         message = f'''Thank you for shopping at AiAi Market. Here is your receipt:
@@ -375,25 +386,16 @@ def payment_success_view(request, id):
     receipt.sent = True
     receipt.save()
 
+    context['receipt_id']= receipt.id
+    context['customer'] = receipt.customer.username
+    context['orders'] = receipt.checkout.order.all()
+
     for order in orders:
         order.open = False
         order.save()
     checkout_obj.open = False
     checkout_obj.checkout_date = timezone.now()
     checkout_obj.save()
-    # discount = []
-    # for order in checkout_obj.order.all():
-    #     if order.product.get_discount_price():
-    #         discount.append(
-    #             {
-    #                 'discount' : order.product.price - order.product.get_discount_price(),
-    #                 'name' : order.product.name
-    #             }
-    #         )
-
-    context = {
-        'domain': DOMAIN
-    }
     return render(request, 'products/payment_success.html', context)
 
 
@@ -420,18 +422,12 @@ def stripe_webhook(request):
             event['data']['object']['id'],
             expand=['line_items'],
         )
-
-        line_items = session.line_items
-
         print(session)
-
-        # customer_email = session['customer_details']['email']
-        # receipt_url = session['metadata']["receipt_url"]
-        # email_from = settings.EMAIL_HOST_USER
-        # send_mail(
-        #     subject = 'Your ordered items',
-        #     message = f'Thank you for shopping at AiAi Market. Here is your receipt @{receipt_url}',
-        #     recipient_list = [customer_email],
-        #     from_email = email_from
-        # )
     return HttpResponse(status=200)
+
+
+def order_history_view(request):
+    user = request.user
+    receipts = CheckoutReceipt.objects.filter(customer=user)
+    context= {'receipts': receipts}
+    return render(request, 'products/receipts.html', context)

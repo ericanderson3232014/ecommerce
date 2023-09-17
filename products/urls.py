@@ -15,7 +15,8 @@ from .views import (
     create_checkout_session_view,
     payment_cancel_view,
     payment_success_view,
-    stripe_webhook
+    stripe_webhook,
+    order_history_view
 )
 
 
@@ -39,5 +40,6 @@ urlpatterns = [
     path('create/checkout/session/<uuid:id>/', create_checkout_session_view, name='checkout-session'),
     path('payment/success/<uuid:id>/', payment_success_view, name='payment-success'),
     path('payment/cancel/', payment_cancel_view, name='payment-cancel'),
-    path('stripe/webhook/', stripe_webhook, name='stripe-webhook')
+    path('stripe/webhook/', stripe_webhook, name='stripe-webhook'),
+    path('order/history/', order_history_view, name='order-history')
 ]

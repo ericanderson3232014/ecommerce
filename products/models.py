@@ -178,7 +178,7 @@ class Checkout(models.Model):
         amount_due = [product.get_order_total() for product in checkout.order.all()]
         self.total_amount_due = sum( amount_due)
         checkout.save()
-        return sum( amount_due)
+        return sum(amount_due)
     
     def __str__(self):
         return f'{self.customer.username} - {self.order}'

@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+
+{% block title %}
+    Order history
+{% endblock title %}
+
+
+{% block content %}
+    <div class="order-history-container">
+        <div class="receipts">
+            {% for receipt in receipts %}
+                <div class="receipt">
+                    <h4>Receipt ID: {{ receipt.id }}</h4>
+                    <p>Customer name: {{ receipt.customer.username }}</p>
+                    <p>Ordered date: {{ receipt.created }}</p>
+                    <p>Receipt sent via email: {{ receipt.receipt_sent_date }}</p>
+                </div>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
