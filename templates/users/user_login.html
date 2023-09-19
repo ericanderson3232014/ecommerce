@@ -7,8 +7,10 @@
     Login
 {% endblock title%}
 
+{% comment %}
 {% block banner %}
 {% endblock banner %}
+{% endcomment %}
 
 {% block content %}
 
@@ -28,7 +30,7 @@
             flex-direction: column;
             gap: 0.5rem;
             padding: 1.3rem;
-            border-radius: 5px;
+            border-radius: 10px;
             background: white;
             box-shadow: 0px 0px 20px -1px rgb(209, 209, 209);
         }
@@ -53,7 +55,7 @@
 
         .user-login-form-wrapper {
             min-height: 100vh;
-            padding: 3rem 0;
+            padding: 5rem 0;
         }
 
         .login-form {
@@ -64,17 +66,18 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            border-radius: 5px;
+            border-radius: 10px;
             background: rgb(255, 255, 255);
             box-shadow: 0px 0px 20px -1px rgb(209, 209, 209);
         }
 
         .login-form > h2 {
-            letter-spacing: 0.07rem;
+            letter-spacing: 0.05rem;
         }
 
         .login-form > label {
-            letter-spacing: 0.07rem;
+            letter-spacing: 0.05rem;
+            font-weight: 500;
         }
 
         .login-form > input {
@@ -101,6 +104,7 @@
             border: none;
         }
 
+
         .login-form > p {
             letter-spacing: 0.07rem;
             color: rgb(43, 43, 43)
@@ -108,7 +112,9 @@
 
         .login-form > p > a{
             letter-spacing: 0.07rem;
-            color: rgb(255, 0, 0);
+            color: rgb(130, 12, 255);
+            text-decoration: underline;
+            font-weight: 500;
         }
 
     </style>
@@ -123,7 +129,7 @@
         {% else %}
         <div class="user-login-form-wrapper">
             <form action="" method="POST" class="login-form">
-                <h2>Please login</h2>
+                <h2>Please Login</h2>
                 {% csrf_token %}
                 {{ form }}
                 <button type="submit">Login</button>

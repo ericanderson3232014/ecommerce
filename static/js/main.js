@@ -248,7 +248,7 @@ TranslateBtns.forEach((btn) => {
             if(circles.indexOf(circle) === index) {
                 circle.style.background = 'white'
             }else {
-                circle.style.background = 'rgb(90, 90, 90)'
+                circle.style.background = 'rgb(51, 51, 51)'
             }
         })
     })

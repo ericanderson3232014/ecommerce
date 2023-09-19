@@ -9,7 +9,7 @@
 }
 
 :root {
-    --purple-10: hsl(267, 90%, 10%);
+    --purple-10: hsl(266, 90%, 10%);
     --purple-15: hsl(267, 90%, 15%);
     --purple-20: hsl(267, 90%, 20%);
     --purple-25: hsl(267, 90%, 25%);
@@ -66,7 +66,8 @@ header {
 }
 
 main {
-    background: rgb(228, 227, 230);
+    /* background: rgb(242, 239, 245); */
+    background: linear-gradient(to bottom, rgba(24, 10, 59, 0.178), rgb(242, 239, 245));
     min-height: 100vh;
 }
 
@@ -103,8 +104,10 @@ BANNER SLIDER
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.200);
-    /* background: rgba(32, 19, 65, 0.411) */
+    /* background: rgba(0, 0, 0, 0.200); */
+    background: rgba(24, 10, 59, 0.205);
+    background: linear-gradient(to bottom, 
+    rgba(24, 10, 59, 0.555), rgba(24, 10, 59, 0.301), rgba(24, 10, 59, 0.151));
 }
 
 .translate-btns-container {
@@ -180,7 +183,7 @@ BANNER SLIDER
     width: 15px;
     aspect-ratio: 1/1;
     border-radius: 50%;
-    background: rgb(90, 90, 90);
+    background: rgb(51, 51, 51);
 }
 
 @media screen and (max-width: 500px) {
@@ -310,9 +313,11 @@ INDEX.HTML
 
 .mobile-nav-link {
     display: block;
-    letter-spacing: 0.09rem;
+    letter-spacing: 0.05rem;
     padding: 0.8rem 1.3rem;
     color: rgb(59, 59, 59);
+    font-size: 0.95rem;
+    font-weight: 500;
     -webkit-tap-highlight-color: transparent !important;
 }
 
@@ -511,7 +516,8 @@ INDEX.HTML
     }
 
     .toggle-user-navbar > h4 {
-        letter-spacing: 0.07rem;
+        letter-spacing: 0.05rem;
+        font-size: 0.95rem;
     }
 
     .logged-in-navbar-arrow-up {
@@ -550,10 +556,12 @@ INDEX.HTML
     .nav-basket {
         position: relative;
         color: var(--black-25);
-        letter-spacing: 0.07rem;
+        letter-spacing: 0.05rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        font-weight: 500;
+        font-size: 0.95rem;
         padding: 1.5rem 2rem 0.3rem 2rem;
     }
 
@@ -580,7 +588,9 @@ INDEX.HTML
 
     .nav-link {
         color: rgb(236, 236, 236);
-        letter-spacing: 0.07rem;
+        letter-spacing: 0.05rem;
+        font-size: 0.95rem;
+        font-weight: 500;
     }
 
     .nav-link-search-button {
@@ -672,11 +682,34 @@ HOME.HTML/CATEGRORIES
 
 .categories-wrapper {
     display: grid;
+    padding: 1rem 0;
+}
+
+.categories-header-container {
+    width: 95%;
+    margin: 0 auto;
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.categories-header {
+    letter-spacing: 0.05rem;
+    color: var(--purple-40);
+    font-size: 22px;
+}
+
+.categories-header-container > p {
+    color: var(--black-20);
+    letter-spacing: 0.07rem;
+    max-width: 800px;
+    line-height: 1.4;
+    font-size: 1.1rem;
 }
 
 .categories {
     width: 95%;
-    margin: 1rem auto;
+    margin: 0 auto;
     display: grid;
     gap: 1rem;
 }
@@ -696,8 +729,9 @@ HOME.HTML/CATEGRORIES
 
 .category-name {
     letter-spacing: 0.07rem;
-    color: var(--black-10);
+    color: var(--black-20);
     padding-bottom: 1rem;
+    font-size: 19px;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 }
@@ -708,23 +742,45 @@ HOME.HTML/CATEGRORIES
     display: block;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 500px) {
     .categories {
-        width: 90%;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 2rem;
-        margin: 2rem auto;
-    }
-
-    .category-name {
-        font-size: 1.23rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
 }
 
 @media screen and (min-width: 1000px) {
-    .categories {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    .categories-wrapper {
+        padding: 2rem 0;
     }
+
+    .categories-header-container {
+        width: 90%;
+    }
+
+    .categories-header {
+        font-size: 24px;
+    }
+
+    .categories {
+        width: 90%;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .category:first-child  {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .category:first-child > .category-name {
+        font-size: 22px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .categories {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
 }
 
 /* 
@@ -741,28 +797,33 @@ PRODUCT_LIST.HTML/PRODUCT LIST
     display: flex;
     flex-direction: column;
     justify-content: stretch;
-    gap: 0.7rem;
+    gap: 1rem;
 }
 
 .product-list-wrapper:last-child {
     margin-bottom: 1rem;
 }
 
-.product-list-header {
+.product-list-header-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.product-list-header-and-link {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    color: var(--black-10);
+    gap: 0.5rem
+}
+
+.product-list-header {
+    font-size: 1.25rem;
+    color: var(--purple-40);
     letter-spacing: 0.05rem;
 }
 
-.product-list-header > h2 {
-    font-size: 1.25rem;
-}
-
-.product-list-header > a {
+.product-list-header-and-link > a {
     font-size: 1rem;
     background: var(--orange-50);
     color: white;
@@ -776,8 +837,16 @@ PRODUCT_LIST.HTML/PRODUCT LIST
     font-size: 0.87rem;
 }
 
-.product-list-header > a > span {
+.product-list-header-and-link > a > span {
     font-size: 1.4rem;
+}
+
+.product-list-header-container > p {
+    color: var(--black-30);
+    max-width: 800px;
+    letter-spacing: 0.07rem;
+    line-height: 1.4;
+    font-size: 1.1rem;
 }
 
 .product-list {
@@ -914,17 +983,17 @@ PRODUCT_LIST.HTML/PRODUCT LIST
         margin-bottom: 2rem !important
     }
 
-    .product-list-header > h2 {
+    .product-list-header {
         font-size: 1.5rem;
     }
 
-    .product-list-header > a {
+    .product-list-header-and-link > a {
         font-size: 1rem;
         padding: 0.3rem 0.8rem;
 
     }
 
-    .product-list-header > a > span {
+    .product-list-header-and-link > a > span {
         font-size: 1.5rem;
     }
 }
@@ -1046,10 +1115,15 @@ PRODUCT_DETAIL.HTML/PRODUCT DETAIL
 
 .product-detail-name {
     letter-spacing: 0.05rem;
-    color: rgb(49, 49, 49);
+    color: var(--black-10);
     font-size: 1.2rem;
     word-wrap: break-word;
-    line-height: 1.2;
+    line-height: 1.05;
+}
+
+.product-detail-name > span {
+    font-size: 1rem;
+    color: var(--black-25)
 }
 
 .product-detail-price-and-discount {
@@ -1396,6 +1470,10 @@ PRODUCT_DETAIL.HTML/PRODUCT DETAIL
         word-wrap: break-word;
     }
     
+    .product-detail-name > span {
+        font-size: 1.3rem;
+    }
+
     .product-detail-price {
         font-size: 1.3rem;
     }

@@ -7,8 +7,11 @@
     Register
 {% endblock title%}
 
+
+{% comment %}
 {% block banner %}
 {% endblock banner %}
+{% endcomment %}
 
 {% block content %}
 
@@ -58,7 +61,7 @@
             max-width: 500px;
             margin: 0 auto;
             padding: 1.3rem;
-            border-radius: 5px;
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
@@ -67,7 +70,7 @@
         }
 
         .register-form > h2 {
-            letter-spacing: 0.07rem;
+            letter-spacing: 0.05rem;
         }
 
         .register-form > div {
@@ -82,7 +85,7 @@
             letter-spacing: 0.07rem;
             color: rgb(48, 48, 48);
             font-size: 1rem;
-            border: 1px solid rgb(170, 170, 170);
+            border: 1px solid rgb(202, 202, 202);
         }
 
         .register-form > div > input:focus {
@@ -91,9 +94,11 @@
         }
 
         .register-form > div > label {
-            letter-spacing: 0.07rem;
-            color: rgb(0, 0, 0);
+            letter-spacing: 0.05rem;
+            color: rgb(10, 10, 10);
+            font-weight: 500;
         }
+
         .register-form > div > p {
             font-size: 0.95rem;
             letter-spacing: 0.07rem;
@@ -104,12 +109,14 @@
            margin-left: 1rem;
            color: rgb(54, 54, 54);
            font-size: 0.95rem;
+           letter-spacing: 0.05rem;
         }
 
         .register-form > div > .errorlist {
            margin-left: 1rem;
            color: rgb(255, 51, 0);
            font-size: 0.95rem;
+           letter-spacing: 0.05rem;
         }
 
         .register-form > button {
@@ -130,9 +137,11 @@
 
         .already-registered > a {
             letter-spacing: 0.07rem;
-            color: rgb(255, 0, 0);
+            color: rgb(130, 12, 255);
             text-decoration: underline;
+            font-weight: 500;
         }
+
     </style>
 
     {% if request.user.is_authenticated %}
@@ -146,7 +155,7 @@
     {% else %}
         <div class="user-register-form-wrapper">
             <form action="" method="POST" class="register-form">
-                <h2>Please register</h2>
+                <h2>Please Register</h2>
                 {% csrf_token %}
                 <div>
                     <p class="errorlist">{{ form.username.errors }}</p>
@@ -155,7 +164,7 @@
                     <p>{{ form.username.help_text}}</p>
                 </div>
                 <div>{{ email_form }}</div>
-                <div>
+                <div class="password1-container">
                     {{ form.password1.label_tag}}
                     {{ form.password1}}
                     {{ form.password1.help_text}}

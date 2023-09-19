@@ -82,7 +82,7 @@
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'product-create' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-create' %}">Create</a>
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-logout' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-logout' %}">Logout</a>
             {% endif %}
-            <a href="{% url 'sellers:sellers-seller' %}" class="mobile-nav mobile-nav-link">Sell on market</a>
+            <a class="mobile-nav mobile-nav-link" href="{% url 'sellers:sellers-seller' %}">Sell on market</a>
         </nav>
     {% endwith %}
     <div class="mobile-nav-background-layout"></div>
