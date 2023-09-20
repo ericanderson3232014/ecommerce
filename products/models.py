@@ -79,7 +79,7 @@ class Product(models.Model):
                         discount = f'{str(discount)[0 : index - 3]},{str(discount)[index - 3 : index  + 3]} '
                 self.discount_price_str_format = discount.strip()
                 return discount
-        return 0
+        # return 0
     
     class Meta:
         ordering = ['-created']
@@ -223,6 +223,12 @@ class CheckoutReceipt(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     receipt_sent_date = models.DateTimeField(null=True)
     sent = models.BooleanField(default=False)
+    saving = models.CharField(max_length=100, null=True, blank=True)
+    sub_total = models.CharField(max_length=100, null=True, blank=True)
+    tax = models.CharField(max_length=100, null=True, blank=True)
+    total = models.CharField(max_length=100, null=True, blank=True)
+
+
 
     def __str__(self):
         return self.customer.username

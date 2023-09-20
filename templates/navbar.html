@@ -7,7 +7,6 @@
     </a>
     {% with request.resolver_match.url_name as url_name %}
         <nav class="nav-links">
-            <a class="nav-link {% if url_name == 'product-home' %}active-nav-link{% endif %}" href="{% url 'products:product-home' %}">Home</a>
             <a class="nav-link {% if url_name == 'product-list' %}active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Products</a>
             {% if not request.user.is_authenticated %}
                 <a class="nav-link {% if url_name == 'user-login' %}active-nav-link{% endif %}" href="{% url 'users:user-login' %}">Login</a>
@@ -71,7 +70,6 @@
                 Search
                 <!-- <span class="material-symbols-outlined">search</span> -->
             </button>
-            <a class="mobile-nav mobile-nav-link {% if url_name == 'product-home' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-home' %}">Home</a>
             <a class="mobile-nav mobile-nav-link {% if url_name == 'product-list' %}mobile-active-nav-link{% endif %}" href="{% url 'products:product-list' %}">Products</a>
             {% if not request.user.is_authenticated %}
                 <a class="mobile-nav mobile-nav-link {% if url_name == 'user-login' %}mobile-active-nav-link{% endif %}" href="{% url 'users:user-login' %}">Login</a>

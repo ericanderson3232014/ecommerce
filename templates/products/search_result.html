@@ -10,10 +10,12 @@
 
 {% block content %}
     {% if not query_set %}
-        <div class="product-list-wrapper" style="display: flex; align-items: center; justify-content: center; background: transparent;">
-            <div class="product-list-header-container">
-                <div class="product-list-header-and-link">
-                    <h2 class="product-list-header">Search "{{ q }}" did not return anything.</h2>
+        <div class="product-main-container">
+            <div class="product-list-wrapper" style="display: flex; align-items: center; justify-content: center; background: transparent;">
+                <div class="product-list-header-container">
+                    <div class="product-list-header-and-link">
+                        <h2 class="product-list-header">Search "{{ q }}" did not return anything.</h2>
+                    </div>
                 </div>
             </div>
         </div>

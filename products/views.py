@@ -358,6 +358,8 @@ def payment_success_view(request, id):
         item_url: {DOMAIN}{item.product.get_absolute_url()}
         --------------------------------------------------
         '''
+    if get_basket_total(request)['discount_amount']:
+        your_purchase += 'Savings: {0}\n'.format(get_basket_total(request)['discount_amount'])
     your_purchase += 'Sub-total: {0},{1}\n'.format(str(checkout_obj.set_amount_due())[0:-6], str(checkout_obj.set_amount_due())[-6:])
     your_purchase += 'VAT: {0}\n'.format(get_basket_total(request)['vat'])
     your_purchase += 'Total: {0}'.format(get_basket_total(request)['total'])
@@ -366,7 +368,11 @@ def payment_success_view(request, id):
     receipt = CheckoutReceipt.objects.create(
         checkout=checkout_obj, 
         customer=customer, 
-        checkout_summary=your_purchase
+        checkout_summary=your_purchase,
+        saving = '{0}'.format(get_basket_total(request)['discount_amount']),
+        sub_total = '{0},{1}'.format(str(checkout_obj.set_amount_due())[0:-6], str(checkout_obj.set_amount_due())[-6:]),
+        tax = '{0}'.format(get_basket_total(request)['vat']),
+        total = '{0}'.format(get_basket_total(request)['total'])
     )
 
     address = ShippingAddress.objects.get(customer=request.user)
@@ -375,9 +381,10 @@ def payment_success_view(request, id):
     # send customer the receipt
     send_mail(
         subject = 'Your ordered items',
-        message = f'''Thank you for shopping at AiAi Market. Here is your receipt:
-                        \nReceipt ID: {receipt.id}{receipt.checkout_summary}
-                ''',
+        message = f'''
+            Thank you for shopping at AiAi Market. Here is your receipt:
+            \nReceipt ID: {receipt.id}{receipt.checkout_summary}
+        ''',
         recipient_list = [address.email],
         from_email = email_from
     )

@@ -23,26 +23,28 @@
     </header>
     <main>
         
-        {% block banner %}
-            {% include 'banner.html' %}
-        {% endblock banner %}
+        <div class="main-banner">
+            {% block banner %}
+                {% include 'banner.html' %}
+            {% endblock banner %}
+        </div>
+        <div class="main-content">
+            {% include 'messages.html' %}
+            
+            {% block content %}
+            {% endblock content %}
         
-        {% include 'messages.html' %}
-
-        {% block content %}
-        {% endblock content %}
-
-        
-        {% block scrollbar %}
-            <div class="scroll-btns">
-                <a href="#header" class="scroll-up">
-                    <span class="material-symbols-outlined">keyboard_arrow_up</span>
-                </a>
-                <a href="#footer" class="scroll-down">
-                    <span class="material-symbols-outlined">keyboard_arrow_down</span>
-                </a>
-            </div>
-        {% endblock scrollbar %}
+            {% block scrollbar %}
+                <div class="scroll-btns">
+                    <a href="#header" class="scroll-up">
+                        <span class="material-symbols-outlined">keyboard_arrow_up</span>
+                    </a>
+                    <a href="#footer" class="scroll-down">
+                        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+                    </a>
+                </div>
+            {% endblock scrollbar %}
+        </div>
     </main>
 
     <footer id="footer">
