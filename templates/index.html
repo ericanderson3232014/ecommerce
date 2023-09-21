@@ -28,6 +28,15 @@
                 {% include 'banner.html' %}
             {% endblock banner %}
         </div>
+
+        <!-- Search form for mobile device -->
+        <form class="mobile-search-form" action="{% url 'products:product-search' %}" method="GET">
+            <input class="mobile-search-input" type="text", name='q' required placeholder="Search">
+            <button class="mobile-search-submit-btn" type="submit">
+                <span class="material-symbols-outlined">search</span>
+            </button>
+        </form>
+
         <div class="main-content">
             {% include 'messages.html' %}
             

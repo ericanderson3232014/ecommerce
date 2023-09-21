@@ -188,39 +188,39 @@ BANNER IMAGES
 =============
 */
 
-const largeScreen = ['pc.webp', 'monitor.webp', 'laptop.webp']
-const mobileScreen = ['pc-small.webp', 'monitor-small.webp', 'laptop-small.webp']
+// const largeScreen = ['pc.webp', 'monitor.webp', 'laptop.webp']
+// const mobileScreen = ['pc.webp', 'monitor.webp', 'laptop.webp']
 
-if(window.innerWidth > 910) {
-    bannerImgContainers.forEach((container, index) => {
-        const img = container.querySelector('img') 
-        let src = `/static/images/${largeScreen[index]}`
-        img.setAttribute('src', src)
-    })
-}else if(window.innerWidth < 910) {
-    bannerImgContainers.forEach((container, index) => {
-        let img = container.querySelector('img') 
-        let src = `/static/images/${mobileScreen[index]}`
-        img.setAttribute('src', src)
-    })
-}
+// if(window.innerWidth > 910) {
+//     bannerImgContainers.forEach((container, index) => {
+//         const img = container.querySelector('img') 
+//         let src = `/static/images/${largeScreen[index]}`
+//         img.setAttribute('src', src)
+//     })
+// }else if(window.innerWidth < 910) {
+//     bannerImgContainers.forEach((container, index) => {
+//         let img = container.querySelector('img') 
+//         let src = `/static/images/${mobileScreen[index]}`
+//         img.setAttribute('src', src)
+//     })
+// }
 
 
-window.addEventListener('resize', (e) => {
-    if(window.innerWidth > 910) {
-        bannerImgContainers.forEach((container, index) => {
-            const img = container.querySelector('img') 
-            let src = `/static/images/${largeScreen[index]}`
-            img.setAttribute('src', src)
-        })
-    }else if(window.innerWidth < 910) {
-        bannerImgContainers.forEach((container, index) => {
-            let img = container.querySelector('img') 
-            let src = `/static/images/${mobileScreen[index]}`
-            img.setAttribute('src', src)
-        })
-    }
-})
+// window.addEventListener('resize', (e) => {
+//     if(window.innerWidth > 910) {
+//         bannerImgContainers.forEach((container, index) => {
+//             const img = container.querySelector('img') 
+//             let src = `/static/images/${largeScreen[index]}`
+//             img.setAttribute('src', src)
+//         })
+//     }else if(window.innerWidth < 910) {
+//         bannerImgContainers.forEach((container, index) => {
+//             let img = container.querySelector('img') 
+//             let src = `/static/images/${mobileScreen[index]}`
+//             img.setAttribute('src', src)
+//         })
+//     }
+// })
 
 let index = 0
 

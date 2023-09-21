@@ -17,11 +17,13 @@
 
     <style>
         .user-registered-and-authenticated {
-            min-height: 100vh;
-            padding: 3rem 0;
+            /* min-height: 100vh; */
+            padding: 1rem 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+
+            border: 2px solid red;
         }
 
         .user-registered-and-authenticated-error {
@@ -52,8 +54,7 @@
         }
 
         .user-register-form-wrapper {
-            min-height: 100vh;
-            padding: 3rem 0;
+            padding: 2rem 0;
         }
 
         .register-form {
@@ -71,6 +72,8 @@
 
         .register-form > h2 {
             letter-spacing: 0.05rem;
+            color: rgb(115, 0, 238);
+            font-size: 1.31rem;
         }
 
         .register-form > div {
@@ -80,16 +83,16 @@
         }
 
         .register-form > div > input {
-            padding: 0.7rem 1rem;
+            padding: 0.8rem 1rem;
             border-radius: 5px;
-            letter-spacing: 0.07rem;
+            letter-spacing: 0.05rem;
             color: rgb(48, 48, 48);
             font-size: 1rem;
             border: 1px solid rgb(202, 202, 202);
         }
 
         .register-form > div > input:focus {
-            outline: 2px solid rgb(123, 0, 255);
+            outline: 2px solid rgb(156, 156, 156);
             border: none;
         }
 
@@ -119,24 +122,42 @@
            letter-spacing: 0.05rem;
         }
 
-        .register-form > button {
-            padding: 0.8rem 1rem;
+        .register-form-button-container {
+            display: grid;
+            gap: 0.5rem;
+            margin-top: 0.3rem
+        }
+
+        .register-button {
+            padding: 0.9rem 1rem;
             text-align: center;
             letter-spacing: 0.07rem;
-            background: orangered;
+            background: rgb(255, 69, 0);
             color: white;
-            border-radius: 5px;
+            border-radius: 25px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .shop-without-registering-button {
+            padding: 0.9rem 1rem;
+            text-align: center;
+            letter-spacing: 0.05rem;
+            background: rgb(87, 87, 87);
+            color: white;
+            border-radius: 25px;
             border: none;
             font-size: 1rem;
         }
 
         .already-registered {
-            letter-spacing: 0.07rem;
-            color: rgb(41, 41, 41)
+            margin-top: 0.3rem;
+            letter-spacing: 0.05rem;
+            color: rgb(43, 43, 43)
         }
 
         .already-registered > a {
-            letter-spacing: 0.07rem;
+            letter-spacing: 0.05rem;
             color: rgb(130, 12, 255);
             text-decoration: underline;
             font-weight: 500;
@@ -154,7 +175,7 @@
         </div>
     {% else %}
         <div class="user-register-form-wrapper">
-            <form action="" method="POST" class="register-form">
+            <form class="register-form" action="" method="POST">
                 <h2>Please Register</h2>
                 {% csrf_token %}
                 <div>
@@ -176,7 +197,10 @@
                     {{ form.password2}}
                     <p>{{ form.password2.help_text}}</p>
                 </div>
-                <button type="submit">Register</button>
+                <div class="register-form-button-container">
+                    <button class="register-button" type="submit">Register</button>
+                    <a href="{% url 'products:product-list' %}" class="shop-without-registering-button" type="submit">Shop Without Registering</a>
+                </div>
                 <p class="already-registered">Already registered? <a href="{% url 'users:user-login' %}">Login</a></p>
             </form>
         </div>

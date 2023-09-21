@@ -17,7 +17,7 @@
     <style>
         .user-login-error-wrapper {
             min-height: 100vh;
-            padding: 3rem;
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -54,8 +54,8 @@
         }
 
         .user-login-form-wrapper {
-            min-height: 100vh;
-            padding: 5rem 0;
+            /* min-height: 100vh; */
+            padding: 2rem 0;
         }
 
         .login-form {
@@ -73,6 +73,8 @@
 
         .login-form > h2 {
             letter-spacing: 0.05rem;
+            color: rgb(115, 0, 238);
+            font-size: 1.31rem;
         }
 
         .login-form > label {
@@ -83,24 +85,41 @@
         .login-form > input {
             letter-spacing: 0.07rem;
             font-size: 1rem;
-            padding: 0.7rem 1rem;
+            padding: 0.8rem 1rem;
             border-radius: 5px;
             border: 1px solid rgb(202, 202, 202);
         }
 
-        .login-form > button {
-            letter-spacing: 0.07rem;
-            font-size: 1rem;
-            padding: 0.8rem 1rem;
-            border-radius: 5px;
-            border: none;
-            color: white;
-            background: rgb(255, 69, 0);
+        .login-form-button-container {
+            display: grid;
+            gap: 0.5rem;
             margin-top: 0.3rem;
         }
 
+        .login-button {
+            letter-spacing: 0.05rem;
+            font-size: 1rem;
+            padding: 0.9rem 1rem;
+            border-radius: 25px;
+            border: none;
+            color: white;
+            background: rgb(255, 69, 0);
+            text-align: center;
+        }
+
+        .shop-without-logging-in-button {
+            letter-spacing: 0.05rem;
+            font-size: 1rem;
+            padding: 0.9rem 1rem;
+            border-radius: 25px;
+            border: none;
+            color: white;
+            background: rgb(87, 87, 87);
+            text-align: center;
+        }
+
         .login-form > input:focus {
-            outline: 2px solid rgb(123, 0, 255);
+            outline: 2px solid rgb(156, 156, 156);
             border: none;
         }
 
@@ -128,11 +147,14 @@
         </div>
         {% else %}
         <div class="user-login-form-wrapper">
-            <form action="" method="POST" class="login-form">
+            <form class="login-form" action="" method="POST">
                 <h2>Please Login</h2>
                 {% csrf_token %}
                 {{ form }}
-                <button type="submit">Login</button>
+                <div class="login-form-button-container">
+                    <button class="login-button" type="submit">Login</button>
+                    <a href="{% url 'products:product-list' %}" class="shop-without-logging-in-button" type="submit">Shop Without Logging In</a>
+                </div>
                 <p>Not yet registered? <a href="{% url 'users:user-register' %}">Register</a></p>
             </form>
         </div>
