@@ -2,24 +2,23 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
-from .forms import UserEmailForm
 
 
 
 def user_register_view(request):
+    user = request.user
+    if user.is_authenticated:
+        messages.info(request, f'Your are already registered and logged in.')
+        return redirect('products:product-list')
+    
     form = UserCreationForm()
-    email_form = UserEmailForm()
-    context = {'form': form, 'email_form': email_form}
+    context = {'form': form}
+
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
-        email_form = UserEmailForm(request.POST)
-        if form.is_valid() and email_form.is_valid():
-            username = form.cleaned_data.get('username')
-            email = email_form.cleaned_data.get('email')
+        if form.is_valid():
             user = form.save()
-            user.email = email
-            user.save()
-            messages.success(request, f'User {username} has been suucessfully registered.')
+            messages.success(request, f'Username "{user.username}" has been suucessfully registered.')
             return redirect('users:user-login')
         else:
             context['form'] = form

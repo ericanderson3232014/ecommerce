@@ -173,7 +173,7 @@ if(toggleUserNavbar) {
 }
 
 window.addEventListener('resize', (e) => {
-    // searchFormWrapper.classList.remove('show-search-form-wrapper')
+    searchFormWrapper.classList.remove('show-search-form-wrapper')
     if(loggedInUserNavLinks){
         loggedInUserNavLinks.classList.remove('show-logged-in-user-nav-links')
     }
@@ -187,40 +187,6 @@ window.addEventListener('resize', (e) => {
 BANNER IMAGES
 =============
 */
-
-// const largeScreen = ['pc.webp', 'monitor.webp', 'laptop.webp']
-// const mobileScreen = ['pc.webp', 'monitor.webp', 'laptop.webp']
-
-// if(window.innerWidth > 910) {
-//     bannerImgContainers.forEach((container, index) => {
-//         const img = container.querySelector('img') 
-//         let src = `/static/images/${largeScreen[index]}`
-//         img.setAttribute('src', src)
-//     })
-// }else if(window.innerWidth < 910) {
-//     bannerImgContainers.forEach((container, index) => {
-//         let img = container.querySelector('img') 
-//         let src = `/static/images/${mobileScreen[index]}`
-//         img.setAttribute('src', src)
-//     })
-// }
-
-
-// window.addEventListener('resize', (e) => {
-//     if(window.innerWidth > 910) {
-//         bannerImgContainers.forEach((container, index) => {
-//             const img = container.querySelector('img') 
-//             let src = `/static/images/${largeScreen[index]}`
-//             img.setAttribute('src', src)
-//         })
-//     }else if(window.innerWidth < 910) {
-//         bannerImgContainers.forEach((container, index) => {
-//             let img = container.querySelector('img') 
-//             let src = `/static/images/${mobileScreen[index]}`
-//             img.setAttribute('src', src)
-//         })
-//     }
-// })
 
 let index = 0
 
@@ -253,6 +219,21 @@ TranslateBtns.forEach((btn) => {
         })
     })
 })
+
+const largeScreenBannerWrapper = document.querySelector('.large-screen-banner-wrapper')
+const imgBannerText = document.querySelectorAll('.img-banner-text')
+
+
+    imgBannerText.forEach((img) => {
+        img.style.height = `${largeScreenBannerWrapper.clientHeight}px`
+    })
+    
+
+    window.addEventListener('resize', () => {
+        imgBannerText.forEach((img) => {
+            img.style.height = `${largeScreenBannerWrapper.clientHeight}px`
+        })
+    })
 
 
 /*

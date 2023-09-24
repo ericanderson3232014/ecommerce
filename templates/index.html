@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <meta name="description" content="shop, online market, gadgets, PC, laptop">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
     <!-- google material icon -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
    <!-- local css -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/products.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/users.css' %}">
+
     <title>{% block title %}{% endblock title %}</title>
+
 </head>
 <body id="body">
     <header id="header">
@@ -30,13 +36,14 @@
         </div>
 
         <!-- Search form for mobile device -->
-        <form class="mobile-search-form" action="{% url 'products:product-search' %}" method="GET">
-            <input class="mobile-search-input" type="text", name='q' required placeholder="Search">
-            <button class="mobile-search-submit-btn" type="submit">
-                <span class="material-symbols-outlined">search</span>
-            </button>
-        </form>
-
+        <div class="mobile-search-form-container">
+            <form class="mobile-search-form" action="{% url 'products:product-search' %}" method="GET">
+                <input class="mobile-search-input" type="text", name='q' required placeholder="Search">
+                <button class="mobile-search-submit-btn" type="submit">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </form>
+        </div>
         <div class="main-content">
             {% include 'messages.html' %}
             

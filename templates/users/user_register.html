@@ -1,209 +1,86 @@
 {% extends 'index.html' %}
 
 
-
-
 {% block title %}
     Register
 {% endblock title%}
 
 
-{% comment %}
 {% block banner %}
 {% endblock banner %}
-{% endcomment %}
+
 
 {% block content %}
 
-    <style>
-        .user-registered-and-authenticated {
-            /* min-height: 100vh; */
-            padding: 1rem 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            border: 2px solid red;
-        }
-
-        .user-registered-and-authenticated-error {
-            max-width: 95%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding: 1.3rem;
-            border-radius: 5px;
-            background: white;
-            box-shadow: 0px 0px 20px -1px rgb(206, 206, 206);
-        }
-
-        .user-registered-and-authenticated-error > h3 {
-            letter-spacing: 0.07rem;
-        }
-
-        .user-registered-and-authenticated-error > h4{
-            letter-spacing: 0.07rem;
-            color: rgb(66, 66, 66);
-        }
-
-        .user-registered-and-authenticated-error > h4 > a{
-            letter-spacing: 0.07rem;
-            color: rgb(255, 0, 0);
-            text-decoration: underline;
-        }
-
-        .user-register-form-wrapper {
-            padding: 2rem 0;
-        }
-
-        .register-form {
-            width: 95%;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 1.3rem;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            background: white;
-            box-shadow: 0px 0px 20px -1px rgb(216, 216, 216);
-        }
-
-        .register-form > h2 {
-            letter-spacing: 0.05rem;
-            color: rgb(115, 0, 238);
-            font-size: 1.31rem;
-        }
-
-        .register-form > div {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .register-form > div > input {
-            padding: 0.8rem 1rem;
-            border-radius: 5px;
-            letter-spacing: 0.05rem;
-            color: rgb(48, 48, 48);
-            font-size: 1rem;
-            border: 1px solid rgb(202, 202, 202);
-        }
-
-        .register-form > div > input:focus {
-            outline: 2px solid rgb(156, 156, 156);
-            border: none;
-        }
-
-        .register-form > div > label {
-            letter-spacing: 0.05rem;
-            color: rgb(10, 10, 10);
-            font-weight: 500;
-        }
-
-        .register-form > div > p {
-            font-size: 0.95rem;
-            letter-spacing: 0.07rem;
-            color: rgb(54, 54, 54);
-        }
-
-        .register-form > div > ul {
-           margin-left: 1rem;
-           color: rgb(54, 54, 54);
-           font-size: 0.95rem;
-           letter-spacing: 0.05rem;
-        }
-
-        .register-form > div > .errorlist {
-           margin-left: 1rem;
-           color: rgb(255, 51, 0);
-           font-size: 0.95rem;
-           letter-spacing: 0.05rem;
-        }
-
-        .register-form-button-container {
-            display: grid;
-            gap: 0.5rem;
-            margin-top: 0.3rem
-        }
-
-        .register-button {
-            padding: 0.9rem 1rem;
-            text-align: center;
-            letter-spacing: 0.07rem;
-            background: rgb(255, 69, 0);
-            color: white;
-            border-radius: 25px;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .shop-without-registering-button {
-            padding: 0.9rem 1rem;
-            text-align: center;
-            letter-spacing: 0.05rem;
-            background: rgb(87, 87, 87);
-            color: white;
-            border-radius: 25px;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .already-registered {
-            margin-top: 0.3rem;
-            letter-spacing: 0.05rem;
-            color: rgb(43, 43, 43)
-        }
-
-        .already-registered > a {
-            letter-spacing: 0.05rem;
-            color: rgb(130, 12, 255);
-            text-decoration: underline;
-            font-weight: 500;
-        }
-
-    </style>
-
-    {% if request.user.is_authenticated %}
-        <div class="user-registered-and-authenticated">
-            <div class="user-registered-and-authenticated-error">
-                <h3>You are already logged in  and registered!</h3>
-                <h4>Do you want to logout? <a href="{% url 'users:user-logout' %}">Logout</a></h3>
-                <h4><a href="{% url 'products:product-list' %}">continue shopping</a></h3>
+    <div class="user-register-form-wrapper">
+        <form class="register-form show-register-form" action="" method="POST">
+            <h2>Please Register</h2>
+            {% csrf_token %}
+            <div class="username-container">
+                <p class="errorlist">{{ form.username.errors }}</p>
+                {{ form.username.label_tag}}
+                {{ form.username}}
+                <p class="username-help-text">{{ form.username.help_text}}</p>
             </div>
-        </div>
-    {% else %}
-        <div class="user-register-form-wrapper">
-            <form class="register-form" action="" method="POST">
-                <h2>Please Register</h2>
-                {% csrf_token %}
-                <div>
-                    <p class="errorlist">{{ form.username.errors }}</p>
-                    {{ form.username.label_tag}}
-                    {{ form.username}}
-                    <p>{{ form.username.help_text}}</p>
-                </div>
-                <div>{{ email_form }}</div>
-                <div class="password1-container">
-                    {{ form.password1.label_tag}}
-                    {{ form.password1}}
-                    {{ form.password1.help_text}}
-                    {{ form.password2.errors}}
-                </div>
-            
-                <div>
-                    {{ form.password2.label_tag}}
-                    {{ form.password2}}
-                    <p>{{ form.password2.help_text}}</p>
-                </div>
-                <div class="register-form-button-container">
-                    <button class="register-button" type="submit">Register</button>
-                    <a href="{% url 'products:product-list' %}" class="shop-without-registering-button" type="submit">Shop Without Registering</a>
-                </div>
-                <p class="already-registered">Already registered? <a href="{% url 'users:user-login' %}">Login</a></p>
-            </form>
-        </div>
-    {% endif %}
+            <div class="password1-container">
+                {{ form.password1.label_tag}}
+                {{ form.password1}}
+                {{ form.password1.help_text}}
+                {{ form.password2.errors}}
+            </div>
+        
+            <div class="password2-container">
+                {{ form.password2.label_tag}}
+                {{ form.password2}}
+                <p class="password2-help-text">{{ form.password2.help_text}}</p>
+            </div>
+            <div class="register-form-button-container">
+                <button class="register-button" type="submit">Register</button>
+                <a href="{% url 'products:product-list' %}" class="shop-without-registering-button" type="submit">Shop Without Registering</a>
+            </div>
+            <p class="already-registered">Already registered? <a href="{% url 'users:user-login' %}">Login</a></p>
+        </form>
+    </div>
+
+    <script>
+
+        const usernameContainer = document.querySelector('.username-container')
+        const password1Container = document.querySelector('.password1-container')
+        const password2Container = document.querySelector('.password2-container')
+
+        const inputs = []
+        const usernameInput = usernameContainer.querySelector('input')
+        const password1Input = password1Container.querySelector('input')
+        const password2Input = password2Container.querySelector('input')
+
+        inputs.push(usernameInput)
+        inputs.push(password1Input)
+        inputs.push(password2Input)
+
+        const siblings = []
+        siblings.push(usernameInput.nextElementSibling)
+        siblings.push( password1Input.nextElementSibling)
+        siblings.push(password2Input.nextElementSibling)
+
+        const events = ['click', 'focus']
+
+        events.map((currentEvent) => {
+            inputs.forEach((input) => {
+                input.addEventListener(currentEvent, (e) => {
+                    siblings.forEach((sibling) => {
+                        sibling.style.display = 'none'
+                    })
+                    e.currentTarget.nextElementSibling.style.display = 'block'
+
+                })
+            })
+        })
+        
+
+    </script>
     
 {% endblock content %}
+
+
+{% block scrollbar %}
+{% endblock scrollbar %}
