@@ -84,7 +84,7 @@ BANNER SLIDER
 .banner-img-container {
     position: relative;
     flex: 0 0 100%;
-    transition: transform 300ms linear;
+    transition: transform 400ms linear;
     display: flex;
 }
 
@@ -113,34 +113,32 @@ BANNER SLIDER
 }
 
 .img-banner-content-container {
-    /* width: 90%; */
-    margin: 0 auto;
-    align-items: start;
     height: 100%;
     display: grid;
+    align-items: stretch;
 }
 
 .img-banner-text{
-    width: 50%;
+    width: 45%;
     text-align: center;
     display: grid;
     align-content: center;
     justify-content: center;
     gap: 0.5rem;
     background: var(--purple-25);
-    backdrop-filter: blur(15px);
-    padding: 1rem 0;
+    padding: 1rem 0.5rem;
 }
 
 .img-banner-h1-header {
     letter-spacing: 0.05rem;
     font-size: 1.5rem;
-    color: var(--black-95)
+    color: var(--black-95);
+    line-height: 1.1;
 }
 
 .img-banner-h2-header {
     letter-spacing: 0.05rem;
-    color: #FF5E24;
+    color: #FF6161;
     font-size: 1.2rem;
 }
 
@@ -151,15 +149,15 @@ BANNER SLIDER
     line-height: 1.3;
     max-width: 600px;
     margin: 0 auto;
-    padding: 0 0.5rem
 }
 
 .more-info {
-    padding: 0.5rem 2rem;
-    background: #FF6161;
+    padding: 0.6rem 2rem;
+    background: #ff4e37;
     color: white;
     border-radius: 20px;
-    justify-self: center
+    justify-self: center;
+    letter-spacing: 0.05rem;
 }
 
 .banner-arrow-left {
@@ -249,10 +247,6 @@ BANNER SLIDER
         line-height: 1.2;
         font-size: 1.1rem;
     }
-
-    .more-info {
-        padding: 0.6rem 2rem;
-    }
 }
 
 @media screen and (min-width: 800px) {
@@ -262,10 +256,6 @@ BANNER SLIDER
 
     .img-banner-paragraph {
         line-height: 1.4;
-    }
-
-    .more-info {
-        padding: 0.6rem 2rem;
     }
 }
 
@@ -292,7 +282,7 @@ BANNER SLIDER
     }
 
     .more-info {
-        padding: 0.8rem 3rem;
+        padding: 0.9rem 3rem;
         border-radius: 25px;
     }
 }
@@ -300,7 +290,7 @@ BANNER SLIDER
 @media screen and (min-width: 1000px) {
 
     .img-banner-text {
-        width: 45%;
+        width: 40%;
         padding: 1rem;
         gap: 0.8rem;
     }
@@ -316,7 +306,7 @@ BANNER SLIDER
 @media screen and (min-width: 1200px) {
 
     .img-banner-text {
-        width: 40%;
+        width: 35%;
         padding: 1rem;
         gap: 0.8rem;
     }
@@ -332,6 +322,13 @@ BANNER SLIDER
     .img-banner-paragraph {
         font-size: 1.2rem;
         letter-spacing: 0.09rem;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+
+    .img-banner-text {
+        width: 30%;
     }
 }
 

@@ -190,10 +190,8 @@ BANNER IMAGES
 
 let index = 0
 
-if(circles && circles[0]) {
-    circles[0].style.background = 'white'
-}
-
+let query = ''
+console.log(query)
 TranslateBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         const targetElement = e.currentTarget === bannerArrowLeft ? bannerArrowLeft : bannerArrowRight
@@ -210,13 +208,6 @@ TranslateBtns.forEach((btn) => {
         bannerImgContainers.forEach((img) => {
             img.style.transform = `translate(-${index * 100}%)`
         })
-        circles.forEach((circle) => {
-            if(circles.indexOf(circle) === index) {
-                circle.style.background = 'white'
-            }else {
-                circle.style.background = 'rgb(51, 51, 51)'
-            }
-        })
     })
 })
 
@@ -224,18 +215,12 @@ const largeScreenBannerWrapper = document.querySelector('.large-screen-banner-wr
 const imgBannerText = document.querySelectorAll('.img-banner-text')
 
 
-    imgBannerText.forEach((img) => {
-        img.style.height = `${largeScreenBannerWrapper.clientHeight}px`
+    imgBannerText.forEach((img, index) => {
+        if(index % 2 === 0) {
+                img.style.background ='rgb(80, 6, 121)'
+            }
     })
     
-
-    window.addEventListener('resize', () => {
-        imgBannerText.forEach((img) => {
-            img.style.height = `${largeScreenBannerWrapper.clientHeight}px`
-        })
-    })
-
-
 /*
 ===================
 PRODUCT DETAIL PAGE
