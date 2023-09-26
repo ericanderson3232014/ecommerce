@@ -190,8 +190,6 @@ BANNER IMAGES
 
 let index = 0
 
-let query = ''
-console.log(query)
 TranslateBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         const targetElement = e.currentTarget === bannerArrowLeft ? bannerArrowLeft : bannerArrowRight
@@ -211,16 +209,7 @@ TranslateBtns.forEach((btn) => {
     })
 })
 
-const largeScreenBannerWrapper = document.querySelector('.large-screen-banner-wrapper')
-const imgBannerText = document.querySelectorAll('.img-banner-text')
 
-
-    imgBannerText.forEach((img, index) => {
-        if(index % 2 === 0) {
-                img.style.background ='rgb(80, 6, 121)'
-            }
-    })
-    
 /*
 ===================
 PRODUCT DETAIL PAGE
