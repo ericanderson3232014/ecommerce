@@ -9,34 +9,33 @@
 }
 
 :root {
-    --purple-10: hsl(266, 90%, 10%);
-    --purple-15: hsl(267, 90%, 15%);
-    --purple-20: hsl(267, 90%, 20%);
-    --purple-25: hsl(267, 90%, 25%);
-    --purple-30: hsl(267, 90%, 30%);
-    --purple-35: hsl(267, 90%, 35%);
-    --purple-40: hsl(267, 90%, 40%);
-    --purple-45: hsl(267, 90%, 45%);
-    --purple-50: hsl(267, 90%, 50%);
-    --purple-55: hsl(267, 90%, 55%);
-    --purple-60: hsl(267, 90%, 60%);
-    --purple-70: hsl(267, 100%, 70%);
-    --purple-97: hsl(263, 30%, 92%);
+    --purple-10: hsl(280, 80%, 10%);
+    --purple-15: hsl(280, 80%, 15%);
+    --purple-20: hsl(280, 80%, 20%);
+    --purple-25: hsl(280, 80%, 25%);
+    --purple-30: #610f8a;
+    --purple-35: hsl(280, 80%, 35%);
+    --purple-40: hsl(280, 80%, 40%);
+    --purple-45: hsl(280, 80%, 45%);
+    --purple-50: hsl(280, 80%, 50%);
+    --purple-55: hsl(280, 80%, 55%);
+    --purple-60: hsl(280, 80%, 60%);
+    --purple-70: hsl(280, 100%, 70%);
 
     --blue-50: hsl(251, 100%, 50%);
     --blue-55: hsl(251, 100%, 55%);
     --blue-60: hsl(251, 100%, 60%);
 
-    --orange-40: hsl(12, 100%, 40%);
+    --orange-40: #cc2900;
     --orange-45: hsl(12, 100%, 45%);
     --orange-50: hsl(12, 100%, 50%);
     --orange-55: hsl(12, 100%, 55%);
     --orange-60: hsl(12, 100%, 60%);
-    --orange-65: hsl(12, 100%, 65%);
+    --orange-65: #ff704d;
     --orange-yellow-54: hsl(34, 100%, 54%);
     
-    --red-52: hsl(0, 100%, 52%);
-    --red-60: hsl(349, 85%, 60%);
+    --red-52: #ff0a0a;
+    --red-60: #ff3d61;
     
     --black-10: hsl(0, 0%, 10%);
     --black-15: hsl(0, 0%, 15%);
@@ -67,8 +66,7 @@ header {
 }
 
 .main-content {
-    background: linear-gradient(to bottom, rgba(24, 10, 59, 0.151), rgb(242, 239, 245));
-    /* min-height: 100vh; */
+    background: rgb(228, 228, 228);
 }
 
 /* ==========
@@ -109,56 +107,56 @@ BANNER SLIDER
     top: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        to right,rgba(30, 0, 61, 0.500),rgba(27, 0, 61, 0.200), rgba(27, 0, 61, 0.100) );
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.101), rgba(0, 0, 0, 0.301),rgba(0, 0, 0, 0.101));
 }
+
 
 .img-banner-content-container {
     height: 100%;
-    display: grid;
-    align-items: center;
     width: 90%;
     margin: 0 auto;
+    display: grid;
+    align-items: center;
 }
 
 .img-banner-text{
-    width: 45%;
+    width: 50%;
+    margin: 0 auto;
     text-align: center;
     display: grid;
     align-content: center;
-    justify-content: start;
-    gap: 0.5rem;
-    backdrop-filter: blur(3px);
-    padding: 0.8rem;
-    border-radius: 25px;
+    justify-content: center;
+    gap: 0.6rem;
+    backdrop-filter: blur(5px);
 }
 
 .img-banner-h1-header {
     letter-spacing: 0.05rem;
-    font-size: 1.5rem;
-    color: var(--black-95);
+    font-size: 1.6rem;
+    color: white;
     line-height: 1.2;
+    text-wrap: balance;
 }
 
 .img-banner-paragraph {
     letter-spacing: 0.07rem;
     color: var(--black-80);
     font-size: 1rem;
-    line-height: 1.3;
+    line-height: 1.4;
     max-width: 500px;
     margin: 0 auto;
 }
 
 .more-info {
-    padding: 0.6rem 1rem;
-    background: #FF5C5C;
-    color: rgb(10, 10, 10);
+    padding: 0.7rem 1.2rem;
+    background: #ff5100;
+    color: rgb(255, 255, 255);
     border-radius: 20px;
     justify-self: center;
     letter-spacing: 0.05rem;
     text-transform: uppercase;
-    font-weight: 700;
-    padding-top: 0.7rem;
+    /* font-weight: 700; */
+    padding-top: 0.8rem;
     font-size: 0.9rem;
 }
 
@@ -231,60 +229,41 @@ BANNER SLIDER
 @media screen and (min-width: 700px) {
 
     .img-banner-text{
-        width: 50%;
         gap: 1rem;
-        padding: 1rem;
     }
 
-    .img-banner-text{
-        gap: 0.7rem;
-    }
-    
     .img-banner-h1-header {
-        font-size: 1.7rem;
-    }
-    
-    .img-banner-h2-header {
-        font-size: 1.3rem;
-    }
-    
-    .img-banner-paragraph {
-        line-height: 1.4;
+        font-size: 1.8rem;
     }
 }
 
 @media screen and (min-width: 800px) {
 
-    .img-banner-paragraph {
-        line-height: 1.4;
+    .img-banner-h1-header {
+        font-size: 2rem;
     }
 }
 
 @media screen and (min-width: 900px) {
 
-    .img-banner-text {
-        gap: 1rem;
-    }
-
     .img-banner-h1-header {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     
-    .img-banner-paragraph {
-        line-height: 1.5;
-    }
-
     .more-info {
-        padding: 0.9rem 2.5rem;
+        padding: 0.8rem 2rem;
         border-radius: 25px;
         font-size: 1rem;
+        padding-top: 0.9rem;
     }
 }
 
 @media screen and (min-width: 1000px) {
+
     .banner-img-container > .large-img {
         display: block;
     }
+
     .banner-img-container > .small-img {
         display: none;
     }
@@ -292,21 +271,21 @@ BANNER SLIDER
 
 @media screen and (min-width: 1200px) {
 
-    .img-banner-text {
-        width: 40%;
-    }
-
-    .img-banner-h1-header {
-        font-size: 2.5rem;
-    }
-    
     .img-banner-paragraph {
         font-size: 1.2rem;
-        letter-spacing: 0.09rem;
     }
 }
 
+@media screen and (min-width: 1400px) {
 
+    .img-banner-h1-header {
+        font-size: 2.7rem;
+    }
+
+    .more-info {
+        font-size: 1.1rem;
+    }
+}
 /* 
 ==========
 INDEX.HTML
@@ -818,21 +797,20 @@ HOME.HTML/CATEGRORIES
     gap: 0.5rem;
     margin-bottom: 1rem;
     padding: 1rem;
-    background: rgb(255, 255, 255);
+    background: var(--purple-30);
     border-radius: 10px;
 }
 
 .categories-header {
     letter-spacing: 0.05rem;
-    color: var(--purple-45);
-    font-size: 22px;
+    color: rgb(255, 255, 255);
+    font-size: 1.4rem;
 }
 
 .categories-header-container > p {
-    color: var(--black-30);
-    letter-spacing: 0.07rem;
-    max-width: 800px;
-    line-height: 1.4;
+    color: rgb(217, 217, 217);
+    letter-spacing: 0.05rem;
+    line-height: 1.3;
     font-size: 1rem;
 }
 
@@ -845,7 +823,7 @@ HOME.HTML/CATEGRORIES
     border-radius: 10px;
     transition: transform 300ms ease-in-out;
     background: white;
-    padding: 1rem
+    padding: 1rem;
 }
 
 @media (hover) {
@@ -893,6 +871,23 @@ HOME.HTML/CATEGRORIES
 
 @media screen and (min-width: 600px) {
 
+    .categories-header-container {
+        background: rgb(255, 255, 255);
+    }
+    
+    .categories-header {
+        letter-spacing: 0.05rem;
+        color: var(--purple-40);
+    }
+    
+    .categories-header-container > p {
+        color: var(--black-30);
+        letter-spacing: 0.07rem;
+        line-height: 1.4;
+        max-width: 600px;
+        font-size: 1.1rem;
+    }
+
     .category:nth-child(6){
         grid-column: span 1;
         grid-row: span 1;
@@ -910,11 +905,7 @@ HOME.HTML/CATEGRORIES
     }
 
     .categories-header {
-        font-size: 24px;
-    }
-
-    .categories-header-container > p {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
     }
 
     .categories {
@@ -932,6 +923,13 @@ HOME.HTML/CATEGRORIES
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 
+    .categories-header {
+        font-size: 1.7rem;
+    }
+
+    .categories-header-container > p {
+        max-width: 50%;
+    }
 }
 
 /* 
@@ -1132,7 +1130,7 @@ PRODUCT_LIST.HTML/PRODUCT LIST
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
-    background: rgb(255, 255, 255);
+    background: var(--purple-30);
     border-radius: 10px;
 }
 
@@ -1144,15 +1142,14 @@ PRODUCT_LIST.HTML/PRODUCT LIST
 }
 
 .product-list-header {
-    font-size: 1.25rem;
-    color: var(--purple-40);
+    font-size: 1.4rem;
+    color: rgb(255, 255, 255);
     letter-spacing: 0.05rem;
 }
 
 .product-list-header-and-link > a {
-    font-size: 1rem;
-    background: var(--orange-50);
-    color: white;
+    background: #FF8D70;
+    color: #141414;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1160,7 +1157,8 @@ PRODUCT_LIST.HTML/PRODUCT LIST
     border-radius: 20px;
     padding: 0.3rem 0.7rem;
     letter-spacing: 0.05rem;
-    font-size: 0.87rem;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .product-list-header-and-link > a > span {
@@ -1168,10 +1166,9 @@ PRODUCT_LIST.HTML/PRODUCT LIST
 }
 
 .product-list-header-container > p {
-    color: var(--black-30);
-    max-width: 800px;
+    color: rgb(217, 217, 217);
     letter-spacing: 0.07rem;
-    line-height: 1.4;
+    line-height: 1.3;
     font-size: 1rem;
 }
 
@@ -1295,23 +1292,42 @@ PRODUCT_LIST.HTML/PRODUCT LIST
     }
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 600px) {
+   
     .product-list-wrapper {
         background: white;
-        padding: 1.5rem;
+        padding: 1.3rem;
         border-radius: 10px;
         margin: 1rem auto 0 auto;
         gap: 1rem;
-    }
-
-    .product-list-wrapper:last-child {
-        margin-bottom: 1rem !important
     }
 
     .product-list-header-container {
         padding: 0;
         border-radius: none;
         background: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-list-header {
+        color: var(--purple-40)
+    }
+
+    .product-list-header-and-link > a {
+        background: var(--orange-55);
+        color: rgb(255, 255, 255);
+        padding: 0.4rem 0.7rem;
+    }
+
+    .product-list-header-container > p {
+        color: var(--black-30);
+    }
+}
+
+@media screen and (min-width: 700px) {
+   
+    .product-list-wrapper:last-child {
+        margin-bottom: 1rem !important
     }
 
     .product-list-header {
@@ -1320,8 +1336,7 @@ PRODUCT_LIST.HTML/PRODUCT LIST
 
     .product-list-header-and-link > a {
         font-size: 1rem;
-        padding: 0.3rem 0.8rem;
-
+        padding: 0.4rem 0.9rem;
     }
 
     .product-list-header-and-link > a > span {
@@ -1329,19 +1344,23 @@ PRODUCT_LIST.HTML/PRODUCT LIST
     }
 
     .product-list-header-container > p {
-        color: var(--black-30)
+        color: var(--black-30);
+        font-size: 1.1rem;
+        line-height: 1.4;
+        max-width: 600px;
     }
 }
 
 @media screen and (min-width: 1000px) {
 
-    .product-list-header-container > p {
-        font-size: 1.1rem;
+    .product-list-header {
+        font-size: 1.7rem;
     }
 
     .product-list-wrapper {
         width: 90%;
         margin: 2rem auto 0 auto;
+        padding: 1.5rem;
     }
 
     .product-list-wrapper:last-child {
@@ -1351,6 +1370,12 @@ PRODUCT_LIST.HTML/PRODUCT LIST
     .product-list {
         width: 100%;
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .product-list-header-container > p {
+        max-width: 50%;
     }
 }
 
